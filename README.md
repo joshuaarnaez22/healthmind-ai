@@ -6,8 +6,8 @@ An AI-powered health companion for symptom checking and mental health support.
 
 ### 1. Project Setup
 
-- [] Set up Next.js project.
-- [] Integrate Tailwind CSS and shadcn/ui for styling.
+- [ ] Set up Next.js project.
+- [ ] Integrate Tailwind CSS and shadcn/ui for styling.
 - [ ] Configure Supabase for authentication and database.
 - [ ] Set up Prisma for database schema management.
 - [ ] Deploy initial setup to Vercel.
