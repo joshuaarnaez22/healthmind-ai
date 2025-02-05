@@ -9,12 +9,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import FeatureCard from "./feature-card";
 import MobileNav from "./mobile-nav";
 import ChatPanel from "./chat-panel";
+import Link from "next/link";
 
 export default function HomePage() {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
       <header className="container mx-auto px-4 py-6">
         <nav className="flex justify-between items-center">
           <div className="flex items-center space-x-2">
@@ -46,15 +47,18 @@ export default function HomePage() {
             >
               Terms and Services
             </Button>
-            <Button className="bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white">
-              Sign Up
-            </Button>
+            <Link href="/sign-in">
+              <Button className="bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white">
+                Sign In
+              </Button>
+            </Link>
+
             <ModeToggle />
           </div>
         </nav>
       </header>
 
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-12 flex flex-col flex-grow">
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -127,7 +131,7 @@ export default function HomePage() {
         </motion.section>
       </main>
 
-      <footer className="py-8 bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300 ">
+      <footer className="py-8 bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300 mt">
         <div className="container mx-auto px-4 text-center">
           <p>&copy; 2025 HealthMind. Empowering your wellness journey.</p>
         </div>
