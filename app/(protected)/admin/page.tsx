@@ -1,4 +1,4 @@
-export default async function AdminDashboard() {
+export async function AdminDashboard() {
   return (
     <p>
       This is the protected admin dashboard restricted to users with the `admin`

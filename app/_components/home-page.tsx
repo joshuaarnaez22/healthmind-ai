@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Heart, Activity, Apple } from "lucide-react";
 import { motion } from "framer-motion";
 import { ModeToggle } from "@/components/dark-mode";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import FeatureCard from "./feature-card";
 import MobileNav from "./mobile-nav";
 import ChatPanel from "./chat-panel";
 import Link from "next/link";
+import { Testimonial } from "./testimonial";
 
 export default function HomePage() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -104,30 +104,46 @@ export default function HomePage() {
           />
         </motion.section>
 
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="text-center mb-20"
-        >
-          <h2 className="text-4xl font-bold mb-6 text-gray-800 dark:text-white">
-            Join Our Community
-          </h2>
-          <div className="flex justify-center space-x-4">
-            <Avatar className="border-4 border-purple-500 size-20">
-              <AvatarImage src="/" />
-              <AvatarFallback>JA</AvatarFallback>
-            </Avatar>
-            <Avatar className="border-4 border-green-500 size-20">
-              <AvatarImage src="/" />
-              <AvatarFallback>CC</AvatarFallback>
-            </Avatar>
-            <Avatar className="border-4 border-blue-500 size-20">
-              <AvatarImage src="/" />
-              <AvatarFallback>WA</AvatarFallback>
-            </Avatar>
+        <div className="container mx-auto px-4 h-full flex flex-col justify-center">
+          <motion.h2
+            className="text-4xl md:text-6xl font-bold mb-16 text-center text-gray-800 dark:text-white"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Transforming Lives
+          </motion.h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <Testimonial
+              quote="HealthHub has completely changed my approach to wellness. The personalized insights are incredible!"
+              author="Sarah J."
+              role="Fitness Enthusiast"
+            />
+            <Testimonial
+              quote="As a busy professional, HealthHub helps me stay on top of my health goals effortlessly."
+              author="Michael R."
+              role="Tech Executive"
+            />
+            <Testimonial
+              quote="The mental wellness features have been a game-changer for my overall health and productivity."
+              author="Emily L."
+              role="Yoga Instructor"
+            />
           </div>
-        </motion.section>
+          <motion.div
+            className="text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+          >
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white text-lg px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              Get Started Now
+            </Button>
+          </motion.div>
+        </div>
       </main>
 
       <footer className="py-8 bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300 mt">
