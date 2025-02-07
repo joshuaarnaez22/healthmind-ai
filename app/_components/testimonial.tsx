@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
-import { Star } from "lucide-react";
+import { motion } from 'framer-motion';
+import { Card, CardContent } from '@/components/ui/card';
+import { Star } from 'lucide-react';
 
 interface TestimonialProps {
   quote: string;
@@ -23,10 +23,10 @@ export function Testimonial({ quote, author, role }: TestimonialProps) {
             initial={{ scale: 0 }}
             whileInView={{ scale: 1 }}
             transition={{
-              type: "spring",
+              type: 'spring',
               stiffness: 260,
               damping: 20,
-              delay: 0.2
+              delay: 0.2,
             }}
           >
             {[...Array(5)].map((_, i) => (

@@ -1,9 +1,9 @@
-import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
+import { motion } from 'framer-motion';
+import { Card, CardContent } from '@/components/ui/card';
 export default function FeatureCard({
   icon,
   title,
-  description
+  description,
 }: {
   icon: React.ReactNode;
   title: string;
@@ -21,7 +21,7 @@ export default function FeatureCard({
           <motion.div
             className="mb-4 flex justify-center"
             whileHover={{ scale: 1.2, rotate: 360 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 20 }}
           >
             {icon}
           </motion.div>

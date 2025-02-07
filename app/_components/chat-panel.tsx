@@ -1,10 +1,10 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from 'framer-motion';
+import { MessageCircle, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function ChatPanel({
   isChatOpen,
-  setIsChatOpen
+  setIsChatOpen,
 }: {
   isChatOpen: boolean;
   setIsChatOpen: (open: boolean) => void;
@@ -16,9 +16,9 @@ export default function ChatPanel({
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{
-          type: "spring",
+          type: 'spring',
           stiffness: 260,
-          damping: 20
+          damping: 20,
         }}
       >
         <Button
@@ -36,18 +36,18 @@ export default function ChatPanel({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed bottom-24 right-6 w-80 rounded-lg shadow-xl overflow-hidden bg-white dark:bg-gray-800"
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="fixed bottom-24 right-2 sm:right-6 w-auto md:w-80 rounded-lg shadow-xl overflow-hidden bg-white dark:bg-gray-800"
           >
             <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 flex justify-between items-center">
               <h3 className="font-semibold">HealthMind Assistant</h3>
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white hover:bg-white/20"
+                className="text-white hover:bg-white/20 hover:cursor-pointer"
                 onClick={() => setIsChatOpen(false)}
               >
-                <X className="h-5 w-5" />
+                <X className="h-5 w-5 " />
               </Button>
             </div>
             <div className="h-64 p-4 overflow-y-auto text-gray-600 dark:text-gray-300">

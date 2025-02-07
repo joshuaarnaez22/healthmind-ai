@@ -1,5 +1,5 @@
-import { Roles } from "@/types/global";
-import { auth } from "@clerk/nextjs/server";
+import { Roles } from '@/types/global';
+import { auth } from '@clerk/nextjs/server';
 
 export const checkRole = async (role: Roles) => {
   try {
@@ -9,7 +9,7 @@ export const checkRole = async (role: Roles) => {
     }
     return sessionClaims?.metadata.role === role;
   } catch (error) {
-    console.error("Failed to verify role:", error);
+    console.error('Failed to verify role:', error);
     return false;
   }
 };

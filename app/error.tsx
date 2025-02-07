@@ -1,10 +1,10 @@
-"use client"; // Error boundaries must be Client Components
+'use client'; // Error boundaries must be Client Components
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 export default function Error({
   error,
-  reset
+  reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;

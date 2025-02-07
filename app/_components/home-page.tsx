@@ -1,20 +1,20 @@
-"use client";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Heart, Activity, Apple } from "lucide-react";
-import { motion } from "framer-motion";
-import { ModeToggle } from "@/components/dark-mode";
-import FeatureCard from "./feature-card";
-import MobileNav from "./mobile-nav";
-import ChatPanel from "./chat-panel";
-import Link from "next/link";
-import { Testimonial } from "./testimonial";
+'use client';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Heart, Activity, Apple } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ModeToggle } from '@/components/dark-mode';
+import FeatureCard from './feature-card';
+import MobileNav from './mobile-nav';
+import ChatPanel from './chat-panel';
+import Link from 'next/link';
+import { Testimonial } from './testimonial';
 
 export default function HomePage() {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+    <div className="h-screen overflow-y-scroll scrollbar flex flex-col bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
       <header className="container mx-auto px-4 py-6">
         <nav className="flex justify-between items-center">
           <div className="flex items-center space-x-2">
@@ -57,7 +57,7 @@ export default function HomePage() {
         </nav>
       </header>
 
-      <main className="container mx-auto px-4 py-12 flex flex-col flex-grow">
+      <main className="container mx-auto px-4 py-12 grid grid-flow-row ">
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -65,7 +65,7 @@ export default function HomePage() {
           className="text-center mb-20"
         >
           <h1 className="text-3xl md:text-6xl font-extrabold mb-6 text-gray-800 dark:text-white">
-            Your Health,{" "}
+            Your Health,{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
               Reimagined
             </span>
@@ -80,12 +80,11 @@ export default function HomePage() {
             Start Your Journey
           </Button>
         </motion.section>
-
         <motion.section
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="grid md:grid-cols-3 gap-8 mb-20"
+          className="grid md:grid-cols-3 gap-8 mb-20 "
         >
           <FeatureCard
             icon={<Activity className="h-12 w-12 text-purple-500" />}
@@ -104,7 +103,12 @@ export default function HomePage() {
           />
         </motion.section>
 
-        <div className="container mx-auto px-4 h-full flex flex-col justify-center">
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="my-20"
+        >
           <motion.h2
             className="text-4xl md:text-6xl font-bold mb-16 text-center text-gray-800 dark:text-white"
             initial={{ opacity: 0, y: 20 }}
@@ -115,12 +119,12 @@ export default function HomePage() {
           </motion.h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             <Testimonial
-              quote="HealthHub has completely changed my approach to wellness. The personalized insights are incredible!"
+              quote="HealthMind has completely changed my approach to wellness. The personalized insights are incredible!"
               author="Sarah J."
               role="Fitness Enthusiast"
             />
             <Testimonial
-              quote="As a busy professional, HealthHub helps me stay on top of my health goals effortlessly."
+              quote="As a busy professional, HealthMind helps me stay on top of my health goals effortlessly."
               author="Michael R."
               role="Tech Executive"
             />
@@ -136,17 +140,19 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
           >
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white text-lg px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              Get Started Now
-            </Button>
+            <Link href="/sign-in">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white text-lg px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                Get Started Now
+              </Button>
+            </Link>
           </motion.div>
-        </div>
+        </motion.section>
       </main>
-
-      <footer className="py-8 bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300 mt">
+      <main></main>
+      <footer className="py-8 bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300 mt-auto">
         <div className="container mx-auto px-4 text-center">
           <p>&copy; 2025 HealthMind. Empowering your wellness journey.</p>
         </div>

@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { GalleryVerticalEnd } from "lucide-react";
+import * as React from 'react';
+import { GalleryVerticalEnd } from 'lucide-react';
 
 import {
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem
-} from "@/components/ui/sidebar";
+  SidebarMenuItem,
+} from '@/components/ui/sidebar';
 
 export default function NavHeader() {
   return (
