@@ -29,7 +29,7 @@ export function ModeToggle() {
           <motion.div
             animate={{ rotate: theme === 'dark' ? 360 : 0 }}
             transition={{ duration: 0.7, ease: 'easeInOut' }}
-            className="absolute inset-0 flex justify-center items-center"
+            className="absolute inset-0 flex items-center justify-center"
           >
             <Moon className="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           </motion.div>

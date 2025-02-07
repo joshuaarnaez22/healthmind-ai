@@ -16,10 +16,10 @@ export function Testimonial({ quote, author, role }: TestimonialProps) {
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
     >
-      <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 overflow-hidden group">
+      <Card className="group overflow-hidden bg-white/90 backdrop-blur-sm transition-all duration-300 hover:shadow-xl dark:bg-gray-800/90">
         <CardContent className="p-6">
           <motion.div
-            className="flex justify-center mb-4"
+            className="mb-4 flex justify-center"
             initial={{ scale: 0 }}
             whileInView={{ scale: 1 }}
             transition={{
@@ -30,10 +30,10 @@ export function Testimonial({ quote, author, role }: TestimonialProps) {
             }}
           >
             {[...Array(5)].map((_, i) => (
-              <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+              <Star key={i} className="h-5 w-5 fill-current text-yellow-400" />
             ))}
           </motion.div>
-          <p className="text-gray-600 dark:text-gray-300 mb-4 italic text-center">
+          <p className="mb-4 text-center italic text-gray-600 dark:text-gray-300">
             &ldquo;{quote}&rdquo;
           </p>
           <div className="text-center">
@@ -43,7 +43,7 @@ export function Testimonial({ quote, author, role }: TestimonialProps) {
             <p className="text-sm text-gray-500 dark:text-gray-400">{role}</p>
           </div>
           <motion.div
-            className="w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500 mt-4"
+            className="mt-4 h-1 w-full bg-gradient-to-r from-yellow-400 to-orange-500"
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}

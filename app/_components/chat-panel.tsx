@@ -23,7 +23,7 @@ export default function ChatPanel({
       >
         <Button
           size="lg"
-          className="rounded-full w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg"
+          className="h-16 w-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg hover:from-purple-600 hover:to-pink-600"
           onClick={() => setIsChatOpen(true)}
         >
           <MessageCircle className="h-8 w-8 text-white" />
@@ -37,27 +37,27 @@ export default function ChatPanel({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="fixed bottom-24 right-2 sm:right-6 w-auto md:w-80 rounded-lg shadow-xl overflow-hidden bg-white dark:bg-gray-800"
+            className="fixed bottom-24 right-2 w-auto overflow-hidden rounded-lg bg-white shadow-xl dark:bg-gray-800 sm:right-6 md:w-80"
           >
-            <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 flex justify-between items-center">
+            <div className="flex items-center justify-between bg-gradient-to-r from-purple-500 to-pink-500 p-4 text-white">
               <h3 className="font-semibold">HealthMind Assistant</h3>
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white hover:bg-white/20 hover:cursor-pointer"
+                className="text-white hover:cursor-pointer hover:bg-white/20"
                 onClick={() => setIsChatOpen(false)}
               >
-                <X className="h-5 w-5 " />
+                <X className="h-5 w-5" />
               </Button>
             </div>
-            <div className="h-64 p-4 overflow-y-auto text-gray-600 dark:text-gray-300">
+            <div className="h-64 overflow-y-auto p-4 text-gray-600 dark:text-gray-300">
               <p>Hello! How can I assist you with your health journey today?</p>
             </div>
             <div className="border-t p-4">
               <input
                 type="text"
                 placeholder="Type your message..."
-                className="w-full px-3 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600"
+                className="w-full rounded-full border border-gray-300 bg-white px-3 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               />
             </div>
           </motion.div>
