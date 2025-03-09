@@ -1,4 +1,4 @@
-Proposal for "JobFlow"
+Proposal for "Jobflow: The Future of Job Boards – Secure, Scalable, and AI-Powered"
 A Modern Job Board SaaS Platform
 
 Executive Summary

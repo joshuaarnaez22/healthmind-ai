@@ -102,7 +102,7 @@ Frontend Developer: Joshua Arnaez.
 Tools: Next.js, Tailwind CSS, Supabase, OpenAI/TensorFlow.js, Vercel.
 
 Budget
-AI API Costs: 
+AI API Costs:
 0
 −
 0−300/month (based on usage).
