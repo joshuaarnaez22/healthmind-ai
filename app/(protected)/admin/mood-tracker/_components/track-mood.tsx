@@ -32,14 +32,16 @@ export default function TrackMood() {
         </CardHeader>
         <CardContent className="flex flex-col gap-4 lg:flex-row">
           {/* Calendar Section */}
-          <div className="flex items-center justify-center">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={setDate}
-              className="w-[280px] rounded-md border"
-            />
-          </div>
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={setDate}
+            className="rounded-lg border border-border bg-background p-2"
+            classNames={{
+              month_caption: 'ms-2.5 me-20 justify-start',
+              nav: 'justify-end',
+            }}
+          />
 
           {/* Mood Details Section */}
           {date && (
