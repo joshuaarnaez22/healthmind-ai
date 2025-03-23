@@ -17,8 +17,10 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { menuItemVariants, subMenuVariants } from '@/lib/motion';
+import Link from 'next/link';
 
 export default function NavMain({
   items,
@@ -34,6 +36,7 @@ export default function NavMain({
     }[];
   }[];
 }) {
+  const { toggleSidebar, open, isMobile } = useSidebar();
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -53,7 +56,10 @@ export default function NavMain({
             >
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
-                  <SidebarMenuButton tooltip={item.title}>
+                  <SidebarMenuButton
+                    tooltip={item.title}
+                    onClick={() => !isMobile && !open && toggleSidebar()}
+                  >
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
@@ -75,9 +81,9 @@ export default function NavMain({
                         >
                           <SidebarMenuSubItem>
                             <SidebarMenuSubButton asChild>
-                              <a href={subItem.url}>
+                              <Link href={subItem.url}>
                                 <span>{subItem.title}</span>
-                              </a>
+                              </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         </motion.div>

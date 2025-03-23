@@ -16,13 +16,22 @@ datasource db {
 
 model User {
   id              String   @id @default(cuid()) // Unique identifier for the user
+  role            Role     @default(USER)
   clerkUserId     String   @unique // Clerk's user ID
   email           String   @unique // User's email address
+  username        String?  @unique
   firstName       String? // User's first name
   lastName        String? // User's last name
   profileImageUrl String? // URL to the user's profile image
   createdAt       DateTime @default(now()) // Timestamp when the user was created
   updatedAt       DateTime @updatedAt // Timestamp when the user was last updated
 
-  // Additional fields can be added here
+  @@index([clerkUserId])
+  @@index([email])
+  @@index([username])
+}
+
+enum Role {
+  USER
+  ADMIN
 }

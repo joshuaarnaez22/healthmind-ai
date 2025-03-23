@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { BookOpen, Bot, Settings2, SquareTerminal } from 'lucide-react';
+import { Brain, FileText, Heart, Notebook, SquareTerminal } from 'lucide-react';
 
 import NavMain from './nav-main';
 import NavUser from './nav-user';
@@ -30,80 +30,61 @@ const data = {
       isActive: false,
       items: [
         {
-          title: 'History',
+          title: 'Mental Analysis',
           url: '#',
         },
         {
-          title: 'Starred',
-          url: '#',
-        },
-        {
-          title: 'Settings',
+          title: 'Physical Analysis',
           url: '#',
         },
       ],
     },
     {
-      title: 'Models',
+      title: 'Mental',
       url: '#',
-      icon: Bot,
+      icon: Brain,
       items: [
         {
-          title: 'Genesis',
-          url: '#',
+          title: 'Mood Tracker',
+          url: '/admin/mood-tracker',
         },
+      ],
+    },
+    {
+      title: 'Physical',
+      url: '#',
+      icon: Heart,
+      items: [
         {
-          title: 'Explorer',
-          url: '#',
-        },
-        {
-          title: 'Quantum',
+          title: 'Fitness',
           url: '#',
         },
       ],
     },
     {
-      title: 'Documentation',
+      title: 'Journal', // Main title
       url: '#',
-      icon: BookOpen,
+      icon: Notebook, // Icon for journaling
+      isActive: false,
       items: [
         {
-          title: 'Introduction',
+          title: 'New Entry', // Nested item
           url: '#',
         },
         {
-          title: 'Get Started',
-          url: '#',
-        },
-        {
-          title: 'Tutorials',
-          url: '#',
-        },
-        {
-          title: 'Changelog',
+          title: 'Past Entries', // Nested item
           url: '#',
         },
       ],
     },
     {
-      title: 'Settings',
+      title: 'MediSummary',
       url: '#',
-      icon: Settings2,
+      icon: FileText,
+      isActive: false,
       items: [
         {
-          title: 'General',
-          url: '#',
-        },
-        {
-          title: 'Team',
-          url: '#',
-        },
-        {
-          title: 'Billing',
-          url: '#',
-        },
-        {
-          title: 'Limits',
+          title: 'Health Insights',
           url: '#',
         },
       ],
