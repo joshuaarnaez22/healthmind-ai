@@ -2,40 +2,37 @@
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import moods from '@/lib/mood';
 import { cn, safeFormat } from '@/lib/utils';
-import { isValid } from 'date-fns';
+import { PlusIcon } from 'lucide-react';
 import { useState } from 'react';
 
-interface MoodModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  selectedDate?: Date;
-}
-export default function MoodModal({
-  isOpen,
-  onClose,
-  selectedDate,
-}: MoodModalProps) {
+export default function MoodModal() {
   const [notes, setNotes] = useState('');
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
-  const validDate =
-    selectedDate && isValid(selectedDate) ? selectedDate : new Date();
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className="gap-2">
+          <PlusIcon className="size-4" />
+          Track Mood
+        </Button>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>How are you feeling?</DialogTitle>
-          <DialogDescription>{`Record your mood for ${safeFormat(validDate, 'EEEE, MMMM do')}`}</DialogDescription>
+          <DialogDescription>{`Record your mood for ${safeFormat(new Date(), 'EEEE, MMMM do')}`}</DialogDescription>
         </DialogHeader>
         <div className="space-y-6 py-4">
           <div className="space-y-4">
@@ -77,9 +74,9 @@ export default function MoodModal({
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
           <Button>Save Entry</Button>
         </DialogFooter>
       </DialogContent>

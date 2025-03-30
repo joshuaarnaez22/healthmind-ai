@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Poppins } from 'next/font/google';
+import NextTopLoader from 'nextjs-toploader';
 import './globals.css';
 
 const poppins = Poppins({ weight: '400', subsets: ['latin'] });
@@ -21,6 +22,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={poppins.className}>
+          <NextTopLoader showSpinner={true} />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

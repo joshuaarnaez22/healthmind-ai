@@ -68,12 +68,8 @@ const data = {
       isActive: false,
       items: [
         {
-          title: 'New Entry', // Nested item
-          url: '#',
-        },
-        {
-          title: 'Past Entries', // Nested item
-          url: '#',
+          title: 'Entries', // Nested item
+          url: '/admin/journal',
         },
       ],
     },

@@ -1,6 +1,6 @@
 'use client';
-import MoodModal from './mood-modal';
 import { useState } from 'react';
+import NewEntryModal from './new-entry-modal';
 import {
   Card,
   CardContent,
@@ -11,24 +11,22 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { safeFormat } from '@/lib/utils';
 import { DateRange } from 'react-day-picker';
-
-export default function TrackMood() {
+export default function JournalEntry() {
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(), // Default start date (today)
     to: new Date(), // Default end date (+6 days)
   });
-
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold">Mood Tracker</h2>
+        <h2 className="text-xl font-semibold">My Mental Health Journal</h2>
       </div>
 
       <Card>
         <CardHeader>
           <CardTitle>Calendar</CardTitle>
           <CardDescription>
-            Select a date to view or add mood entries
+            Select a date range to view or add journal entries
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 lg:flex-row">
@@ -48,7 +46,7 @@ export default function TrackMood() {
               <div>
                 {date ? (
                   <CardTitle className="text-xl font-semibold text-primary">
-                    {safeFormat(date.from, 'EEEE, MMMM do, yyyy')} -{' '}
+                    {safeFormat(date.from, 'EEEE, MMMM do, yyyy')} -
                     {safeFormat(date.to, 'EEEE, MMMM do, yyyy')}
                   </CardTitle>
                 ) : (
@@ -57,10 +55,11 @@ export default function TrackMood() {
                   </CardTitle>
                 )}
                 <CardDescription className="mt-1 text-sm text-muted-foreground">
-                  No mood recorded for this day
+                  No journal recorded for this day
                 </CardDescription>
               </div>
-              <MoodModal />
+
+              <NewEntryModal />
             </CardHeader>
             <CardContent></CardContent>
           </Card>
