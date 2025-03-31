@@ -1,6 +1,5 @@
 import { getUserId } from '@/actions/server-actions/user';
 import { prisma } from '@/lib/client';
-import { dateFormatUtc } from '@/lib/utils';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
@@ -32,11 +31,16 @@ export async function GET(request: Request) {
     }
 
     // Set the date range to cover the entire day
-    const addedAt = dateFormatUtc(date);
-    console.log(addedAt);
+    const queryDate = new Date(date);
+    queryDate.setHours(0, 0, 0, 0);
+
+    console.log(queryDate);
 
     const journals = await prisma.journal.findMany({
-      where: { userId: user_id, addedAt },
+      where: {
+        userId: user_id,
+        addedAt: queryDate,
+      },
       orderBy: { createdAt: 'desc' },
     });
 

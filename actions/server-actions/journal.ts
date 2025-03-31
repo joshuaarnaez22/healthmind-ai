@@ -4,7 +4,6 @@ import { prisma } from '@/lib/client';
 import { journalEntrySchema } from '@/lib/zod-validation';
 import { Mood } from '@prisma/client';
 import { getUserId } from './user';
-import { dateFormatUtc } from '@/lib/utils';
 
 export const createJournal = async (
   values: unknown,
@@ -23,15 +22,19 @@ export const createJournal = async (
 
     const { title, mood, content } = parsedData.data;
     const moodEnum = mood.toUpperCase() as keyof typeof Mood;
-    const addedAt = dateFormatUtc(date);
-    console.log(addedAt);
 
     if (!Mood[moodEnum]) {
       return { success: false, message: 'Invalid mood value' };
     }
 
     const journal = await prisma.journal.create({
-      data: { title, mood: Mood[moodEnum], content, userId: id, addedAt },
+      data: {
+        title,
+        mood: Mood[moodEnum],
+        content,
+        userId: id,
+        addedAt: date,
+      },
     });
     return {
       success: true,

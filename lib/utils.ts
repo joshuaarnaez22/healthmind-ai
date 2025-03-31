@@ -15,9 +15,3 @@ export const safeFormat = (
   }
   return format(date, formatString);
 };
-
-export const dateFormatUtc = (date: Date) => {
-  return new Date(
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
-  );
-};

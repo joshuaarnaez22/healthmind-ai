@@ -54,7 +54,7 @@ model Journal {
   content   String
   mood      Mood
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  addedAt   DateTime
+  addedAt   DateTime @db.Date
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
