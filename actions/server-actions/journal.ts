@@ -26,6 +26,8 @@ export const createJournal = async (
     if (!Mood[moodEnum]) {
       return { success: false, message: 'Invalid mood value' };
     }
+    const adjustedDate = new Date(date);
+    adjustedDate.setHours(date.getHours() + 8);
 
     const journal = await prisma.journal.create({
       data: {
@@ -33,7 +35,7 @@ export const createJournal = async (
         mood: Mood[moodEnum],
         content,
         userId: id,
-        addedAt: date,
+        addedAt: adjustedDate,
       },
     });
     return {

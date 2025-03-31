@@ -30,11 +30,8 @@ export async function GET(request: Request) {
       );
     }
 
-    // Set the date range to cover the entire day
     const queryDate = new Date(date);
-    queryDate.setHours(0, 0, 0, 0);
-
-    console.log(queryDate);
+    queryDate.setHours(date.getHours() + 8);
 
     const journals = await prisma.journal.findMany({
       where: {
