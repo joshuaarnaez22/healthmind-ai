@@ -1,5 +1,6 @@
 import { getUserId } from '@/actions/server-actions/user';
 import { prisma } from '@/lib/client';
+import { dateFormatUtc } from '@/lib/utils';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
@@ -23,7 +24,7 @@ export async function GET(request: Request) {
     }
 
     const date = new Date(dateParam);
-    if (isNaN(date.getTime())) {
+    if (!date || isNaN(date.getTime())) {
       return NextResponse.json(
         { error: 'Invalid date format' },
         { status: 400 }
@@ -31,20 +32,12 @@ export async function GET(request: Request) {
     }
 
     // Set the date range to cover the entire day
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
-
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
+    const addedAt = dateFormatUtc(date);
 
     const journals = await prisma.journal.findMany({
-      where: { userId: user_id, createdAt: { gte: startOfDay, lte: endOfDay } },
+      where: { userId: user_id, addedAt },
       orderBy: { createdAt: 'desc' },
     });
-
-    console.log('startOfDay', startOfDay);
-    console.log('endOfDay', endOfDay);
-    console.log(journals.length);
 
     return NextResponse.json({ journals }, { status: 200 });
   } catch (error) {

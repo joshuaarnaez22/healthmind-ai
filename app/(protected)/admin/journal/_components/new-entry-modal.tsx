@@ -54,7 +54,7 @@ export default function NewEntryModal({ date }: { date: Date | undefined }) {
 
   const onSubmit = async (values: JournalEntryFormValues) => {
     startTransition(async () => {
-      const response = await createJournal(values);
+      const response = await createJournal(values, date);
       if (response.success && response.data) {
         queryClient.setQueryData<Journal[]>(
           ['journals', dateKey],

@@ -7,6 +7,7 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
+  output          = "../prisma/generated"
 }
 
 datasource db {
@@ -48,13 +49,13 @@ enum Mood {
 }
 
 model Journal {
-  id      String @id @default(cuid())
-  userId  String
-  title   String
-  content String
-  mood    Mood
-  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  content   String
+  mood      Mood
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  addedAt   DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

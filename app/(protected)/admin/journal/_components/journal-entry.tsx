@@ -27,7 +27,7 @@ export default function JournalEntry() {
     queryKey: ['journals', dateKey],
     queryFn: async ({ signal }) => {
       if (!date) return [];
-      const response = await fetch(`/api/journal?date=${date.toISOString()}`, {
+      const response = await fetch(`/api/journal?date=${date}`, {
         signal,
       });
       const data = await response.json();
