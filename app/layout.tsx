@@ -4,6 +4,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { Poppins } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
 import './globals.css';
+import QueryProvider from '@/components/wrappers/query-client';
 
 const poppins = Poppins({ weight: '400', subsets: ['latin'] });
 
@@ -15,9 +16,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
@@ -29,7 +28,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <QueryProvider>{children}</QueryProvider>
           </ThemeProvider>
         </body>
       </html>

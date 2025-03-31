@@ -36,21 +36,34 @@ import { useState } from 'react';
 import RichTextEditor from './rich-text-editor';
 import moods from '@/lib/mood';
 import { cn } from '@/lib/utils';
-export default function NewEntryModal() {
+import { useTransition } from 'react';
+import { createJournal } from '@/actions/server-actions/journal';
+import { useQueryClient } from '@tanstack/react-query';
+import { Journal } from '@prisma/client';
+
+export default function NewEntryModal({ date }: { date: Date | undefined }) {
   const [open, setOpen] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const queryClient = useQueryClient();
   const form = useForm<JournalEntryFormValues>({
     resolver: zodResolver(journalEntrySchema),
-    defaultValues: {
-      title: '',
-      mood: '',
-      content: '',
-    },
+    defaultValues: { title: '', mood: '', content: '' },
   });
 
-  const onSubmit = (values: JournalEntryFormValues) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  const dateKey = date?.toISOString().split('T')[0];
+
+  const onSubmit = async (values: JournalEntryFormValues) => {
+    startTransition(async () => {
+      const response = await createJournal(values);
+      if (response.success && response.data) {
+        queryClient.setQueryData<Journal[]>(
+          ['journals', dateKey],
+          (old = []) => [response.data, ...old]
+        );
+      }
+      setOpen(false);
+      form.reset();
+    });
   };
   return (
     <Dialog
@@ -141,9 +154,9 @@ export default function NewEntryModal() {
               />
 
               <DialogFooter>
-                <Button type="submit" disabled={form.formState.isSubmitting}>
+                <Button type="submit" disabled={pending}>
                   <Save className="mr-2 h-4 w-4" />
-                  {form.formState.isSubmitting ? 'Saving...' : 'Save Entry'}
+                  {pending ? 'Saving...' : 'Save Entry'}
                 </Button>
               </DialogFooter>
             </form>

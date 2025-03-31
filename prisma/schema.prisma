@@ -15,16 +15,19 @@ datasource db {
 }
 
 model User {
-  id              String   @id @default(cuid()) // Unique identifier for the user
+  id              String   @id @default(cuid())
   role            Role     @default(USER)
-  clerkUserId     String   @unique // Clerk's user ID
-  email           String   @unique // User's email address
+  clerkUserId     String   @unique
+  email           String   @unique
   username        String?  @unique
-  firstName       String? // User's first name
-  lastName        String? // User's last name
-  profileImageUrl String? // URL to the user's profile image
-  createdAt       DateTime @default(now()) // Timestamp when the user was created
-  updatedAt       DateTime @updatedAt // Timestamp when the user was last updated
+  firstName       String?
+  lastName        String?
+  profileImageUrl String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  //relations
+  journals Journal[]
 
   @@index([clerkUserId])
   @@index([email])
@@ -34,4 +37,26 @@ model User {
 enum Role {
   USER
   ADMIN
+}
+
+enum Mood {
+  TERRIBLE
+  BAD
+  NEUTRAL
+  GOOD
+  GREAT
+}
+
+model Journal {
+  id      String @id @default(cuid())
+  userId  String
+  title   String
+  content String
+  mood    Mood
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
