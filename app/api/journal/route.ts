@@ -33,6 +33,7 @@ export async function GET(request: Request) {
 
     // Set the date range to cover the entire day
     const addedAt = dateFormatUtc(date);
+    console.log(addedAt);
 
     const journals = await prisma.journal.findMany({
       where: { userId: user_id, addedAt },

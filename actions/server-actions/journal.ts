@@ -24,6 +24,7 @@ export const createJournal = async (
     const { title, mood, content } = parsedData.data;
     const moodEnum = mood.toUpperCase() as keyof typeof Mood;
     const addedAt = dateFormatUtc(date);
+    console.log(addedAt);
 
     if (!Mood[moodEnum]) {
       return { success: false, message: 'Invalid mood value' };
