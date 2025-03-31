@@ -41,7 +41,7 @@ export default function RichTextEditor({
     editorProps: {
       attributes: {
         class:
-          'min-h-[150px] focus:outline-none prose dark:prose-invert max-w-none',
+          'min-h-[150px] focus:outline-none prose dark:prose-invert max-w-none [&>p]:my-1 [&>p:first-child]:mt-0 [&>p:last-child]:mb-0 [&>ul]:my-1 [&>ol]:my-1 [&>blockquote]:my-2 [&>h2]:my-2 [&>h3]:my-2',
       },
     },
   });
