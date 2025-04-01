@@ -23,6 +23,8 @@ export async function GET(request: Request) {
     }
 
     const date = new Date(dateParam);
+    console.log(date);
+
     if (!date || isNaN(date.getTime())) {
       return NextResponse.json(
         { error: 'Invalid date format' },
@@ -30,13 +32,10 @@ export async function GET(request: Request) {
       );
     }
 
-    const queryDate = new Date(date);
-    queryDate.setHours(date.getHours() + 8);
-
     const journals = await prisma.journal.findMany({
       where: {
         userId: user_id,
-        addedAt: queryDate,
+        addedAt: date,
       },
       orderBy: { createdAt: 'desc' },
     });

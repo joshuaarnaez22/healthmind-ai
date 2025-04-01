@@ -85,7 +85,10 @@ Many individuals struggle to access timely and accurate health information, espe
    - Use `pdf-parse` for text extraction from uploaded medical files.
 
 4. **Deployment**:
+
    - Deploy the app to Vercel for seamless CI/CD.
+
+5. https://react.email/docs/introduction
 
 ---
 

@@ -83,6 +83,10 @@ const data = {
           title: 'Health Insights',
           url: '#',
         },
+        {
+          title: 'Health Tracker',
+          url: '/admin/health-tracker',
+        },
       ],
     },
   ],
