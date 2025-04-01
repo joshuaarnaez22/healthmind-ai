@@ -53,5 +53,37 @@ const moods = [
     selectedColor: 'bg-blue-200 border-blue-500',
   },
 ];
+const commonSymptoms = [
+  'Headache',
+  'Dizziness',
+  'Nausea',
+  'Blurred Vision',
+  'Shortness of Breath',
+  'Chest Pain',
+  'Fatigue',
+  'Anxiety',
+];
 
-export default moods;
+const postures = ['SITTING', 'STANDING', 'LYING_DOWN'];
+
+const getBPCategory = (systolic: number, diastolic: number) => {
+  if (systolic < 120 && diastolic < 80)
+    return { label: 'Normal', color: 'bg-green-100 text-green-800' };
+  if (systolic >= 120 && systolic <= 129 && diastolic < 80)
+    return { label: 'Elevated', color: 'bg-yellow-100 text-yellow-800' };
+  if (
+    (systolic >= 130 && systolic <= 139) ||
+    (diastolic >= 80 && diastolic <= 89)
+  )
+    return {
+      label: 'Stage 1 Hypertension',
+      color: 'bg-orange-100 text-orange-800',
+    };
+  if (systolic >= 140 || diastolic >= 90)
+    return { label: 'Stage 2 Hypertension', color: 'bg-red-100 text-red-800' };
+  if (systolic > 180 || diastolic > 120)
+    return { label: 'Hypertensive Crisis', color: 'bg-red-500 text-white' };
+  return { label: 'Unknown', color: 'bg-gray-100 text-gray-800' };
+};
+
+export { moods, commonSymptoms, getBPCategory, postures };

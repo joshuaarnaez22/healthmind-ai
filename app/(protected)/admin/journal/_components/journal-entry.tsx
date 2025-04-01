@@ -1,7 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import NewEntryModal from './new-entry-modal';
-import { safeFormat } from '@/lib/utils';
+import { formatDateKey, safeFormat } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Journal } from '@prisma/client';
@@ -12,8 +12,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 export default function JournalEntry() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const dateKey = formatDateKey(date);
 
-  const dateKey = date?.toISOString().split('T')[0];
   const {
     data: journals,
     isLoading,
@@ -28,6 +28,7 @@ export default function JournalEntry() {
       const data = await response.json();
       return data.journals;
     },
+    enabled: !!date,
   });
 
   const hasEntries = journals && journals.length > 0;

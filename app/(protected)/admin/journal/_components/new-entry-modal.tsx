@@ -34,7 +34,7 @@ import {
 } from '@/components/ui/select';
 import { useState } from 'react';
 import RichTextEditor from './rich-text-editor';
-import moods from '@/lib/mood';
+import { moods } from '@/lib/constant';
 import { cn } from '@/lib/utils';
 import { useTransition } from 'react';
 import { createJournal } from '@/actions/server-actions/journal';

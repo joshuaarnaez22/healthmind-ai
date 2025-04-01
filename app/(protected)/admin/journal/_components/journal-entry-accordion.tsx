@@ -8,7 +8,7 @@ import { formatDistanceToNow } from 'date-fns';
 import DOMPurify from 'dompurify';
 import { ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import moods from '@/lib/mood';
+import { moods } from '@/lib/constant';
 import EditEntryModal from './edit-entry-moda';
 
 export default function JournalEntryAccordionItem({

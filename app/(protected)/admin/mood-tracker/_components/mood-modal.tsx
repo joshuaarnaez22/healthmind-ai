@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import moods from '@/lib/mood';
+import { moods } from '@/lib/constant';
 import { cn, safeFormat } from '@/lib/utils';
 import { PlusIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -73,7 +73,7 @@ export default function MoodModal() {
             />
           </div>
         </div>
-        <DialogFooter>
+        <DialogFooter className="gap-4">
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
