@@ -28,14 +28,8 @@ export const bloodPressureSchema = z.object({
     .max(200, 'Must be at most 200')
     .optional()
     .nullable(),
-  posture: z
-    .enum(['SITTING', 'STANDING', 'LYING_DOWN'] as const)
-    .optional()
-    .nullable(),
-  arm: z
-    .enum(['LEFT', 'RIGHT'] as const)
-    .optional()
-    .nullable(),
+  posture: z.enum(['SITTING', 'STANDING', 'LYING_DOWN'] as const).optional(),
+  arm: z.enum(['LEFT', 'RIGHT'] as const).optional(),
   device: z.string().optional().nullable(),
   symptoms: z.array(z.string()),
   notes: z.string().optional().nullable(),

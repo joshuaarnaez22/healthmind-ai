@@ -1,5 +1,6 @@
 'use client';
 
+import { addBloodPressure } from '@/actions/server-actions/health-tracker';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -39,12 +40,16 @@ import {
   bloodPressureSchema,
 } from '@/lib/zod-validation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { BloodPressureLog } from '@prisma/client';
+import { useQueryClient } from '@tanstack/react-query';
 import { CalendarIcon, Heart } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function BloodPressureForm() {
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
+  const [pending, startTransition] = useTransition();
+  const queryClient = useQueryClient();
   const [customSymptom, setCustomSymptom] = useState('');
   const form = useForm<BloodPressureFormValues>({
     resolver: zodResolver(bloodPressureSchema),
@@ -76,8 +81,17 @@ export default function BloodPressureForm() {
     setSelectedSymptoms(selectedSymptoms.filter((s) => s !== symptom));
   };
 
-  const handleSubmit = (values: BloodPressureFormValues) => {
-    console.log(values);
+  const handleSubmit = async (values: BloodPressureFormValues) => {
+    startTransition(async () => {
+      const response = await addBloodPressure(values);
+      if (response.success && response.data) {
+        queryClient.setQueryData<BloodPressureLog[]>(
+          ['blood-pressure-logs'],
+          (old = []) => [response.data, ...old]
+        );
+      }
+      form.reset();
+    });
   };
 
   useEffect(() => {
@@ -372,9 +386,15 @@ export default function BloodPressureForm() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button type="submit" className="w-full md:w-auto">
+                <Button
+                  type="submit"
+                  className="w-full md:w-auto"
+                  disabled={pending}
+                >
                   <Heart className="mr-2 h-4 w-4" />
-                  Save Blood Pressure Reading
+                  {pending
+                    ? 'Saving Blood Pressure Reading...'
+                    : 'Save Blood Pressure Reading'}
                 </Button>
               </TooltipTrigger>
               <TooltipContent>

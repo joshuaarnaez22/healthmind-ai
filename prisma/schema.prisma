@@ -119,7 +119,7 @@ model GlucoseLog {
 enum PostureType {
   SITTING
   STANDING
-  LYING
+  LYING_DOWN
 }
 
 enum ArmType {

@@ -4,6 +4,7 @@ import { prisma } from '@/lib/client';
 import { journalEntrySchema } from '@/lib/zod-validation';
 import { Mood } from '@prisma/client';
 import { getUserId } from './user';
+import { enumConvertor } from '@/lib/utils';
 
 export const createJournal = async (
   values: unknown,
@@ -21,9 +22,9 @@ export const createJournal = async (
     }
 
     const { title, mood, content } = parsedData.data;
-    const moodEnum = mood.toUpperCase() as keyof typeof Mood;
+    const moodEnum = enumConvertor(Mood, mood);
 
-    if (!Mood[moodEnum]) {
+    if (!moodEnum) {
       return { success: false, message: 'Invalid mood value' };
     }
     const adjustedDate = new Date(date);
