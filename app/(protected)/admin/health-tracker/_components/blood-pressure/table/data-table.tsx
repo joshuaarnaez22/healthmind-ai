@@ -83,7 +83,7 @@ export function DataTable<TData, TValue>({
     return <TableError />;
   }
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 overflow-x-auto">
       <div className="flex items-center justify-between">
         <Input
           placeholder="Filter readings..."
@@ -94,7 +94,7 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
       </div>
-      <div className="rounded-md border">
+      <div className="grid grid-cols-1">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

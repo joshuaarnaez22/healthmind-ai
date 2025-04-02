@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { getBPCategory } from '@/lib/constant';
-import { cn } from '@/lib/utils';
+import { cn, truncatedText } from '@/lib/utils';
 import { BloodPressureLog } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
@@ -92,7 +92,7 @@ export const columns: ColumnDef<BloodPressureLog>[] = [
       const symptoms = row.original.symptoms;
 
       return (
-        <div className="flex max-w-[200px] flex-wrap gap-1">
+        <div className="flex flex-wrap gap-1">
           {symptoms.length > 0 ? (
             symptoms.map((symptom) => (
               <Badge key={symptom} variant="outline" className="text-xs">
@@ -113,8 +113,10 @@ export const columns: ColumnDef<BloodPressureLog>[] = [
       const notes = row.original.notes;
 
       return (
-        <div className="max-w-[200px] truncate">
-          {notes || <span className="text-muted-foreground">-</span>}
+        <div className="truncate">
+          {(notes && truncatedText(notes)) || (
+            <span className="text-muted-foreground">-</span>
+          )}
         </div>
       );
     },

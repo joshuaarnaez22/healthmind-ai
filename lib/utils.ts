@@ -30,3 +30,9 @@ export const enumConvertor = <T extends object>(
   const upperValue = value.toUpperCase();
   return upperValue in enumOjb ? (upperValue as keyof typeof enumOjb) : null;
 };
+
+export const truncatedText = (text: string, maxLength = 20): string => {
+  const truncateText =
+    text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+  return truncateText;
+};
