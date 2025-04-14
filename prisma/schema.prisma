@@ -36,19 +36,6 @@ model User {
   @@index([username])
 }
 
-enum Role {
-  USER
-  ADMIN
-}
-
-enum Mood {
-  TERRIBLE
-  BAD
-  NEUTRAL
-  GOOD
-  GREAT
-}
-
 model Journal {
   id        String   @id @default(cuid())
   userId    String
@@ -147,4 +134,17 @@ enum ActivityLevel {
   RESTING
   AFTER_EXERCISE
   NORMAL
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Mood {
+  TERRIBLE
+  BAD
+  NEUTRAL
+  GOOD
+  GREAT
 }

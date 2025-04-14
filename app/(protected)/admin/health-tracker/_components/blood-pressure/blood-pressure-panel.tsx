@@ -4,6 +4,7 @@ import { BarChart, List, PlusCircle } from 'lucide-react';
 import { useState } from 'react';
 import BloodPressureForm from './blood-pressure-form';
 import BloodPressureHistory from './blood-pressure-history';
+import BloodPressureChart from './blood-pressure-chart';
 
 export default function BloodPressurePanel() {
   const [view, setView] = useState<'form' | 'history' | 'chart'>('form');
@@ -43,7 +44,7 @@ export default function BloodPressurePanel() {
       <Card className="p-4">
         {view === 'form' && <BloodPressureForm />}
         {view === 'history' && <BloodPressureHistory />}
-        {view === 'chart' && <div>BloodPressureChart</div>}
+        {view === 'chart' && <BloodPressureChart />}
       </Card>
     </div>
   );

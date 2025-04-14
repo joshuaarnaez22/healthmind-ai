@@ -3,14 +3,17 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { BarChart, List, PlusCircle } from 'lucide-react';
 import { useState } from 'react';
+import GlucoseForm from './glucose-form';
+import GlucoseHistory from './glucose-history';
+import GlucoseChart from './glucose-chart';
 
 export default function GlucosePanel() {
   const [view, setView] = useState<'form' | 'history' | 'chart'>('form');
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <h2 className="text-2xl font-bold text-blue-800">Glucose Tracker</h2>
-        <div className="flex space-x-2">
+        <div className="flex flex-col justify-start gap-2 md:flex-row lg:justify-end">
           <Button
             variant={view === 'form' ? 'default' : 'outline'}
             size="sm"
@@ -38,9 +41,9 @@ export default function GlucosePanel() {
         </div>
       </div>
       <Card className="p-4">
-        {view === 'form' && <div>GlucoseForm</div>}
-        {view === 'history' && <div>GlucoseHistory</div>}
-        {view === 'chart' && <div>GlucoseChart</div>}
+        {view === 'form' && <GlucoseForm />}
+        {view === 'history' && <GlucoseHistory />}
+        {view === 'chart' && <GlucoseChart />}
       </Card>
     </div>
   );

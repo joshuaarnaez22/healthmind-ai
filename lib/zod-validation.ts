@@ -1,3 +1,9 @@
+import {
+  ArmType,
+  MealType,
+  MeasurementType,
+  PostureType,
+} from '@prisma/client';
 import * as z from 'zod';
 
 export const journalEntrySchema = z.object({
@@ -28,11 +34,29 @@ export const bloodPressureSchema = z.object({
     .max(200, 'Must be at most 200')
     .optional()
     .nullable(),
-  posture: z.enum(['SITTING', 'STANDING', 'LYING_DOWN'] as const).optional(),
-  arm: z.enum(['LEFT', 'RIGHT'] as const).optional(),
+  posture: z.nativeEnum(PostureType).optional(),
+  arm: z.nativeEnum(ArmType).optional(),
   device: z.string().optional().nullable(),
   symptoms: z.array(z.string()),
   notes: z.string().optional().nullable(),
 });
+
+export const glucoseSchema = z.object({
+  loggedAt: z.date(),
+  glucose: z.coerce.number().positive('Must be a positive number'),
+  glucoseMgDl: z.coerce
+    .number()
+    .positive('Must be a positive number')
+    .optional()
+    .nullable(),
+  measurementType: z.nativeEnum(MeasurementType),
+  mealType: z.nativeEnum(MealType).optional().nullable(),
+  timeSinceMeal: z.coerce.number().min(0).optional().nullable(),
+  device: z.string().optional().nullable(),
+  insulinDose: z.coerce.number().min(0).optional().nullable(),
+  carbs: z.coerce.number().min(0).optional().nullable(),
+  notes: z.string().optional().nullable(),
+});
 export type JournalEntryFormValues = z.infer<typeof journalEntrySchema>;
 export type BloodPressureFormValues = z.infer<typeof bloodPressureSchema>;
+export type GlucoseFormValues = z.infer<typeof glucoseSchema>;

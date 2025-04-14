@@ -1,3 +1,4 @@
+import { MeasurementType, PostureType } from '@prisma/client';
 import {
   FrownIcon,
   MehIcon,
@@ -64,7 +65,8 @@ const commonSymptoms = [
   'Anxiety',
 ];
 
-const postures = ['SITTING', 'STANDING', 'LYING_DOWN'];
+const postures = Object.values(PostureType);
+const measurementType = Object.values(MeasurementType);
 
 const getBPCategory = (systolic: number, diastolic: number) => {
   if (systolic < 120 && diastolic < 80)
@@ -86,4 +88,27 @@ const getBPCategory = (systolic: number, diastolic: number) => {
   return { label: 'Unknown', color: 'bg-gray-100 text-gray-800' };
 };
 
-export { moods, commonSymptoms, getBPCategory, postures };
+const getGlucoseCategory = (value: number, isMMOL: boolean) => {
+  const glucoseValue = isMMOL ? value : value / 18;
+
+  if (glucoseValue < 4.0)
+    return { label: 'Low', color: 'bg-red-100 text-red-800' };
+  if (glucoseValue >= 4.0 && glucoseValue <= 5.9)
+    return { label: 'Normal', color: 'bg-green-100 text-green-800' };
+  if (glucoseValue > 5.9 && glucoseValue <= 7.0)
+    return { label: 'Elevated', color: 'bg-yellow-100 text-yellow-800' };
+  if (glucoseValue > 7.0 && glucoseValue <= 10.0)
+    return { label: 'High', color: 'bg-orange-100 text-orange-800' };
+  if (glucoseValue > 10.0)
+    return { label: 'Very High', color: 'bg-red-100 text-red-800' };
+  return { label: 'Unknown', color: 'bg-gray-100 text-gray-800' };
+};
+
+export {
+  moods,
+  commonSymptoms,
+  getBPCategory,
+  postures,
+  getGlucoseCategory,
+  measurementType,
+};
