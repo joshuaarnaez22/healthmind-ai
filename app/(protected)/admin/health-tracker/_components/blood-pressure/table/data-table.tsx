@@ -73,8 +73,6 @@ export function DataTable<TData, TValue>({
     }
   }, [isMobile]);
 
-  console.log(isMobile);
-
   if (isLoading) {
     return <TableLoading columns={6} rows={6} />;
   }

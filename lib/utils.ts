@@ -1,7 +1,7 @@
+import { Decimal } from '@prisma/client/runtime/library';
 import { clsx, type ClassValue } from 'clsx';
 import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -36,3 +36,5 @@ export const truncatedText = (text: string, maxLength = 20): string => {
     text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
   return truncateText;
 };
+
+export const decimalToString = (value: Decimal) => value.toString();

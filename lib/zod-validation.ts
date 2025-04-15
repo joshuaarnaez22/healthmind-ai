@@ -46,9 +46,11 @@ export const glucoseSchema = z.object({
   glucose: z.coerce.number().positive('Must be a positive number'),
   glucoseMgDl: z.coerce
     .number()
-    .positive('Must be a positive number')
-    .optional()
-    .nullable(),
+    .transform((val) => (val === 0 ? null : val))
+    .refine((val) => val == null || val > 0, {
+      message: 'Must be a positive number',
+    })
+    .optional(),
   measurementType: z.nativeEnum(MeasurementType),
   mealType: z.nativeEnum(MealType).optional().nullable(),
   timeSinceMeal: z.coerce.number().min(0).optional().nullable(),

@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
@@ -41,15 +41,17 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { GlucoseFormValues, glucoseSchema } from '@/lib/zod-validation';
 import { getGlucoseCategory, measurementType } from '@/lib/constant';
+import { addGlucose } from '@/actions/server-actions/health-tracker';
 export default function GlucoseForm() {
   const [unit, setUnit] = useState<'mmol' | 'mgdl'>('mmol');
+  const [pending, startTransition] = useTransition();
 
   const form = useForm<GlucoseFormValues>({
     resolver: zodResolver(glucoseSchema),
     defaultValues: {
       loggedAt: new Date(),
       glucose: 0,
-      glucoseMgDl: 0, // Changed from null to 0
+      glucoseMgDl: 0,
       measurementType: 'FASTING',
       mealType: null,
       timeSinceMeal: 0, // Changed from null to 0
@@ -64,13 +66,37 @@ export default function GlucoseForm() {
 
   const glucose = form.watch('glucose');
 
-  const glucoseCategory = glucose
-    ? getGlucoseCategory(glucose, unit === 'mmol')
-    : null;
+  const glucoseCategory =
+    glucose && unit === 'mmol'
+      ? getGlucoseCategory(glucose, unit === 'mmol')
+      : null;
 
   const handleSubmit = (values: GlucoseFormValues) => {
-    console.log(values);
+    let glucose = values.glucose || 0;
+    let glucoseMgDl = values.glucoseMgDl || 0;
+    if (unit === 'mmol') {
+      glucoseMgDl = Math.round(glucose * 18);
+    } else if (unit === 'mgdl') {
+      glucose = Number.parseFloat((glucoseMgDl / 18).toFixed(1));
+    }
+    const result = {
+      ...values,
+      glucose,
+      glucoseMgDl: glucoseMgDl || null,
+      timeSinceMeal: values.timeSinceMeal === 0 ? null : values.timeSinceMeal,
+      insulinDose: values.insulinDose === 0 ? null : values.insulinDose,
+      carbs: values.carbs === 0 ? null : values.carbs,
+    };
+    startTransition(async () => {
+      const response = await addGlucose(result);
+      if (response.success && response.data) {
+        console.log(response);
+
+        console.log('add to table');
+      }
+    });
   };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
@@ -359,9 +385,16 @@ export default function GlucoseForm() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button type="submit" className="w-full md:w-auto">
+                <Button
+                  type="submit"
+                  className="w-full md:w-auto"
+                  disabled={pending}
+                >
                   <Droplet className="mr-2 h-4 w-4" />
-                  Save Glucose Reading
+
+                  {pending
+                    ? 'Saving Glucose Reading...'
+                    : 'Save Glucose Reading'}
                 </Button>
               </TooltipTrigger>
               <TooltipContent>

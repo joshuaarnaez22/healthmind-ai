@@ -1,5 +1,6 @@
 'use client';
 import AppSidebar from '@/app/(protected)/admin/_components/app-sidebar';
+import SearchCommand from '@/app/(protected)/admin/_components/search-command';
 import { ModeToggle } from '@/components/dark-mode';
 import {
   Breadcrumb,
@@ -43,8 +44,9 @@ export default function AdminLayoutWrapper({
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <div className="px-4">
+          <div className="flex items-center gap-4">
             <ModeToggle />
+            <SearchCommand />
           </div>
         </header>
         <div className="p-4">{children}</div>
