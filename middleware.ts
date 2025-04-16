@@ -5,7 +5,12 @@ import {
 } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
-const publicRoutes = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)', '/']);
+const publicRoutes = createRouteMatcher([
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/',
+  '/api/webhooks/clerk',
+]);
 const adminRoutes = createRouteMatcher(['/admin(.*)']);
 const userRoutes = createRouteMatcher(['/user(.*)']);
 

@@ -1,0 +1,150 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String   @id @default(cuid())
+  role            Role     @default(USER)
+  clerkUserId     String   @unique
+  email           String   @unique
+  username        String?  @unique
+  firstName       String?
+  lastName        String?
+  profileImageUrl String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  //relations
+  journals         Journal[]
+  bloodPressureLog BloodPressureLog[]
+  glucoseLog       GlucoseLog[]
+
+  @@index([clerkUserId])
+  @@index([email])
+  @@index([username])
+}
+
+model Journal {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  content   String
+  mood      Mood
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  addedAt   DateTime @db.Date
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, addedAt])
+}
+
+model BloodPressureLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  loggedAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Blood Pressure Values (validation done at application level)
+  systolic  Int // mmHg (validate 70-250 in app)
+  diastolic Int // mmHg (validate 40-150 in app)
+  pulse     Int? // BPM (validate 30-200 in app)
+
+  // Contextual Data
+  posture PostureType?
+  arm     ArmType?
+  device  String?
+
+  // Symptoms (PostgreSQL array)
+  symptoms String[]
+  notes    String?
+
+  @@index([userId])
+  @@index([loggedAt])
+}
+
+model GlucoseLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  loggedAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Glucose Values
+  glucose     Decimal
+  glucoseMgDl Decimal?
+
+  // Measurement Context
+  measurementType MeasurementType
+  mealType        MealType?
+  timeSinceMeal   Int? // Minutes
+  device          String?
+
+  // Health Context
+  insulinDose Decimal? // Units
+  carbs       Int? // Grams
+  notes       String?
+
+  @@index([userId])
+  @@index([loggedAt])
+  @@index([measurementType])
+}
+
+// Enums for controlled values
+enum PostureType {
+  SITTING
+  STANDING
+  LYING_DOWN
+}
+
+enum ArmType {
+  LEFT
+  RIGHT
+}
+
+enum MeasurementType {
+  FASTING
+  POSTPRANDIAL
+  BEFORE_MEAL
+  AFTER_MEAL
+  RANDOM
+  BEDTIME
+}
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+}
+
+enum ActivityLevel {
+  RESTING
+  AFTER_EXERCISE
+  NORMAL
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Mood {
+  TERRIBLE
+  BAD
+  NEUTRAL
+  GOOD
+  GREAT
+}
