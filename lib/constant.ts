@@ -5,6 +5,11 @@ import {
   SmileIcon,
   SmilePlusIcon,
   CloudRainIcon,
+  Brain,
+  Heart,
+  Sparkles,
+  BookOpen,
+  Smartphone,
 } from 'lucide-react';
 
 const moods = [
@@ -88,8 +93,13 @@ const getBPCategory = (systolic: number, diastolic: number) => {
   return { label: 'Unknown', color: 'bg-gray-100 text-gray-800' };
 };
 
-const getGlucoseCategory = (value: number, isMMOL: boolean) => {
-  const glucoseValue = isMMOL ? value : value / 18;
+const getGlucoseCategory = (value: number, isMMOL?: boolean) => {
+  let glucoseValue;
+  if (isMMOL) {
+    glucoseValue = isMMOL ? value : value / 18;
+  } else {
+    glucoseValue = value;
+  }
 
   if (glucoseValue < 4.0)
     return { label: 'Low', color: 'bg-red-100 text-red-800' };
@@ -104,6 +114,49 @@ const getGlucoseCategory = (value: number, isMMOL: boolean) => {
   return { label: 'Unknown', color: 'bg-gray-100 text-gray-800' };
 };
 
+const insightCards = [
+  {
+    title: 'Managing Anxiety',
+    description: 'Learn techniques to manage anxiety in daily situations',
+    icon: Brain,
+    className: 'h-5 w-5 text-teal-500',
+    category: 'Technique',
+    categoryColor: 'bg-teal-100 text-teal-800',
+  },
+  {
+    title: 'Mindful Breathing',
+    description: 'Simple breathing exercises to center yourself',
+    icon: Heart,
+    className: 'h-5 w-5 text-rose-500',
+    category: 'Exercise',
+    categoryColor: 'bg-rose-100 text-rose-800',
+  },
+  {
+    title: 'Positive Affirmations',
+    description: 'Daily affirmations to boost your mental wellbeing',
+    icon: Sparkles,
+    className: 'h-5 w-5 text-amber-500',
+    category: 'Practice',
+    categoryColor: 'bg-amber-100 text-amber-800',
+  },
+  {
+    title: 'Gratitude Journaling',
+    description: 'How keeping a gratitude journal can improve your mindset',
+    icon: BookOpen,
+    className: 'h-5 w-5 text-indigo-500',
+    category: 'Practice',
+    categoryColor: 'bg-indigo-100 text-indigo-800',
+  },
+  {
+    title: 'Digital Detox',
+    description: 'Benefits of taking regular breaks from technology',
+    icon: Smartphone,
+    className: 'h-5 w-5 text-blue-500',
+    category: 'Technique',
+    categoryColor: 'bg-blue-100 text-blue-800',
+  },
+];
+
 export {
   moods,
   commonSymptoms,
@@ -111,4 +164,5 @@ export {
   postures,
   getGlucoseCategory,
   measurementType,
+  insightCards,
 };

@@ -46,7 +46,9 @@ export default function AdminLayoutWrapper({
           </div>
           <div className="flex items-center gap-4">
             <ModeToggle />
-            <SearchCommand />
+            <div className="hidden md:flex">
+              <SearchCommand />
+            </div>
           </div>
         </header>
         <div className="p-4">{children}</div>

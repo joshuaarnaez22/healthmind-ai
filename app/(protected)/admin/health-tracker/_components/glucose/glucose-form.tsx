@@ -42,9 +42,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { GlucoseFormValues, glucoseSchema } from '@/lib/zod-validation';
 import { getGlucoseCategory, measurementType } from '@/lib/constant';
 import { addGlucose } from '@/actions/server-actions/health-tracker';
+import { useQueryClient } from '@tanstack/react-query';
+import { GlucoseLog } from '@prisma/client';
+import { Decimal } from 'decimal.js';
 export default function GlucoseForm() {
   const [unit, setUnit] = useState<'mmol' | 'mgdl'>('mmol');
   const [pending, startTransition] = useTransition();
+  const queryClient = useQueryClient();
 
   const form = useForm<GlucoseFormValues>({
     resolver: zodResolver(glucoseSchema),
@@ -90,10 +94,19 @@ export default function GlucoseForm() {
     startTransition(async () => {
       const response = await addGlucose(result);
       if (response.success && response.data) {
-        console.log(response);
-
-        console.log('add to table');
+        const { glucoseMgDl, insulinDose, glucose } = response.data;
+        const data = {
+          ...response.data,
+          glucose: new Decimal(glucose),
+          glucoseMgDl: glucoseMgDl ? new Decimal(glucoseMgDl) : null,
+          insulinDose: insulinDose ? new Decimal(insulinDose) : null,
+        };
+        queryClient.setQueryData<GlucoseLog[]>(['glucose-logs'], (old = []) => [
+          data,
+          ...old,
+        ]);
       }
+      form.reset();
     });
   };
 

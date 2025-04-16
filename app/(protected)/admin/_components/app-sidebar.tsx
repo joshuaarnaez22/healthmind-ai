@@ -81,7 +81,7 @@ const data = {
       items: [
         {
           title: 'Health Insights',
-          url: '#',
+          url: '/admin/health-insights',
         },
         {
           title: 'Health Tracker',

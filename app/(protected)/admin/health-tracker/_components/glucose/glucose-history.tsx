@@ -1,13 +1,15 @@
 'use client';
 import { GlucoseLog } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
+import { DataTable } from './table/data-table';
+import { columns } from './table/column';
 export default function GlucoseHistory() {
   const {
     data: glucoseLogs,
-    // isLoading,
-    // isError,
+    isLoading,
+    isError,
   } = useQuery<GlucoseLog[]>({
-    queryKey: ['blood-pressure-logs'],
+    queryKey: ['glucose-logs'],
     queryFn: async ({ signal }) => {
       const response = await fetch(`/api/glucose-logs`, {
         signal,
@@ -17,7 +19,12 @@ export default function GlucoseHistory() {
     },
   });
 
-  console.log(glucoseLogs);
-
-  return <div>glucose-history</div>;
+  return (
+    <DataTable
+      columns={columns}
+      data={glucoseLogs || []}
+      isLoading={isLoading}
+      isError={isError}
+    />
+  );
 }

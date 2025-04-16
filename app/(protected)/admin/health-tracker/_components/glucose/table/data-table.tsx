@@ -74,7 +74,7 @@ export function DataTable<TData, TValue>({
   }, [isMobile]);
 
   if (isLoading) {
-    return <TableLoading columns={5} rows={6} />;
+    return <TableLoading columns={6} rows={6} />;
   }
 
   if (isError) {
