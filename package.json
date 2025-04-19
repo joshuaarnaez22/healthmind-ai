@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "postinstall": "prisma generate",
-    "build": "prisma generate && next build",
-    "start": "next start",
+    "build": "prisma generate && next build --turbopack",
+    "start": "next start --turbopack",
     "lint": "next lint",
     "ngrok": "ngrok http --url=content-loon-rationally.ngrok-free.app 3000",
     "format": "prettier --write .",
@@ -47,12 +47,12 @@
     "dompurify": "^3.2.4",
     "lucide-react": "^0.474.0",
     "motion": "^12.1.0",
-    "next": "15.2.2",
+    "next": "15.3.1",
     "next-themes": "^0.4.4",
     "nextjs-toploader": "^3.8.16",
-    "react": "19.0.0",
+    "react": "19.1.0",
     "react-day-picker": "^9.6.3",
-    "react-dom": "19.0.0",
+    "react-dom": "19.1.0",
     "react-hook-form": "^7.55.0",
     "recharts": "^2.15.1",
     "svix": "^1.62.0",
@@ -64,10 +64,10 @@
     "@eslint/eslintrc": "^3",
     "@faker-js/faker": "^9.7.0",
     "@types/node": "^20.17.24",
-    "@types/react": "19.0.10",
-    "@types/react-dom": "19.0.4",
+    "@types/react": "19.1.2",
+    "@types/react-dom": "19.1.2",
     "eslint": "^9",
-    "eslint-config-next": "15.2.2",
+    "eslint-config-next": "15.3.1",
     "husky": "^9.1.7",
     "postcss": "^8",
     "prettier": "^3.4.2",
@@ -81,7 +81,7 @@
     "seed": "node --import tsx prisma/seed.ts"
   },
   "overrides": {
-    "@types/react": "19.0.10",
-    "@types/react-dom": "19.0.4"
+    "@types/react": "19.1.2",
+    "@types/react-dom": "19.1.2"
   }
 }
