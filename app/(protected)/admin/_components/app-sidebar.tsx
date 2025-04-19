@@ -87,6 +87,10 @@ const data = {
           title: 'Health Tracker',
           url: '/admin/health-tracker',
         },
+        {
+          title: 'Health Summary',
+          url: '/admin/health-summary',
+        },
       ],
     },
   ],

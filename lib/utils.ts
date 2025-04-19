@@ -2,6 +2,7 @@ import { Decimal } from 'decimal.js';
 import { clsx, type ClassValue } from 'clsx';
 import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -38,3 +39,9 @@ export const truncatedText = (text: string, maxLength = 20): string => {
 };
 
 export const decimalToString = (value: Decimal) => value.toString();
+
+export const formatFileSize = (bytes: number) => {
+  if (bytes < 1024) return bytes + ' bytes';
+  else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+  else return (bytes / 1048576).toFixed(1) + ' MB';
+};
