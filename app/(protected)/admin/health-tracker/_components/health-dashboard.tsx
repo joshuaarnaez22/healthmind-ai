@@ -5,14 +5,12 @@ import { useState } from 'react';
 import BloodPressurePanel from './blood-pressure/blood-pressure-panel';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import GlucosePanel from './glucose/glucose-panel';
+import { pageAnimations } from '@/lib/motion';
+
 export default function HealthDashboard() {
   const [, setActiveTab] = useState('blood-pressure');
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <motion.div {...pageAnimations}>
       <Card>
         <CardHeader>
           <h2 className="mb-6 text-xl font-bold">Health Tracker</h2>
