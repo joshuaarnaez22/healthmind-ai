@@ -1,9 +1,14 @@
 import React from 'react';
 import FileUploader from './file-uploader';
+import { motion } from 'framer-motion';
 
 export default function MedicalFileSummaryContainer() {
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="space-y-6">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">
@@ -18,6 +23,6 @@ export default function MedicalFileSummaryContainer() {
           <FileUploader />
         </div>
       </div>
-    </>
+    </motion.div>
   );
 }
