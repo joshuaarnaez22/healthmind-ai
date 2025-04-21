@@ -7,6 +7,9 @@ import { streamText } from 'ai';
 import { systemPrompt_summary } from '@/lib/prompts';
 import { deepseek } from '@ai-sdk/deepseek';
 
+export const config = {
+  runtime: 'edge',
+};
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -57,6 +60,7 @@ export async function POST(request: NextRequest) {
         },
       ],
     });
+
     return result.toDataStreamResponse();
   } catch (error) {
     console.error('Error uploading  files:', error);
