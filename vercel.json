@@ -1,7 +1,7 @@
 {
-    "functions": {
-        "api/summarize-files/**/*.ts": {
-            "maxDuration": 30
-        }
+  "functions": {
+    "api/summarize-files/**/*.ts": {
+      "maxDuration": 30
     }
+  }
 }
