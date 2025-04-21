@@ -35,10 +35,8 @@ export async function POST(request: NextRequest) {
 
     return result.toDataStreamResponse({
       headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache, no-transform',
+        'Transfer-Encoding': 'chunked',
         Connection: 'keep-alive',
-        'X-Accel-Buffering': 'no', // Disable buffering
       },
     });
   } catch (error) {
