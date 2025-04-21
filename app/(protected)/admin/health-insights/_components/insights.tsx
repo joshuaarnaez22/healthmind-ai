@@ -1,4 +1,4 @@
-import React from 'react';
+'use client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AllInsights from './all-insights';
 import VideosInsights from './videos-insights';
@@ -13,10 +13,12 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { pageAnimations } from '@/lib/motion';
 
 export default function Insights() {
   return (
-    <>
+    <motion.div {...pageAnimations}>
       <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Health Insights</h1>
@@ -59,6 +61,6 @@ export default function Insights() {
           </Button>
         </CardContent>
       </Card>
-    </>
+    </motion.div>
   );
 }

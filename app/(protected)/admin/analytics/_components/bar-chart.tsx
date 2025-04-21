@@ -38,8 +38,6 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function BarChartComponent() {
-  console.log('this is a client render');
-
   return (
     <Card className="size-[400px]">
       <CardHeader>
