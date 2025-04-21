@@ -6,7 +6,7 @@ import { deepseek } from '@ai-sdk/deepseek';
 export const config = {
   runtime: 'edge',
 };
-export const maxDuration = 30;
+export const maxDuration = 60;
 export async function POST(request: NextRequest) {
   try {
     const { contents } = await request.json();
