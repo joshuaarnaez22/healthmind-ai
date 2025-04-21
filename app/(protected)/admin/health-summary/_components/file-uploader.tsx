@@ -9,7 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { cn, formatFileSize, processMedicalSummary } from '@/lib/utils';
+import { cn, formatFileSize } from '@/lib/utils';
+// processMedicalSummary
 import { useMutation } from '@tanstack/react-query';
 import {
   FileText,
@@ -89,7 +90,7 @@ export default function FileUploader() {
     mutationFn: async ({
       files,
       signal,
-      onChunk,
+      // onChunk,
     }: {
       files: File[];
       signal?: AbortSignal;
@@ -122,18 +123,19 @@ export default function FileUploader() {
           if (done) break;
 
           const rawChunk = decoder.decode(value, { stream: true });
-          let cleanedChunk = '';
+          // let cleanedChunk = '';
+          console.log(rawChunk);
 
-          // Process each part of the chunk
-          const matches = [...rawChunk.matchAll(/\d+:"(.*?)"/g)];
-          for (const match of matches) {
-            cleanedChunk += processMedicalSummary(match[1]);
-          }
+          // // Process each part of the chunk
+          // const matches = [...rawChunk.matchAll(/\d+:"(.*?)"/g)];
+          // for (const match of matches) {
+          //   cleanedChunk += processMedicalSummary(match[1]);
+          // }
 
-          if (cleanedChunk) {
-            onChunk?.(cleanedChunk);
-            result += cleanedChunk;
-          }
+          // if (cleanedChunk) {
+          //   onChunk?.(cleanedChunk);
+          result += rawChunk;
+          // }
         }
       } catch (error) {
         console.error('Error processing stream:', error);
