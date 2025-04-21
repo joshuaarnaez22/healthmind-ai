@@ -31,6 +31,9 @@ export async function POST(request: NextRequest) {
           content: `Please summarize all of the following contents there are ${contents.length} number of contents and reply only related to contents:\n\n${cleanedContents}`,
         },
       ],
+      onError({ error }) {
+        console.error(error); // your error logging logic here
+      },
     });
 
     return result.toDataStreamResponse({
