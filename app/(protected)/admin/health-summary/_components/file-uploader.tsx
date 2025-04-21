@@ -23,6 +23,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import React, { useState } from 'react';
+import { parseFilesToText } from '@/actions/server-actions/file-extractor';
 
 type FileStatus =
   | 'selected'
@@ -95,16 +96,17 @@ export default function FileUploader() {
       signal?: AbortSignal;
       onChunk?: (chunk: string) => void;
     }) => {
-      const formData = new FormData();
-
-      Array.from(files).forEach((file) => {
-        formData.append('files', file);
-      });
-
+      const extractedTexts = await parseFilesToText(files);
+      if (!extractedTexts.length) {
+        throw new Error('No valid contents extracted from files');
+      }
       const response = await fetch('/api/summarize-files', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
         signal,
+        body: JSON.stringify({ contents: extractedTexts }),
       });
       if (!response.ok) {
         throw new Error('Failed to summarize files');
