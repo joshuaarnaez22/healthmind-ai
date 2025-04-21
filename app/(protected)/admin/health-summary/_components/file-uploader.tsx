@@ -40,6 +40,8 @@ interface FileState {
   error?: string;
   file?: File; // Store the actual File object for upload
 }
+
+export const maxDuration = 30;
 export default function FileUploader() {
   const [files, setFiles] = useState<FileState[]>([]);
   const [isDragging, setIsDragging] = useState(false);
