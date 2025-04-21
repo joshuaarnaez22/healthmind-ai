@@ -45,3 +45,9 @@ export const formatFileSize = (bytes: number) => {
   else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
   else return (bytes / 1048576).toFixed(1) + ' MB';
 };
+
+export const allowedTypes = [
+  'application/pdf',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'text/plain',
+];

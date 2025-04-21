@@ -1,4 +1,5 @@
 import s3Client from '@/lib/s3';
+import { allowedTypes } from '@/lib/utils';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,13 +10,6 @@ export async function POST(request: NextRequest) {
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
-
-    const allowedTypes = [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'text/plain',
-    ];
 
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(

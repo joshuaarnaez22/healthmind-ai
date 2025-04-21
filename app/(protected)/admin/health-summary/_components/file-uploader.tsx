@@ -23,7 +23,13 @@ import {
 } from 'lucide-react';
 import React, { useState } from 'react';
 
-type FileStatus = 'selected' | 'uploading' | 'success' | 'error';
+type FileStatus =
+  | 'selected'
+  | 'uploading'
+  | 'success'
+  | 'error'
+  | 'summarizing'
+  | 'summarized';
 interface FileState {
   id?: string;
   name: string;
@@ -36,25 +42,31 @@ interface FileState {
 export default function FileUploader() {
   const [files, setFiles] = useState<FileState[]>([]);
   const [isDragging, setIsDragging] = useState(false);
-
+  const [summary, setSummary] = useState('');
   const uploadMutation = useMutation({
-    mutationFn: async (file: File) => {
+    mutationFn: async ({
+      file,
+      signal,
+    }: {
+      file: File;
+      signal?: AbortSignal;
+    }) => {
       const formData = new FormData();
       formData.append('file', file);
 
       const response = await fetch('/api/file-upload', {
         method: 'POST',
         body: formData,
+        signal,
       });
       if (!response.ok) {
         throw new Error('Failed to upload file');
       }
-      console.log(response.json);
 
       return response.json();
     },
     onSuccess: (data, variables) => {
-      const fileName = variables.name;
+      const fileName = variables.file.name;
       setFiles((prevFiles) => {
         return prevFiles.map((file) => {
           if (file.name === fileName && file.status === 'uploading') {
@@ -67,6 +79,63 @@ export default function FileUploader() {
           return file;
         });
       });
+    },
+  });
+
+  const summarizeMutation = useMutation({
+    mutationFn: async ({
+      files,
+      signal,
+      onChunk,
+    }: {
+      files: File[];
+      signal?: AbortSignal;
+      onChunk?: (chunk: string) => void;
+    }) => {
+      const formData = new FormData();
+
+      Array.from(files).forEach((file) => {
+        formData.append('files', file);
+      });
+
+      const response = await fetch('/api/summarize-files', {
+        method: 'POST',
+        body: formData,
+        signal,
+      });
+      if (!response.ok) {
+        throw new Error('Failed to summarize files');
+      }
+      if (!response.body) {
+        throw new Error('Response body is null');
+      }
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let result = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        result += chunk;
+        onChunk?.(chunk); // Send the chunk to the callback
+      }
+      return result;
+    },
+    onSuccess: (data) => {
+      setFiles((prevFiles) => {
+        return prevFiles.map((file) => {
+          if (file.status === 'summarized') {
+            return {
+              ...file,
+              status: 'success',
+            };
+          }
+          return file;
+        });
+      });
+      setSummary(data);
     },
   });
 
@@ -97,6 +166,7 @@ export default function FileUploader() {
     setFiles((prevFiles) => [...prevFiles, ...newFiles]);
   };
   const handleUploadFiles = () => {
+    const controller = new AbortController();
     const selectedFiles = files.filter((file) => file.status === 'selected');
     if (selectedFiles.length === 0) return;
 
@@ -114,10 +184,46 @@ export default function FileUploader() {
 
     selectedFiles.forEach((fileState) => {
       if (fileState.file) {
-        uploadMutation.mutate(fileState.file);
+        uploadMutation.mutate({
+          file: fileState.file,
+          signal: controller.signal,
+        });
       }
     });
   };
+
+  const handleSummarize = () => {
+    const controller = new AbortController();
+
+    const successFiles = files.filter((file) => file.status === 'success');
+    if (!successFiles || successFiles.length === 0) return;
+    setFiles((prevFiles) => {
+      return prevFiles.map((file) => {
+        if (file.status === 'success') {
+          return {
+            ...file,
+            status: 'summarizing',
+          };
+        }
+        return file;
+      });
+    });
+
+    const filesToSummarize = successFiles
+      .map((fileState) => fileState.file)
+      .filter((file): file is File => file !== undefined);
+
+    summarizeMutation.mutate({
+      files: filesToSummarize,
+      signal: controller.signal,
+      onChunk: (chunk) => {
+        setSummary((prev) => prev + chunk); // Update in real-time
+      },
+    });
+  };
+
+  console.log(summary);
+
   const handleRemoveFile = (index: number) => {
     setFiles((prevFiles) => {
       const newFiles = [...prevFiles];
@@ -145,6 +251,9 @@ export default function FileUploader() {
 
   const hasUploadingFiles = files.some((file) => file.status === 'uploading');
   const hasSelectedFiles = files.some((file) => file.status === 'selected');
+  const hasSuccessFiles = files.some((file) => file.status === 'success');
+  const hasSummarizing = files.some((file) => file.status === 'summarizing');
+
   return (
     <Card>
       <CardHeader>
@@ -227,6 +336,9 @@ export default function FileUploader() {
                       {file.status === 'uploading' && (
                         <p className="text-xs text-blue-500">Uploading...</p>
                       )}
+                      {file.status === 'summarizing' && (
+                        <p className="text-xs text-blue-500">Summarizing...</p>
+                      )}
                       {file.status === 'selected' && (
                         <p className="text-xs text-amber-500">
                           Ready to upload
@@ -234,6 +346,9 @@ export default function FileUploader() {
                       )}
                       {file.status === 'success' && (
                         <p className="text-xs text-green-500">Uploaded</p>
+                      )}
+                      {file.status === 'summarized' && (
+                        <p className="text-xs text-green-500">Summarized</p>
                       )}
                     </div>
                   </div>
@@ -246,7 +361,10 @@ export default function FileUploader() {
                       size="icon"
                       className="h-8 w-8 text-muted-foreground hover:text-destructive"
                       onClick={() => handleRemoveFile(index)}
-                      disabled={file.status === 'uploading'}
+                      disabled={
+                        file.status === 'uploading' ||
+                        file.status === 'summarizing'
+                      }
                     >
                       {file.status === 'selected' ? (
                         <X className="h-4 w-4" />
@@ -262,7 +380,22 @@ export default function FileUploader() {
           </div>
         )}
       </CardContent>
-      <CardFooter></CardFooter>
+      <CardFooter>
+        <Button
+          className="w-full"
+          disabled={!hasSuccessFiles || hasUploadingFiles || hasSummarizing}
+          onClick={handleSummarize}
+        >
+          {hasUploadingFiles ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Uploading...
+            </>
+          ) : (
+            'Summarize Files'
+          )}
+        </Button>
+      </CardFooter>
     </Card>
   );
 }
