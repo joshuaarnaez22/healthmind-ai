@@ -61,7 +61,13 @@ export async function POST(request: NextRequest) {
       ],
     });
 
-    return result.toDataStreamResponse();
+    return result.toDataStreamResponse({
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive',
+      },
+    });
   } catch (error) {
     console.error('Error uploading  files:', error);
     return NextResponse.json(
