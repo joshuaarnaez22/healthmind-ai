@@ -3,6 +3,9 @@ import { streamText } from 'ai';
 import { systemPrompt_summary } from '@/lib/prompts';
 import { deepseek } from '@ai-sdk/deepseek';
 
+export const config = {
+  runtime: 'edge',
+};
 export async function POST(request: NextRequest) {
   try {
     const { contents } = await request.json();
@@ -33,15 +36,16 @@ export async function POST(request: NextRequest) {
     return result.toDataStreamResponse({
       headers: {
         'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
+        'Cache-Control': 'no-cache, no-transform',
         Connection: 'keep-alive',
+        'X-Accel-Buffering': 'no', // Disable buffering
       },
     });
   } catch (error) {
     console.error('Error uploading  files:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error('Error uploading files:', error);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+    });
   }
 }
