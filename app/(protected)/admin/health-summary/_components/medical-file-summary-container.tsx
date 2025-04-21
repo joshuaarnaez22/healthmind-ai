@@ -16,9 +16,9 @@ export default function MedicalFileSummaryContainer() {
             content.
           </p>
         </div>
-        <div className="grid gap-8 md:grid-cols-2">
-          <FileUploader />
-        </div>
+        {/* <div className="grid gap-8 md:grid-cols-2"> */}
+        <FileUploader />
+        {/* </div> */}
       </div>
     </motion.div>
   );

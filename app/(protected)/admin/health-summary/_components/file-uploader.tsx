@@ -1,4 +1,5 @@
 'use client';
+import ReactMarkdown from 'react-markdown';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -8,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { cn, formatFileSize } from '@/lib/utils';
+import { cn, formatFileSize, processMedicalSummary } from '@/lib/utils';
 import { useMutation } from '@tanstack/react-query';
 import {
   FileText,
@@ -113,14 +114,30 @@ export default function FileUploader() {
       const decoder = new TextDecoder();
       let result = '';
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
 
-        const chunk = decoder.decode(value, { stream: true });
-        result += chunk;
-        onChunk?.(chunk); // Send the chunk to the callback
+          const rawChunk = decoder.decode(value, { stream: true });
+          let cleanedChunk = '';
+
+          // Process each part of the chunk
+          const matches = [...rawChunk.matchAll(/\d+:"(.*?)"/g)];
+          for (const match of matches) {
+            cleanedChunk += processMedicalSummary(match[1]);
+          }
+
+          if (cleanedChunk) {
+            onChunk?.(cleanedChunk);
+            result += cleanedChunk;
+          }
+        }
+      } catch (error) {
+        console.error('Error processing stream:', error);
+        throw new Error('Failed to process stream response');
       }
+
       return result;
     },
     onSuccess: (data) => {
@@ -194,7 +211,7 @@ export default function FileUploader() {
 
   const handleSummarize = () => {
     const controller = new AbortController();
-
+    setSummary('');
     const successFiles = files.filter((file) => file.status === 'success');
     if (!successFiles || successFiles.length === 0) return;
     setFiles((prevFiles) => {
@@ -255,147 +272,187 @@ export default function FileUploader() {
   const hasSummarizing = files.some((file) => file.status === 'summarizing');
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Upload Medical Files</CardTitle>
-        <CardDescription>
-          Upload medical records, test results, or other health documents for
-          summarization.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div
-          className={cn(
-            'rounded-lg border-2 border-dashed p-8 text-center',
-            isDragging
-              ? 'border-primary bg-primary/5'
-              : 'border-muted-foreground/20'
-          )}
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-          onDragLeave={handleDragLeave}
-        >
-          <div className="mx-auto flex flex-col items-center justify-center space-y-4">
-            <Upload className="h-10 w-10 text-muted-foreground" />
-            <div className="space-y-2">
-              <h3 className="font-medium">
-                Drag files here or click to upload
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Support for PDF, DOC, DOCX, and TXT files up to 10MB
-              </p>
+    <div className="grid gap-8 md:grid-cols-2">
+      <Card>
+        <CardHeader>
+          <CardTitle>Upload Medical Files</CardTitle>
+          <CardDescription>
+            Upload medical records, test results, or other health documents for
+            summarization.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div
+            className={cn(
+              'rounded-lg border-2 border-dashed p-8 text-center',
+              isDragging
+                ? 'border-primary bg-primary/5'
+                : 'border-muted-foreground/20'
+            )}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            onDragLeave={handleDragLeave}
+          >
+            <div className="mx-auto flex flex-col items-center justify-center space-y-4">
+              <Upload className="h-10 w-10 text-muted-foreground" />
+              <div className="space-y-2">
+                <h3 className="font-medium">
+                  Drag files here or click to upload
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Support for PDF, DOC, DOCX, and TXT files up to 10MB
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  const input = document.createElement('input');
+                  input.type = 'file';
+                  input.accept = '.pdf,.doc,.docx,.txt';
+                  input.multiple = true;
+                  input.onchange = (e) =>
+                    handleSelectedFiles((e.target as HTMLInputElement).files);
+                  input.click();
+                }}
+              >
+                Select Files
+              </Button>
             </div>
-            <Button
-              variant="outline"
-              onClick={() => {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = '.pdf,.doc,.docx,.txt';
-                input.multiple = true;
-                input.onchange = (e) =>
-                  handleSelectedFiles((e.target as HTMLInputElement).files);
-                input.click();
-              }}
-            >
-              Select Files
-            </Button>
           </div>
-        </div>
-        {files.length > 0 && (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="font-medium">Files</h3>
-              {hasSelectedFiles && (
-                <Button
-                  onClick={handleUploadFiles}
-                  disabled={hasUploadingFiles}
-                >
-                  <UploadCloud className="mr-2 h-4 w-4" />
-                  Upload Selected Files
-                </Button>
-              )}
-            </div>
-            <div className="space-y-2">
-              {files.map((file, index) => (
-                <div
-                  key={index}
-                  className="flex items-center space-x-3 rounded border p-3"
-                >
-                  <div className="flex-shrink-0">{getFileIcon(file.type)}</div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">{file.name}</p>
-                    <div className="flex items-center space-x-2">
-                      <p className="text-xs text-muted-foreground">
-                        {formatFileSize(file.size)}
-                      </p>
-                      {file.status === 'error' && (
-                        <p className="text-xs text-red-500">
-                          {file.error || 'Upload failed'}
-                        </p>
-                      )}
-                      {file.status === 'uploading' && (
-                        <p className="text-xs text-blue-500">Uploading...</p>
-                      )}
-                      {file.status === 'summarizing' && (
-                        <p className="text-xs text-blue-500">Summarizing...</p>
-                      )}
-                      {file.status === 'selected' && (
-                        <p className="text-xs text-amber-500">
-                          Ready to upload
-                        </p>
-                      )}
-                      {file.status === 'success' && (
-                        <p className="text-xs text-green-500">Uploaded</p>
-                      )}
-                      {file.status === 'summarized' && (
-                        <p className="text-xs text-green-500">Summarized</p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
+          {files.length > 0 && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="font-medium">Files</h3>
+                {hasSelectedFiles && (
+                  <Button
+                    onClick={handleUploadFiles}
+                    disabled={hasUploadingFiles}
+                  >
+                    <UploadCloud className="mr-2 h-4 w-4" />
+                    Upload Selected Files
+                  </Button>
+                )}
+              </div>
+              <div className="space-y-2">
+                {files.map((file, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center space-x-3 rounded border p-3"
+                  >
                     <div className="flex-shrink-0">
-                      {getStatusIcon(file.status)}
+                      {getFileIcon(file.type)}
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                      onClick={() => handleRemoveFile(index)}
-                      disabled={
-                        file.status === 'uploading' ||
-                        file.status === 'summarizing'
-                      }
-                    >
-                      {file.status === 'selected' ? (
-                        <X className="h-4 w-4" />
-                      ) : (
-                        <Trash2 className="h-4 w-4" />
-                      )}
-                      <span className="sr-only">Remove file</span>
-                    </Button>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">
+                        {file.name}
+                      </p>
+                      <div className="flex items-center space-x-2">
+                        <p className="text-xs text-muted-foreground">
+                          {formatFileSize(file.size)}
+                        </p>
+                        {file.status === 'error' && (
+                          <p className="text-xs text-red-500">
+                            {file.error || 'Upload failed'}
+                          </p>
+                        )}
+                        {file.status === 'uploading' && (
+                          <p className="text-xs text-blue-500">Uploading...</p>
+                        )}
+                        {file.status === 'summarizing' && (
+                          <p className="text-xs text-blue-500">
+                            Summarizing...
+                          </p>
+                        )}
+                        {file.status === 'selected' && (
+                          <p className="text-xs text-amber-500">
+                            Ready to upload
+                          </p>
+                        )}
+                        {file.status === 'success' && (
+                          <p className="text-xs text-green-500">Uploaded</p>
+                        )}
+                        {file.status === 'summarized' && (
+                          <p className="text-xs text-green-500">Summarized</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="flex-shrink-0">
+                        {getStatusIcon(file.status)}
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                        onClick={() => handleRemoveFile(index)}
+                        disabled={
+                          file.status === 'uploading' ||
+                          file.status === 'summarizing'
+                        }
+                      >
+                        {file.status === 'selected' ? (
+                          <X className="h-4 w-4" />
+                        ) : (
+                          <Trash2 className="h-4 w-4" />
+                        )}
+                        <span className="sr-only">Remove file</span>
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-      </CardContent>
-      <CardFooter>
-        <Button
-          className="w-full"
-          disabled={!hasSuccessFiles || hasUploadingFiles || hasSummarizing}
-          onClick={handleSummarize}
-        >
-          {hasUploadingFiles ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Uploading...
-            </>
-          ) : (
-            'Summarize Files'
           )}
-        </Button>
-      </CardFooter>
-    </Card>
+        </CardContent>
+        <CardFooter>
+          <Button
+            className="w-full"
+            disabled={!hasSuccessFiles || hasUploadingFiles || hasSummarizing}
+            onClick={handleSummarize}
+          >
+            {hasUploadingFiles ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Uploading...
+              </>
+            ) : (
+              'Summarize Files'
+            )}
+          </Button>
+        </CardFooter>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Medical Summary</CardTitle>
+          <CardDescription>
+            {summarizeMutation.isPending
+              ? 'Generating...'
+              : 'Your personalized health summary'}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="prose min-h-64 max-w-none rounded-lg bg-muted/50 p-4">
+            {summary && <ReactMarkdown>{summary}</ReactMarkdown>}
+          </div>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          {summarizeMutation.isPending ? (
+            <Button variant="outline" onClick={() => summarizeMutation.reset()}>
+              Cancel
+            </Button>
+          ) : (
+            <>
+              <Button
+                variant="outline"
+                onClick={() => navigator.clipboard.writeText(summary)}
+              >
+                Copy Summary
+              </Button>
+              <Button>Back to Files</Button>
+            </>
+          )}
+        </CardFooter>
+      </Card>
+    </div>
   );
 }

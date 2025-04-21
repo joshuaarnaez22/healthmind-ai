@@ -51,3 +51,79 @@ export const allowedTypes = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'text/plain',
 ];
+
+export const processMedicalSummary = (chunk: string): string => {
+  // First clean the chunk
+  let cleaned = chunk
+    .replace(/\\n/g, '\n') // Convert escaped newlines
+    .replace(/^---$/gm, '') // Remove markdown dividers
+    .replace(/^###\s*/gm, '') // Remove markdown headings
+    .replace(/^[-–—]\s*/gm, ''); // Remove list markers
+
+  // Make the summary header bold and ensure it's followed by a newline
+  cleaned = cleaned.replace(
+    /===(.*?)PATIENT ===/g,
+    '<strong>=== SUMMARY FOR PATIENT ===</strong>\n'
+  );
+
+  // Ensure there's always a newline after the patient header
+  cleaned = cleaned.replace(
+    /<strong>=== SUMMARY FOR PATIENT ===<\/strong>(?!\n)/g,
+    '<strong>=== SUMMARY FOR PATIENT ===</strong>\n'
+  );
+
+  // Extract the description line (after the header and before KEY FINDINGS)
+  const parts = cleaned.split(/\*\*KEY FINDINGS:/);
+  if (parts.length > 1) {
+    const headerPart = parts[0].trim();
+    const descriptionMatch = headerPart.match(/.*?\n(.*?)$/);
+    let description = '';
+
+    if (descriptionMatch && descriptionMatch[1]) {
+      description = descriptionMatch[1].trim() + '\n';
+    }
+
+    // Process the rest of the content
+    let contentPart = parts[1];
+
+    // Make section headers bold
+    contentPart = contentPart
+      .replace(/\*\*KEY FINDINGS:/g, '<strong>KEY FINDINGS:</strong>')
+      .replace(/\*\*WHAT THIS MEANS:/g, '<strong>WHAT THIS MEANS:</strong>')
+      .replace(/\*\*NEXT STEPS:/g, '<strong>NEXT STEPS:</strong>');
+
+    // Remove other bold markers
+    contentPart = contentPart.replace(/\*\*/g, '');
+
+    // Format spacing
+    contentPart = contentPart
+      .replace(/([a-z])→/g, '$1 →') // Add space before arrows
+      .replace(/→([A-Za-z])/g, '→ $1') // Add space after arrows
+      .replace(/⚠️\s*/g, '⚠️ '); // Preserve warning symbols
+
+    // Normalize spacing
+    contentPart = contentPart.replace(/\s+/g, ' ').trim();
+
+    // Add line breaks before each section header
+    contentPart = contentPart
+      .replace(
+        /<strong>WHAT THIS MEANS:<\/strong>/g,
+        '\n<strong>WHAT THIS MEANS:</strong>'
+      )
+      .replace(
+        /<strong>NEXT STEPS:<\/strong>/g,
+        '\n<strong>NEXT STEPS:</strong>'
+      );
+
+    // Combine everything - ensuring newline after the header
+    cleaned = `<strong>=== SUMMARY FOR PATIENT ===</strong>\n${description}<strong>KEY FINDINGS:</strong> ${contentPart}`;
+  }
+
+  // Final check to ensure every patient header has a newline after it
+  cleaned = cleaned.replace(
+    /<strong>=== SUMMARY FOR PATIENT ===<\/strong>(?!\n)/g,
+    '<strong>=== SUMMARY FOR PATIENT ===</strong>\n'
+  );
+
+  return cleaned;
+};

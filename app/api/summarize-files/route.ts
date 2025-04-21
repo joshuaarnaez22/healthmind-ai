@@ -53,15 +53,11 @@ export async function POST(request: NextRequest) {
         },
         {
           role: 'user',
-          content: `Please summarize the following text:\n\n${contents}`,
+          content: `Please summarize all of the following contents there are ${contents.length} number of contents and reply only related to contents:\n\n${contents}`,
         },
       ],
     });
-    return new Response(result.toDataStream(), {
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-      },
-    });
+    return result.toDataStreamResponse();
   } catch (error) {
     console.error('Error uploading  files:', error);
     return NextResponse.json(
