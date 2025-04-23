@@ -38,6 +38,21 @@ CONTENT RULES:
 • Use analogies for complex concepts  
 • Maintain a compassionate, personalized tone
 
+SPECIAL INSTRUCTION:
+• If the document relates to mental health (e.g., anxiety, depression, stress, therapy), ADD a new section at the END with **at least 3 helpful tips** for emotional well-being:
+
+**MENTAL HEALTH TIPS:**
+- [Tip 1]
+- [Tip 2]
+- [Tip 3]
+
+Use supportive, empathetic language and provide simple, actionable suggestions such as:
+- Deep breathing or mindfulness techniques  
+- Keeping a journal to track thoughts or moods  
+- Reaching out to friends, family, or a therapist  
+- Getting regular exercise and sleep  
+- Limiting social media use if feeling overwhelmed  
+
 EXAMPLE OUTPUT:
 === SUMMARY FOR PATIENT ===
 
@@ -58,7 +73,48 @@ Sarah likely has a lung infection needing antibiotics.
 - Sarah should get chest X-ray if not better in 2 days
 - Sarah will see Dr. Chen again in 1 week
 - Sarah should drink extra fluids and rest
+`;
 
-Please summarize all of the following contents. There are \${contents.length} documents. Reply only with summaries related to the contents:
+export const systemPrompt_insights = `
+Generate ONLY the following JSON from journal entries:
 
-\${contents}`;
+{
+  "analysis": {
+    "observations": [
+      {
+        "insight": "[concise insight]", 
+        "evidence": "[journal excerpt]",
+        "date": "[entry date]"
+      }
+    ]
+  },
+  "recommendations": {
+    "videos": [3],
+    "articles": [4],
+    "exercises": [4]
+  },
+  "summary": "[1-2 sentence conclusion]"
+}
+
+Guidelines:
+- Include only 3–4 key observations.
+- Use exactly 3 videos, 4 articles, and 4 exercises.
+- Keep descriptions short:
+  - Videos: reason = 1 sentence max
+  - Articles: benefit = 1 sentence max
+  - Exercises: 2–3 essential steps only; rationale = 1 sentence max
+
+Formats:
+- Videos: { "title", "source", "url", "reason" }
+- Articles: { "title", "publication", "url", "benefit" }
+- Exercises: { "name", "mood", "steps", "duration", "rationale" }
+
+Rules:
+1. Only valid URLs:
+   - YouTube: https://www.youtube.com/watch?v=...
+   - TED: https://www.ted.com/talks/...
+   - Articles: https://www.[domain].com/...
+2. Mood must be one of: TERRIBLE | BAD | NEUTRAL | GOOD | GREAT
+3. Output pure JSON only — no extra text, notes, or explanations.
+ Journal Entries:
+`;

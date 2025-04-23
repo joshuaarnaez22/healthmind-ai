@@ -16,6 +16,9 @@ export default function BloodPressureHistory() {
       const response = await fetch(`/api/blood-pressure-logs`, {
         signal,
       });
+      if (!response.ok) {
+        throw new Error('Failed to fetch blood pressure logs');
+      }
       const data = await response.json();
       return data.bloodPressureLogs;
     },
