@@ -16,15 +16,20 @@ import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { pageAnimations } from '@/lib/motion';
 import { useQuery } from '@tanstack/react-query';
-import { generateInsights } from '@/actions/server-actions/insights';
 import InsightsLoader from '@/components/loaders/insights';
+import { systemPrompt_observations } from '@/lib/prompts';
 export default function Insights() {
   const { data, isLoading } = useQuery({
-    queryKey: ['generate-insights'],
+    queryKey: ['generate-observations'],
     queryFn: async () => {
-      const response = await generateInsights();
-      return response;
+      const response = await fetch('/api/insights', {
+        method: 'POST',
+        body: JSON.stringify({ prompt: systemPrompt_observations }),
+      });
+      return response.json();
     },
+    staleTime: 0,
+    gcTime: 0,
   });
 
   if (isLoading) {

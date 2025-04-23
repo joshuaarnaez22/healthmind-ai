@@ -75,8 +75,8 @@ Sarah likely has a lung infection needing antibiotics.
 - Sarah should drink extra fluids and rest
 `;
 
-export const systemPrompt_insights = `
-Generate ONLY the following JSON from journal entries:
+export const systemPrompt_observations = `
+Generate ONLY the following JSON for observations from journal entries:
 
 {
   "analysis": {
@@ -87,34 +87,100 @@ Generate ONLY the following JSON from journal entries:
         "date": "[entry date]"
       }
     ]
-  },
-  "recommendations": {
-    "videos": [3],
-    "articles": [4],
-    "exercises": [4]
-  },
-  "summary": "[1-2 sentence conclusion]"
+  }
 }
 
 Guidelines:
 - Include only 3–4 key observations.
-- Use exactly 3 videos, 4 articles, and 4 exercises.
-- Keep descriptions short:
-  - Videos: reason = 1 sentence max
-  - Articles: benefit = 1 sentence max
-  - Exercises: 2–3 essential steps only; rationale = 1 sentence max
+- Insights must be clear and concise.
+- Evidence must be a relevant journal excerpt.
+- Output pure JSON only — no extra text, notes, or explanations.
 
-Formats:
-- Videos: { "title", "source", "url", "reason" }
-- Articles: { "title", "publication", "url", "benefit" }
-- Exercises: { "name", "mood", "steps", "duration", "rationale" }
+Journal Entries:
+`;
 
-Rules:
-1. Only valid URLs:
-   - YouTube: https://www.youtube.com/watch?v=...
-   - TED: https://www.ted.com/talks/...
-   - Articles: https://www.[domain].com/...
-2. Mood must be one of: TERRIBLE | BAD | NEUTRAL | GOOD | GREAT
-3. Output pure JSON only — no extra text, notes, or explanations.
- Journal Entries:
+export const systemPrompt_videos = `
+Generate ONLY the following JSON for 3 video recommendations:
+
+{
+  "recommendations": {
+    "videos": [
+      {
+        "title": "[video title]",
+        "source": "[YouTube or TED]",
+        "url": "https://www.youtube.com/watch?v=..." or "https://www.ted.com/talks/...",
+        "reason": "[1 sentence reason]"
+      }
+    ]
+  }
+}
+
+Guidelines:
+- Include exactly 3 videos.
+- Reason must be 1 sentence max.
+- Only valid URLs allowed.
+- Output pure JSON only — no extra text, notes, or explanations.
+`;
+
+export const systemPrompt_articles = `
+Generate ONLY the following JSON for 4 article recommendations:
+
+{
+  "recommendations": {
+    "articles": [
+      {
+        "title": "[article title]",
+        "publication": "[publication name]",
+        "url": "https://www.[domain].com/...",
+        "benefit": "[1 sentence benefit]"
+      }
+    ]
+  }
+}
+
+Guidelines:
+- Include exactly 4 articles.
+- Benefit must be 1 sentence max.
+- Only valid URLs allowed.
+- Output pure JSON only — no extra text, notes, or explanations.
+`;
+
+export const systemPrompt_exercises = `
+Generate ONLY the following JSON for 4 exercise recommendations:
+
+{
+  "recommendations": {
+    "exercises": [
+      {
+        "name": "[exercise name]",
+        "mood": "TERRIBLE | BAD | NEUTRAL | GOOD | GREAT",
+        "steps": ["[step 1]", "[step 2]", "..."],
+        "duration": "[e.g., 10 min]",
+        "rationale": "[1 sentence rationale]"
+      }
+    ]
+  }
+}
+
+Guidelines:
+- Include exactly 4 exercises.
+- Steps must be clear and concise (2–3 essential steps).
+- Rationale must be 1 sentence max.
+- Mood must match one of the allowed values.
+- Output pure JSON only — no extra text, notes, or explanations.
+`;
+
+export const systemPrompt_mental_summary = `
+Generate ONLY the following JSON summary of journal entries:
+
+{
+  "summary": "[1–2 sentence conclusion]"
+}
+
+Guidelines:
+- Provide a concise and meaningful overall insight.
+- Do not repeat earlier observations verbatim.
+- Output pure JSON only — no extra text, notes, or explanations.
+
+Journal Entries:
 `;
