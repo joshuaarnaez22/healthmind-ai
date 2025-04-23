@@ -14,6 +14,9 @@ export default function GlucoseHistory() {
       const response = await fetch(`/api/glucose-logs`, {
         signal,
       });
+      if (!response.ok) {
+        throw new Error('Failed to fetch  glucose logs');
+      }
       const data = await response.json();
       return data.glucoseLogs;
     },

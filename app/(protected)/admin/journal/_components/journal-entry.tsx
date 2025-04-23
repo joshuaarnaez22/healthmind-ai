@@ -25,6 +25,9 @@ export default function JournalEntry() {
       const response = await fetch(`/api/journal?date=${date}`, {
         signal,
       });
+      if (!response.ok) {
+        throw new Error('Failed to fetch journal');
+      }
       const data = await response.json();
       return data.journals;
     },

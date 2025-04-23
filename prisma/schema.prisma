@@ -30,6 +30,7 @@ model User {
   journals         Journal[]
   bloodPressureLog BloodPressureLog[]
   glucoseLog       GlucoseLog[]
+  file             File[]
 
   @@index([clerkUserId])
   @@index([email])
@@ -100,6 +101,25 @@ model GlucoseLog {
   @@index([userId])
   @@index([loggedAt])
   @@index([measurementType])
+}
+
+model File {
+  id           String @id @default(cuid())
+  key          String @unique
+  bucket       String
+  originalName String
+  mimeType     String
+  size         Int
+
+  // Relationships
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 // Enums for controlled values

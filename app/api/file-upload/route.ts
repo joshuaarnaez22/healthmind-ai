@@ -1,3 +1,5 @@
+import { prisma } from '@/lib/client';
+import { getUserId } from '@/actions/server-actions/user';
 import s3Client from '@/lib/s3';
 import { allowedTypes } from '@/lib/utils';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
@@ -5,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 export async function POST(request: NextRequest) {
   try {
+    const user_id = await getUserId();
     const formData = await request.formData();
     const file = formData.get('file') as File;
     if (!file) {
@@ -33,14 +36,27 @@ export async function POST(request: NextRequest) {
       process.env.ENVIRONMENT === 'development' ? 'dev-files/' : 'prod-files/';
     const fileId = uuidv4();
     const filename = `${bucketFolder}${fileId}-${file.name.replace(/\s+/g, '-')}`;
-    await s3Client.send(
-      new PutObjectCommand({
-        Bucket: process.env.AWS_BUCKET_NAME!,
-        Key: filename,
-        Body: buffer,
-        ContentType: file.type,
-      })
-    );
+
+    await Promise.all([
+      s3Client.send(
+        new PutObjectCommand({
+          Bucket: process.env.AWS_BUCKET_NAME!,
+          Key: filename,
+          Body: buffer,
+          ContentType: file.type,
+        })
+      ),
+      prisma.file.create({
+        data: {
+          userId: user_id,
+          key: filename,
+          bucket: process.env.AWS_BUCKET_NAME!,
+          originalName: file.name,
+          mimeType: file.type,
+          size: file.size,
+        },
+      }),
+    ]);
     return NextResponse.json({ fileId, status: 200 });
   } catch (error) {
     console.error('Error uploading  files:', error);

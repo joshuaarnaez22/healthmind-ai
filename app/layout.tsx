@@ -5,6 +5,7 @@ import { Poppins } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
 import QueryProvider from '@/components/wrappers/query-client';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 
 const poppins = Poppins({ weight: '400', subsets: ['latin'] });
@@ -30,6 +31,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <QueryProvider>{children}</QueryProvider>
+            <Toaster />
             <SpeedInsights />
           </ThemeProvider>
         </body>

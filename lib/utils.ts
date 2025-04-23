@@ -53,7 +53,6 @@ export const allowedTypes = [
 ];
 
 export const processMedicalSummary = (chunk: string): string => {
-  // First clean the chunk
   let cleaned = chunk
     .replace(/\\n/g, '\n') // Convert escaped newlines
     .replace(/^---$/gm, '') // Remove markdown dividers

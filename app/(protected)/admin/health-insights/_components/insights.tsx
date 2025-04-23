@@ -15,8 +15,22 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { pageAnimations } from '@/lib/motion';
-
+import { useQuery } from '@tanstack/react-query';
+import { generateInsights } from '@/actions/server-actions/insights';
+import InsightsLoader from '@/components/loaders/insights';
 export default function Insights() {
+  const { data, isLoading } = useQuery({
+    queryKey: ['generate-insights'],
+    queryFn: async () => {
+      const response = await generateInsights();
+      return response;
+    },
+  });
+
+  if (isLoading) {
+    return <InsightsLoader />;
+  }
+  console.log(data);
   return (
     <motion.div {...pageAnimations}>
       <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">

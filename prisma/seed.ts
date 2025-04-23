@@ -1,12 +1,26 @@
 // prisma/seed.ts
-import { PrismaClient } from '@prisma/client';
+import { Mood, PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
-
+import journalsData from '../data/mentalHealthJournals.json';
 const prisma = new PrismaClient();
 
 async function main() {
   const userId = 'cm8xaedkp0000icdw1teb9yp5';
-
+  const journals = journalsData.map((journal) => {
+    const date = faker.date.between({
+      from: '2023-01-01',
+      to: new Date(),
+    });
+    const mood = journal.mood as keyof typeof Mood;
+    return {
+      userId,
+      title: `Journal Entry: ${date.toLocaleDateString()}`,
+      content: journal.content,
+      mood: mood,
+      addedAt: faker.date.recent({ days: 365 }),
+    };
+  });
+  await prisma.journal.createMany({ data: journals });
   // Generate Glucose Logs (120 records - 20 per measurement type)
   const glucoseMeasurementTypes = [
     'FASTING',

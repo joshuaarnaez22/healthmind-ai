@@ -9,7 +9,7 @@ export const getUserId = async () => {
     const { userId: clerkId } = await auth();
 
     if (!clerkId) {
-      redirect('/sign-in'); // More direct than redirectToSignIn
+      redirect('/sign-in');
     }
 
     const user = await prisma.user.findUnique({

@@ -74,49 +74,59 @@ export default function MedicalFileSummaryContainer() {
       if (!extractedTexts.length) {
         throw new Error('No valid contents extracted from files');
       }
-      const response = await fetch('/api/summarize-files', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        signal,
-        body: JSON.stringify({ contents: extractedTexts }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to summarize files');
-      }
-      if (!response.body) {
-        throw new Error('Response body is null');
-      }
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let result = '';
 
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
+      let combinedResult = '';
 
-          const rawChunk = decoder.decode(value, { stream: true });
-          let cleanedChunk = '';
+      // Process each text sequentially
+      for (const text of extractedTexts) {
+        const response = await fetch('/api/summarize-files', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          signal,
+          body: JSON.stringify({ content: [text] }), // Send one text at a time
+        });
 
-          // Process each part of the chunk
-          const matches = [...rawChunk.matchAll(/\d+:"(.*?)"/g)];
-          for (const match of matches) {
-            cleanedChunk += processMedicalSummary(match[1]);
-          }
-
-          if (cleanedChunk) {
-            onChunk?.(cleanedChunk);
-            result += cleanedChunk;
-          }
+        if (!response.ok) {
+          throw new Error('Failed to summarize files');
         }
-      } catch (error) {
-        console.error('Error processing stream:', error);
-        throw new Error('Failed to process stream response');
+        if (!response.body) {
+          throw new Error('Response body is null');
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let fileResult = '';
+
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const rawChunk = decoder.decode(value, { stream: true });
+            let cleanedChunk = '';
+
+            const matches = [...rawChunk.matchAll(/^d:\{.*?\}$/gm)];
+            for (const match of matches) {
+              cleanedChunk += processMedicalSummary(match[1]);
+            }
+
+            if (cleanedChunk) {
+              // Send chunks as they come
+              onChunk?.(cleanedChunk);
+              fileResult += cleanedChunk;
+            }
+          }
+        } catch (error) {
+          console.error('Error processing stream:', error);
+          throw new Error('Failed to process stream response');
+        }
+
+        combinedResult += fileResult + '\n\n';
       }
 
-      return result;
+      return combinedResult.trim();
     },
     onSuccess: (data) => {
       setFiles((prevFiles) => {
@@ -130,6 +140,7 @@ export default function MedicalFileSummaryContainer() {
           return file;
         });
       });
+      // This will already contain all summaries from all files
       setSummary(data);
     },
   });
@@ -271,7 +282,7 @@ export default function MedicalFileSummaryContainer() {
             content.
           </p>
         </div>
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-8 md:grid-cols-2">
           <FileUploader
             isDragging={isDragging}
             handleDragOver={handleDragOver}
@@ -292,9 +303,77 @@ export default function MedicalFileSummaryContainer() {
           <MedicalSummary
             pending={summarizeMutation.isPending}
             summary={summary}
+            reset={summarizeMutation.reset}
           />
         </div>
       </div>
     </motion.div>
   );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======================
+
+import { NextRequest, NextResponse } from 'next/server';
+import { streamText } from 'ai';
+import { systemPrompt_summary } from '@/lib/prompts';
+import { deepseek } from '@ai-sdk/deepseek';
+
+export const config = {
+  runtime: 'edge',
+};
+export const maxDuration = 60;
+export async function POST(request: NextRequest) {
+  try {
+    const { content } = await request.json();
+
+    if (!content || !Array.isArray(content) || content.length === 0) {
+      return NextResponse.json(
+        { error: 'No contents provided' },
+        { status: 400 }
+      );
+    }
+    const cleanedContent = content
+      .map((text: string) => text.replace(/\n{2,}/g, '\n').trim())
+      .join('\n\n');
+    const result = streamText({
+      model: deepseek('deepseek-chat'),
+      messages: [
+        {
+          role: 'system',
+          content: systemPrompt_summary,
+        },
+        {
+          role: 'user',
+          content: `Please summarize all of the following content reply only related to contents:\n\n${cleanedContent}`,
+        },
+      ],
+    });
+
+    return result.toDataStreamResponse({
+      headers: {
+        'Transfer-Encoding': 'chunked',
+        Connection: 'keep-alive',
+      },
+    });
+  } catch (error) {
+    console.error('Error uploading  files:', error);
+    console.error('Error uploading files:', error);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+    });
+  }
 }
