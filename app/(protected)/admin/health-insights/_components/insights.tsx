@@ -15,8 +15,8 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { pageAnimations } from '@/lib/motion';
-import { useQueries } from '@tanstack/react-query';
-import InsightsLoader from '@/components/loaders/insights';
+import { useQueries, useQuery } from '@tanstack/react-query';
+// import InsightsLoader from '@/components/loaders/insights';
 import {
   systemPrompt_articles,
   systemPrompt_exercises,
@@ -24,54 +24,180 @@ import {
   systemPrompt_observations,
   systemPrompt_videos,
 } from '@/lib/prompts';
+import { useUser } from '@clerk/nextjs';
 
-function useAllInsights() {
-  const prompts = [
-    { name: 'observations', prompt: systemPrompt_observations },
-    { name: 'videos', prompt: systemPrompt_videos },
-    { name: 'articles', prompt: systemPrompt_articles },
-    { name: 'exercises', prompt: systemPrompt_exercises },
-    { name: 'mental_summary', prompt: systemPrompt_mental_summary },
-  ];
+function useSequentialInsights() {
+  const { user, isLoaded: isUserLoaded } = useUser();
+  const userId = user?.id;
+  const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 
-  const queries = useQueries({
-    queries: prompts.map(({ name, prompt }) => ({
-      queryKey: ['generate-insights', name],
-      queryFn: async () => {
-        const response = await fetch('/api/insights', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt }),
-        });
-        if (!response.ok) {
-          throw new Error(`Request failed with status ${response.status}`);
-        }
-        return response.json();
-      },
-    })),
+  // Group 1: Observations
+  const observationQuery = useQuery({
+    queryKey: ['insights', 'observations', userId],
+    queryFn: async () => {
+      if (!userId) throw new Error('User not authenticated');
+
+      const response = await fetch('/api/insights', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: systemPrompt_observations,
+          cachedKey: `insights-observations:${userId}`,
+          userId,
+        }),
+      });
+      if (!response.ok) throw new Error('Observations request failed');
+      return response.json();
+    },
+    staleTime: ONE_DAY_IN_MS,
+    gcTime: ONE_DAY_IN_MS,
+    enabled: !!userId && isUserLoaded, // Only enable if we have a user
   });
 
-  // Extract data and loading states
-  const isLoading = queries.some((query) => query.isLoading);
-  const isError = queries.some((query) => query.isError);
-  const errors = queries.map((query) => query.error);
-  const data = {
-    observations: queries[0].data,
-    videos: queries[1].data,
-    articles: queries[2].data,
-    exercises: queries[3].data,
-    mental_summary: queries[4].data,
+  // Group 2: Videos & Articles
+  const mediaQueries = useQueries({
+    queries: [
+      {
+        queryKey: ['insights', 'videos', userId],
+        queryFn: async () => {
+          if (!userId) throw new Error('User not authenticated');
+
+          const response = await fetch('/api/insights', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              prompt: systemPrompt_videos,
+              userId,
+            }),
+          });
+          if (!response.ok) throw new Error('Videos request failed');
+          return response.json();
+        },
+        staleTime: ONE_DAY_IN_MS,
+        gcTime: ONE_DAY_IN_MS,
+        enabled: !!userId && isUserLoaded && !!observationQuery.data,
+      },
+      {
+        queryKey: ['insights', 'articles', userId],
+        queryFn: async () => {
+          if (!userId) throw new Error('User not authenticated');
+
+          const response = await fetch('/api/insights', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              prompt: systemPrompt_articles,
+              userId,
+            }),
+          });
+          if (!response.ok) throw new Error('Articles request failed');
+          return response.json();
+        },
+        staleTime: ONE_DAY_IN_MS,
+        gcTime: ONE_DAY_IN_MS,
+        enabled: !!userId && isUserLoaded && !!observationQuery.data,
+      },
+    ],
+  });
+
+  // Group 3: Exercises & Mental Summary
+  const healthQueries = useQueries({
+    queries: [
+      {
+        queryKey: ['insights', 'exercises', userId],
+        queryFn: async () => {
+          if (!userId) throw new Error('User not authenticated');
+
+          const response = await fetch('/api/insights', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              prompt: systemPrompt_exercises,
+              userId,
+            }),
+          });
+          if (!response.ok) throw new Error('Exercises request failed');
+          return response.json();
+        },
+        staleTime: ONE_DAY_IN_MS,
+        gcTime: ONE_DAY_IN_MS,
+        enabled:
+          !!userId &&
+          isUserLoaded &&
+          !!mediaQueries[0].data &&
+          !!mediaQueries[1].data,
+      },
+      {
+        queryKey: ['insights', 'mental-summary', userId],
+        queryFn: async () => {
+          if (!userId) throw new Error('User not authenticated');
+
+          const response = await fetch('/api/insights', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              prompt: systemPrompt_mental_summary,
+              userId,
+            }),
+          });
+          if (!response.ok) throw new Error('Mental summary request failed');
+          return response.json();
+        },
+        staleTime: ONE_DAY_IN_MS,
+        gcTime: ONE_DAY_IN_MS,
+        enabled:
+          !!userId &&
+          isUserLoaded &&
+          !!mediaQueries[0].data &&
+          !!mediaQueries[1].data,
+      },
+    ],
+  });
+
+  // Derive loading state based on enabled status
+  const videosQuery = mediaQueries[0];
+  const articlesQuery = mediaQueries[1];
+  const exercisesQuery = healthQueries[0];
+  const mentalSummaryQuery = healthQueries[1];
+
+  const loadingStates = {
+    observations: observationQuery.isLoading,
+    videos: videosQuery.isLoading || !videosQuery.isFetched,
+    articles: articlesQuery.isLoading || !articlesQuery.isFetched,
+    exercises: exercisesQuery.isLoading || !exercisesQuery.isFetched,
+    mental_summary:
+      mentalSummaryQuery.isLoading || !mentalSummaryQuery.isFetched,
   };
 
-  return { data, isLoading, isError, errors };
+  return {
+    data: isUserLoaded
+      ? {
+          observations: observationQuery.data,
+          videos: mediaQueries[0].data,
+          articles: mediaQueries[1].data,
+          exercises: healthQueries[0].data,
+          mental_summary: healthQueries[1].data,
+        }
+      : undefined,
+    loadingStates,
+    isError:
+      observationQuery.isError ||
+      mediaQueries.some((q) => q.isError) ||
+      healthQueries.some((q) => q.isError),
+    errors: {
+      observations: observationQuery.error,
+      videos: mediaQueries[0].error,
+      articles: mediaQueries[1].error,
+      exercises: healthQueries[0].error,
+      mental_summary: healthQueries[1].error,
+    },
+  };
 }
-
 export default function Insights() {
-  const { data, isLoading, isError } = useAllInsights();
+  const { data, loadingStates, isError } = useSequentialInsights();
 
-  if (isLoading) {
-    return <InsightsLoader />;
-  }
+  console.log(loadingStates);
+
   if (isError) return <div>Error loading some insights</div>;
   console.log(data);
   return (

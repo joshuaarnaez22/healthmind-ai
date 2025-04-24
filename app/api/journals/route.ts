@@ -22,12 +22,9 @@ export async function GET() {
       take: 7,
     });
 
-    return NextResponse.json(
-      { journals },
-      {
-        status: 200,
-      }
-    );
+    return NextResponse.json(journals, {
+      status: 200,
+    });
   } catch (error) {
     console.error('Error uploading  files:', error);
     console.error('Error uploading files:', error);
