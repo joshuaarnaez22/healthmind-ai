@@ -2,17 +2,17 @@ import { NextResponse, NextRequest } from 'next/server';
 import { generateText } from 'ai';
 import { deepseek } from '@ai-sdk/deepseek';
 import { getUserId } from '@/actions/server-actions/user';
-import redis from '@/lib/upstash';
+// import redis from '@/lib/upstash';
 import { prisma } from '@/lib/client';
 
 export async function POST(request: NextRequest) {
   try {
     const user_id = await getUserId();
-    const cachedKey = `insights:${user_id}`;
-    const cached = await redis.get(cachedKey);
-    if (cached) {
-      return NextResponse.json({ data: cached }, { status: 200 });
-    }
+    // const cachedKey = `insights:${user_id}`;
+    // const cached = await redis.get(cachedKey);
+    // if (cached) {
+    //   return NextResponse.json({ data: cached }, { status: 200 });
+    // }
     const { prompt } = await request.json();
     const journals = await prisma.journal.findMany({
       where: {
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       ],
     });
     const cleanJsonString = rawResponse.replace(/^```json\n|\n```$/g, '');
-    await redis.setex(cachedKey, 86400, JSON.parse(cleanJsonString));
+    // await redis.setex(cachedKey, 86400, JSON.parse(cleanJsonString));
     console.log(cleanJsonString);
 
     return NextResponse.json(

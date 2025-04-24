@@ -15,26 +15,64 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { pageAnimations } from '@/lib/motion';
-import { useQuery } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 import InsightsLoader from '@/components/loaders/insights';
-import { systemPrompt_observations } from '@/lib/prompts';
-export default function Insights() {
-  const { data, isLoading } = useQuery({
-    queryKey: ['generate-observations'],
-    queryFn: async () => {
-      const response = await fetch('/api/insights', {
-        method: 'POST',
-        body: JSON.stringify({ prompt: systemPrompt_observations }),
-      });
-      return response.json();
-    },
-    staleTime: 0,
-    gcTime: 0,
+import {
+  systemPrompt_articles,
+  systemPrompt_exercises,
+  systemPrompt_mental_summary,
+  systemPrompt_observations,
+  systemPrompt_videos,
+} from '@/lib/prompts';
+
+function useAllInsights() {
+  const prompts = [
+    { name: 'observations', prompt: systemPrompt_observations },
+    { name: 'videos', prompt: systemPrompt_videos },
+    { name: 'articles', prompt: systemPrompt_articles },
+    { name: 'exercises', prompt: systemPrompt_exercises },
+    { name: 'mental_summary', prompt: systemPrompt_mental_summary },
+  ];
+
+  const queries = useQueries({
+    queries: prompts.map(({ name, prompt }) => ({
+      queryKey: ['generate-insights', name],
+      queryFn: async () => {
+        const response = await fetch('/api/insights', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt }),
+        });
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+        return response.json();
+      },
+    })),
   });
+
+  // Extract data and loading states
+  const isLoading = queries.some((query) => query.isLoading);
+  const isError = queries.some((query) => query.isError);
+  const errors = queries.map((query) => query.error);
+  const data = {
+    observations: queries[0].data,
+    videos: queries[1].data,
+    articles: queries[2].data,
+    exercises: queries[3].data,
+    mental_summary: queries[4].data,
+  };
+
+  return { data, isLoading, isError, errors };
+}
+
+export default function Insights() {
+  const { data, isLoading, isError } = useAllInsights();
 
   if (isLoading) {
     return <InsightsLoader />;
   }
+  if (isError) return <div>Error loading some insights</div>;
   console.log(data);
   return (
     <motion.div {...pageAnimations}>
