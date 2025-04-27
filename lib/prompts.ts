@@ -75,15 +75,45 @@ Sarah likely has a lung infection needing antibiotics.
 - Sarah should drink extra fluids and rest
 `;
 
+export const systemPrompt_videos = `
+Generate ONLY the following JSON for 4 to 6 video recommendations using this exact format:
+
+{
+  "recommendations": {
+    "videos": [
+      {
+        "title": "[video title]",
+        "duration": "[duration]",
+        "thumbnail": "[valid thumbnail URL]",
+        "creator": "[creator name]",
+        "views": "[view count]",
+        "source": "YouTube",
+        "url": "https://www.youtube.com/watch?v=[valid video ID]"
+      }
+    ]
+  }
+}
+
+Guidelines:
+- Include between 4 and 6 videos.
+- Only valid and publicly accessible YouTube video URLs.
+- Only use YouTube as the source.
+- Thumbnails must be valid image URLs (e.g., YouTube video thumbnails or actual image links).
+- Output pure JSON only — no extra text, notes, or explanations.
+- Follow the format exactly, including all fields.
+`;
+
 export const systemPrompt_observations = `
-Generate ONLY the following JSON for observations from journal entries:
+Generate ONLY the following JSON for observations based on the provided journal entries:
 
 {
   "analysis": {
     "observations": [
       {
-        "insight": "[concise insight]", 
-        "evidence": "[journal excerpt]",
+        "title": "[short title for display]",
+        "shortEvidence": "[short excerpt for quick display]",
+        "insight": "[concise insight]",
+        "evidence": "[full journal excerpt]",
         "date": "[entry date]"
       }
     ]
@@ -92,46 +122,132 @@ Generate ONLY the following JSON for observations from journal entries:
 
 Guidelines:
 - Include only 3–4 key observations.
+- Each observation must have:
+  - a short "title" for display,
+  - a "shortEvidence" (brief excerpt for preview),
+  - an "insight" (concise analysis),
+  - a "full evidence" (full excerpt from journal),
+  - and the "date."
+- Short evidence should be roughly 10–20 words max.
 - Insights must be clear and concise.
-- Evidence must be a relevant journal excerpt.
+- Observations must be directly derived from the journal entries provided.
 - Output pure JSON only — no extra text, notes, or explanations.
 
 Journal Entries:
 `;
 
-export const systemPrompt_videos = `
-Generate ONLY the following JSON for 3 video recommendations:
+export const systemPrompt_articles = `
+Generate ONLY the following JSON for exactly 4 real article recommendations:
 
 {
-  "recommendations": {
-    "videos": [
-      {
-        "title": "[video title]",
-        "source": "[YouTube or TED]",
-        "url": "https://www.youtube.com/watch?v=..." or "https://www.ted.com/talks/...",
-        "reason": "[1 sentence reason]"
-      }
-    ]
-  }
+  "articles": [
+    {
+      "title": "[article title]",
+      "publication": "[publication name]",
+      "url": "https://[working-domain].com/[path]",
+      "benefit": "[concise 1-sentence benefit]"
+    }
+  ]
+}
+Rules:
+- Include exactly 4 articles inside the "articles" array.
+- The "url" must point to a real, working, publicly accessible article online (no dummy links).
+- URLs must start with "https://" and must be openable in a browser.
+- Use only well-known or credible publications (e.g., nytimes.com, psychologytoday.com, healthline.com, etc.).
+- The "benefit" must be a clear 1-sentence description of the value of the article.
+- Output pure JSON only — no extra text, no comments, no markdown formatting (no triple backticks).
+
+IMPORTANT:
+- Do not fabricate URLs or domains.
+- Only select articles that actually exist and are publicly accessible.
+`;
+
+export const systemPrompt_exercises = `
+Generate ONLY the following JSON for exactly 4-6 exercise recommendations based on the journal entries:
+
+{
+  "exercises": [
+    {
+      "name": "[exercise name]",
+      "steps": [
+        { "description": "[Step 1 description]", "duration": [number of seconds] },
+        { "description": "[Step 2 description]", "duration": [number of seconds] }
+      ],
+      "rationale": "[concise 1-sentence rationale]"
+    }
+  ]
 }
 
 Guidelines:
-- Include exactly 3 videos.
-- Reason must be 1 sentence max.
-- Only valid URLs allowed.
-- Output pure JSON only — no extra text, notes, or explanations.
+- Include exactly 4-6 exercises inside the "exercises" array.
+- Each exercise must have 2–5 essential steps.
+- Each step must be an object with:
+  - "description" (string)
+  - "duration" (number, in seconds — no quotes)
+- "rationale" must be a short, 1-sentence explanation.
+- Output pure JSON only — no extra text, no comments, no markdown formatting (no triple backticks).
+
+IMPORTANT:
+- "duration" must be a plain number (e.g., 60, 120), NOT a string.
+- Use realistic, practical exercises.
+- Keep steps and descriptions simple, clear, and friendly.
+
+Journal Entries:
 `;
 
-export const systemPrompt_articles = `
-Generate ONLY the following JSON for 4 article recommendations:
+export const systemPrompt_mental_summary = `
+Generate ONLY the following JSON summary based on the journal entries:
+
+{
+  "summary": "[1–2 sentence conclusion]",
+  "moodData": [
+    { "name": "Entry 1", "mood": [1–10] },
+    { "name": "Entry 2", "mood": [1–10] },
+    { "name": "Entry 3", "mood": [1–10] },
+    { "name": "Entry 4", "mood": [1–10] },
+    { "name": "Entry 5", "mood": [1–10] },
+    { "name": "Entry 6", "mood": [1–10] },
+    { "name": "Entry 7", "mood": [1–10] }
+  ]
+}
+
+Guidelines:
+- "mood" should be a number from 1 to 10 based on the tone of each entry.
+- Provide a concise and meaningful overall insight in the "summary."
+- Do not repeat earlier observations verbatim.
+- Output pure JSON only — no extra text, notes, or explanations.
+
+Journal Entries:
+`;
+
+export const systemPrompt_affirmations = `
+Generate ONLY the following JSON for 3 affirmations based on the user's journal entries:
+
+{
+  "affirmations": [
+    "[affirmation 1]",
+    "[affirmation 2]",
+    "[affirmation 3]"
+  ]
+}
+
+Guidelines:
+- Affirmations must be positive, short, and personalized to common emotional themes in the journal.
+- Output pure JSON only — no extra text, notes, or explanations.
+
+Journal Entries:
+`;
+
+export const systemPrompt_activities = `
+Generate ONLY the following JSON for 4 mood-boosting activity suggestions:
 
 {
   "recommendations": {
-    "articles": [
+    "activities": [
       {
-        "title": "[article title]",
-        "publication": "[publication name]",
-        "url": "https://www.[domain].com/...",
+        "name": "[activity name]",
+        "mood": "TERRIBLE | BAD | NEUTRAL | GOOD | GREAT",
+        "description": "[1 sentence description]",
         "benefit": "[1 sentence benefit]"
       }
     ]
@@ -139,48 +255,7 @@ Generate ONLY the following JSON for 4 article recommendations:
 }
 
 Guidelines:
-- Include exactly 4 articles.
-- Benefit must be 1 sentence max.
-- Only valid URLs allowed.
+- Activities should be simple, low-effort, and emotionally uplifting.
+- Description and benefit must be 1 sentence each.
 - Output pure JSON only — no extra text, notes, or explanations.
-`;
-
-export const systemPrompt_exercises = `
-Generate ONLY the following JSON for 4 exercise recommendations:
-
-{
-  "recommendations": {
-    "exercises": [
-      {
-        "name": "[exercise name]",
-        "mood": "TERRIBLE | BAD | NEUTRAL | GOOD | GREAT",
-        "steps": ["[step 1]", "[step 2]", "..."],
-        "duration": "[e.g., 10 min]",
-        "rationale": "[1 sentence rationale]"
-      }
-    ]
-  }
-}
-
-Guidelines:
-- Include exactly 4 exercises.
-- Steps must be clear and concise (2–3 essential steps).
-- Rationale must be 1 sentence max.
-- Mood must match one of the allowed values.
-- Output pure JSON only — no extra text, notes, or explanations.
-`;
-
-export const systemPrompt_mental_summary = `
-Generate ONLY the following JSON summary of journal entries:
-
-{
-  "summary": "[1–2 sentence conclusion]"
-}
-
-Guidelines:
-- Provide a concise and meaningful overall insight.
-- Do not repeat earlier observations verbatim.
-- Output pure JSON only — no extra text, notes, or explanations.
-
-Journal Entries:
 `;
