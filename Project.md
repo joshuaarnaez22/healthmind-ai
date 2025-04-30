@@ -59,28 +59,5 @@ This checklist tracks the development progress of the HealthMind AI project, an 
 - Allocate time for technical debt management
 
 ==========================
-lets start with this first Therapeutic Tools
-Guided Meditation
-
-Audio player (Howler.js)
-
-Session tracking Prisma Neon
-
-Breathing Exercises
-
-Animated visual guides (Framer Motion)
-
-Browser vibration patterns (Vibration API)
-
-Grounding Techniques
-
-Interactive 5-4-3-2-1 exercises
-
-Sensory prompts library
-
-=================
-Progress Tracking
-
-Streak counters
-
-Milestone badges
+additional features: Medicine Schedule
+optional features: Connect with professionals

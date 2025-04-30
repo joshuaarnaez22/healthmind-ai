@@ -8,12 +8,11 @@ import { prisma } from '@/lib/client';
 export async function POST(request: NextRequest) {
   try {
     const user_id = await getUserId();
-    const cachedKey = `insights:${user_id}`;
+    const { prompt, cachedKey } = await request.json();
     const cached = await redis.get(cachedKey);
     if (cached) {
       return NextResponse.json({ data: cached }, { status: 200 });
     }
-    const { prompt } = await request.json();
     const journals = await prisma.journal.findMany({
       where: {
         userId: user_id,
@@ -25,7 +24,7 @@ export async function POST(request: NextRequest) {
         title: true,
       },
       orderBy: {
-        createdAt: 'desc',
+        addedAt: 'desc',
       },
       take: 7,
     });
@@ -53,7 +52,6 @@ export async function POST(request: NextRequest) {
     });
     const cleanJsonString = rawResponse.replace(/^```json\n|\n```$/g, '');
     await redis.setex(cachedKey, 86400, JSON.parse(cleanJsonString));
-    console.log(cleanJsonString);
 
     return NextResponse.json(
       { data: JSON.parse(cleanJsonString) },

@@ -39,3 +39,22 @@ export type JournalType = Omit<
   Journal,
   'id' | 'userId' | 'createdAt' | 'updatedAt'
 >;
+
+type Observation = {
+  title: string;
+  shortEvidence: string;
+  insight: string;
+  evidence: string;
+  date: string;
+};
+interface ObservationProps {
+  observation: Observation;
+  onSelect: () => void;
+}
+
+export type ArticleProps = {
+  title: string;
+  publication: string;
+  url: string;
+  benefit: string;
+};
