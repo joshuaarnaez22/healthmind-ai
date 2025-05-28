@@ -1,7 +1,15 @@
 'use client';
 
 import * as React from 'react';
-import { Brain, FileText, Heart, Notebook, SquareTerminal } from 'lucide-react';
+import {
+  Brain,
+  FileText,
+  BookOpen,
+  PlayCircle,
+  Bookmark,
+  Notebook,
+  SquareTerminal,
+} from 'lucide-react';
 
 import NavMain from './nav-main';
 import NavUser from './nav-user';
@@ -50,17 +58,7 @@ const data = {
         },
       ],
     },
-    {
-      title: 'Physical',
-      url: '#',
-      icon: Heart,
-      items: [
-        {
-          title: 'Fitness',
-          url: '#',
-        },
-      ],
-    },
+
     {
       title: 'Journal', // Main title
       url: '#',
@@ -81,17 +79,87 @@ const data = {
       items: [
         {
           title: 'Health Insights',
-          url: '/admin/health-insights',
+          url: '/admin/insights/health-insights',
         },
         {
           title: 'Health Tracker',
-          url: '/admin/health-tracker',
+          url: '/admin/insights/health-tracker',
         },
         {
           title: 'Health Summary',
-          url: '/admin/health-summary',
+          url: '/admin/insights/health-summary',
         },
       ],
+    },
+    {
+      title: 'Therapy Modules',
+      url: '#',
+      icon: BookOpen,
+      isActive: false,
+      items: [
+        {
+          title: 'CBT',
+          url: '/admin/modules/cbt',
+        },
+        {
+          title: 'DBT',
+          url: '/admin/modules/dbt',
+        },
+        {
+          title: 'ACT',
+          url: '/admin/modules/act',
+        },
+      ],
+    },
+    {
+      title: 'Videos',
+      url: '#',
+      icon: PlayCircle,
+      isActive: false,
+      items: [
+        {
+          title: 'Anxiety',
+          url: '/videos/anxiety',
+        },
+        {
+          title: 'Depression',
+          url: '/videos/depression',
+        },
+        {
+          title: 'Relationships',
+          url: '/videos/relationships',
+        },
+        {
+          title: 'Burnout',
+          url: '/videos/burnout',
+        },
+      ],
+    },
+    {
+      title: 'Articles',
+      url: '#',
+      icon: FileText,
+      isActive: false,
+      items: [
+        {
+          title: 'Stress & Coping',
+          url: '/articles/stress',
+        },
+        {
+          title: 'Grief & Trauma',
+          url: '/articles/grief',
+        },
+        {
+          title: 'Workplace Mental Health',
+          url: '/articles/workplace',
+        },
+      ],
+    },
+    {
+      title: 'Bookmarks',
+      url: '/bookmarks',
+      icon: Bookmark,
+      isActive: false,
     },
   ],
 };

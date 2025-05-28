@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { PlusIcon, Save } from 'lucide-react';
+import { PlusIcon, Save, Sparkles } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import {
@@ -35,10 +35,10 @@ import {
 import { useState } from 'react';
 import RichTextEditor from './rich-text-editor';
 import { moods } from '@/lib/constant';
-import { cn } from '@/lib/utils';
+import { cn, isContentEmpty } from '@/lib/utils';
 import { useTransition } from 'react';
 import { createJournal } from '@/actions/server-actions/journal';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Journal } from '@prisma/client';
 
 export default function NewEntryModal({
@@ -56,6 +56,8 @@ export default function NewEntryModal({
     defaultValues: { title: '', mood: '', content: '' },
   });
 
+  const { watch } = form;
+  const content = watch('content');
   const onSubmit = async (values: JournalEntryFormValues) => {
     startTransition(async () => {
       const response = await createJournal(values, date);
@@ -69,6 +71,22 @@ export default function NewEntryModal({
       form.reset();
     });
   };
+
+  const handlEnhanceJournal = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!content || isContentEmpty(content)) {
+      console.log('No meaningful content to enhance');
+      return;
+    }
+    journalMutation.mutate();
+  };
+
+  const journalMutation = useMutation({
+    mutationFn: async () => {},
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
   return (
     <Dialog
       open={open}
@@ -145,7 +163,18 @@ export default function NewEntryModal({
                 name="content"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Journal Entry</FormLabel>
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Journal Entry</FormLabel>
+                      <Button variant="outline" onClick={handlEnhanceJournal}>
+                        Improve with AI
+                        <Sparkles
+                          className="-me-1 ms-2 opacity-60"
+                          size={16}
+                          strokeWidth={2}
+                          aria-hidden="true"
+                        />
+                      </Button>
+                    </div>
                     <FormControl>
                       <RichTextEditor
                         content={field.value}

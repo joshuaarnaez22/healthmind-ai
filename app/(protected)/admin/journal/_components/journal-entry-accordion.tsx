@@ -9,7 +9,7 @@ import DOMPurify from 'dompurify';
 import { ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { moods } from '@/lib/constant';
-import EditEntryModal from './edit-entry-moda';
+import EditEntryModal from './edit-entry-modal';
 
 export default function JournalEntryAccordionItem({
   journal,

@@ -1,10 +1,8 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { generateText } from 'ai';
-// import { deepseek } from '@ai-sdk/deepseek';
-import { openai } from '@ai-sdk/openai';
 import { getUserId } from '@/actions/server-actions/user';
 import redis from '@/lib/upstash';
 import { prisma } from '@/lib/client';
+import { openai } from '@/lib/openai';
 
 export async function POST(request: NextRequest) {
   try {
@@ -38,24 +36,17 @@ export async function POST(request: NextRequest) {
         }
       );
     }
-    const { text: rawResponse } = await generateText({
-      model: openai('gpt-4.1-mini'),
-      messages: [
-        {
-          role: 'system',
-          content: prompt,
-        },
-        {
-          role: 'user',
-          content: JSON.stringify(journals),
-        },
-      ],
+    const response = await openai.responses.create({
+      model: 'gpt-4.1-mini',
+      tools: [{ type: 'web_search_preview' }],
+      input: `System instructions: ${prompt}\n\nUser data: ${JSON.stringify(journals)}`,
     });
-    const cleanJsonString = rawResponse.replace(/^```json\n|\n```$/g, '');
-    await redis.setex(cachedKey, 86400, JSON.parse(cleanJsonString));
+
+    const cleanObject = JSON.parse(response.output_text);
+    await redis.setex(cachedKey, 86400, cleanObject);
 
     return NextResponse.json(
-      { data: JSON.parse(cleanJsonString) },
+      { data: cleanObject },
       {
         status: 200,
       }

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { streamText } from 'ai';
 import { systemPrompt_summary } from '@/lib/prompts';
-import { deepseek } from '@ai-sdk/deepseek';
 import { getUserId } from '@/actions/server-actions/user';
-
+// import { deepseek } from '@ai-sdk/deepseek';
+import { openai } from '@ai-sdk/openai';
 export const config = {
   runtime: 'edge',
 };
@@ -18,11 +18,12 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
     const cleanedContents = contents
       .map((text: string) => text.replace(/\n{2,}/g, '\n').trim())
       .join('\n\n');
     const result = streamText({
-      model: deepseek('deepseek-chat'),
+      model: openai('gpt-4.1-mini'),
       messages: [
         {
           role: 'system',
@@ -43,7 +44,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error uploading  files:', error);
-    console.error('Error uploading files:', error);
     return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
     });

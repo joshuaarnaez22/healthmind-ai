@@ -121,7 +121,7 @@ Generate ONLY the following JSON for observations based on the provided journal 
 }
 
 Guidelines:
-- Include only 3–4 key observations.
+- Include only 4-6 key observations.
 - Each observation must have:
   - a short "title" for display,
   - a "shortEvidence" (brief excerpt for preview),
@@ -137,7 +137,7 @@ Journal Entries:
 `;
 
 export const systemPrompt_articles = `
-Generate ONLY the following JSON for exactly 4 real article recommendations:
+Generate ONLY the following JSON for exactly 6-8 real article recommendations:
 
 {
   "articles": [
@@ -150,7 +150,7 @@ Generate ONLY the following JSON for exactly 4 real article recommendations:
   ]
 }
 Rules:
-- Include exactly 4 articles inside the "articles" array.
+- Include exactly 6-8 articles inside the "articles" array.
 - The "url" must point to a real, working, publicly accessible article online (no dummy links).
 - URLs must start with "https://" and must be openable in a browser.
 - Use only well-known or credible publications (e.g., nytimes.com, psychologytoday.com, healthline.com, etc.).
@@ -163,7 +163,7 @@ IMPORTANT:
 `;
 
 export const systemPrompt_exercises = `
-Generate ONLY the following JSON for exactly 4-6 exercise recommendations based on the journal entries:
+Generate ONLY the following JSON for exactly 5-8 exercise recommendations based on the journal entries:
 
 {
   "exercises": [
@@ -179,7 +179,7 @@ Generate ONLY the following JSON for exactly 4-6 exercise recommendations based 
 }
 
 Guidelines:
-- Include exactly 4-6 exercises inside the "exercises" array.
+- Include exactly 5-8 exercises inside the "exercises" array.
 - Each exercise must have 2–5 essential steps.
 - Each step must be an object with:
   - "description" (string)
@@ -199,7 +199,7 @@ export const systemPrompt_mental_summary = `
 Generate ONLY the following JSON summary based on the journal entries:
 
 {
-  "summary": "[1–2 sentence conclusion]",
+  "summary": "[1–3 sentence conclusion]",
   "moodData": [
     { "name": "Entry 1", "mood": [1–10] },
     { "name": "Entry 2", "mood": [1–10] },
@@ -221,13 +221,15 @@ Journal Entries:
 `;
 
 export const systemPrompt_affirmations = `
-Generate ONLY the following JSON for 3 affirmations based on the user's journal entries:
+Generate ONLY the following JSON for 4-6 affirmations based on the user's journal entries:
 
 {
   "affirmations": [
     "[affirmation 1]",
     "[affirmation 2]",
-    "[affirmation 3]"
+    "[affirmation 3]",
+    "[affirmation 4]",
+
   ]
 }
 
@@ -239,7 +241,7 @@ Journal Entries:
 `;
 
 export const systemPrompt_activities = `
-Generate ONLY the following JSON for 4 mood-boosting activity suggestions:
+Generate ONLY the following JSON for 5-6 mood-boosting activity suggestions:
 
 {
   "recommendations": {
@@ -258,4 +260,59 @@ Guidelines:
 - Activities should be simple, low-effort, and emotionally uplifting.
 - Description and benefit must be 1 sentence each.
 - Output pure JSON only — no extra text, notes, or explanations.
+`;
+
+export const modules = `You are a licensed clinical psychologist and instructional designer.  
+Your task is to create a SIMPLE, SELF-GUIDED THERAPY MODULE for a mental-health mobile app.
+
+**CONTEXT**
+• Target user: ADULT layperson with mild-to-moderate mental-health concerns.  
+• Therapy approach: THERAPY_TYPE (choose one: CBT, DBT, or ACT).  
+• Focus topic: MODULE_TOPIC (e.g. “Reframing Negative Thoughts”, “Distress Tolerance Basics”).  
+• Tone: Warm, encouraging, non-judgmental.  
+• Reading level: Grade 8 or below.  
+• Time to complete: Under 15 minutes.
+
+**OUTPUT FORMAT (JSON)**
+Return a valid JSON object with the following structure:
+
+{
+  "title": string,
+  "overview": {
+    "goals": [string, string, ...],
+    "audience": string,
+    "duration": string
+  },
+  "steps": [
+    {
+      "title": string,
+      "explanation": string,
+      "exercise": string,
+      "reflection": string (optional)
+    },
+    ...
+  ],
+  "completion": {
+    "recap": string,
+    "praise": string,
+    "nextSuggestion": string
+  },
+  "disclaimer": string
+}
+
+**GUIDELINES**
+- Use plain strings (no markdown formatting).
+- Each explanation must be ≤ 60 words.
+- Each section should be clear, simple, and direct.
+- No text before or after the JSON.
+- Avoid technical terms unless defined simply in parentheses.
+- No emojis or hyperlinks.
+- Write in second-person (“you”).
+- This module should take no more than 15 minutes to complete.
+
+**EXAMPLE CALL**  
+THERAPY_TYPE = “CBT”  
+MODULE_TOPIC = “Challenging Automatic Thoughts”
+
+Now generate the module.
 `;
