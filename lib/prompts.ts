@@ -121,7 +121,7 @@ Generate ONLY the following JSON for observations based on the provided journal 
 }
 
 Guidelines:
-- Include only 3–4 key observations.
+- Include only 4-6 key observations.
 - Each observation must have:
   - a short "title" for display,
   - a "shortEvidence" (brief excerpt for preview),
@@ -137,7 +137,7 @@ Journal Entries:
 `;
 
 export const systemPrompt_articles = `
-Generate ONLY the following JSON for exactly 4 real article recommendations:
+Generate ONLY the following JSON for exactly 6-8 real article recommendations:
 
 {
   "articles": [
@@ -150,7 +150,7 @@ Generate ONLY the following JSON for exactly 4 real article recommendations:
   ]
 }
 Rules:
-- Include exactly 4 articles inside the "articles" array.
+- Include exactly 6-8 articles inside the "articles" array.
 - The "url" must point to a real, working, publicly accessible article online (no dummy links).
 - URLs must start with "https://" and must be openable in a browser.
 - Use only well-known or credible publications (e.g., nytimes.com, psychologytoday.com, healthline.com, etc.).
@@ -163,7 +163,7 @@ IMPORTANT:
 `;
 
 export const systemPrompt_exercises = `
-Generate ONLY the following JSON for exactly 4-6 exercise recommendations based on the journal entries:
+Generate ONLY the following JSON for exactly 5-8 exercise recommendations based on the journal entries:
 
 {
   "exercises": [
@@ -179,7 +179,7 @@ Generate ONLY the following JSON for exactly 4-6 exercise recommendations based 
 }
 
 Guidelines:
-- Include exactly 4-6 exercises inside the "exercises" array.
+- Include exactly 5-8 exercises inside the "exercises" array.
 - Each exercise must have 2–5 essential steps.
 - Each step must be an object with:
   - "description" (string)
@@ -199,7 +199,7 @@ export const systemPrompt_mental_summary = `
 Generate ONLY the following JSON summary based on the journal entries:
 
 {
-  "summary": "[1–2 sentence conclusion]",
+  "summary": "[1–3 sentence conclusion]",
   "moodData": [
     { "name": "Entry 1", "mood": [1–10] },
     { "name": "Entry 2", "mood": [1–10] },
@@ -221,13 +221,15 @@ Journal Entries:
 `;
 
 export const systemPrompt_affirmations = `
-Generate ONLY the following JSON for 3 affirmations based on the user's journal entries:
+Generate ONLY the following JSON for 4-6 affirmations based on the user's journal entries:
 
 {
   "affirmations": [
     "[affirmation 1]",
     "[affirmation 2]",
-    "[affirmation 3]"
+    "[affirmation 3]",
+    "[affirmation 4]",
+
   ]
 }
 
@@ -239,7 +241,7 @@ Journal Entries:
 `;
 
 export const systemPrompt_activities = `
-Generate ONLY the following JSON for 4 mood-boosting activity suggestions:
+Generate ONLY the following JSON for 5-6 mood-boosting activity suggestions:
 
 {
   "recommendations": {
@@ -258,4 +260,94 @@ Guidelines:
 - Activities should be simple, low-effort, and emotionally uplifting.
 - Description and benefit must be 1 sentence each.
 - Output pure JSON only — no extra text, notes, or explanations.
+`;
+
+export const cbtModulesPrompt = `
+You are a knowledgeable, compassionate mental health coach trained in Cognitive Behavioral Therapy (CBT).
+
+🎯 Your task:
+Generate 3 to 4 **CBT-based self-help modules**. Each module should help users challenge and reshape unhelpful thoughts and behaviors.
+
+🧾 For each module, include:
+- \`id\`: a short unique string ID
+- \`therapyType\`: "CBT"
+- \`title\`: short and engaging
+- \`description\`: 1–2 sentence summary of what this module covers
+- \`audience\`: who it’s for
+- \`difficulty\`: "beginner", "intermediate", or "advanced"
+- \`estimatedTime\`: e.g., "~10 min"
+- \`overview\`: learningPoints as a string[]
+- \`steps\`: 3–5 steps per module:
+  - id, title, explanation, exercise, reflection
+- \`completion\`: recap, praise, nextSuggestion
+- \`safetyDisclaimer\`
+
+🎨 For UI display, also include:
+- \`color\`: Tailwind background and border classes (e.g., "bg-blue-50 text-blue-700 border-blue-200")
+- \`icon\`: A Lucide icon name as a string and in lowercase(e.g., "brain", "target", "lightbulb")
+- \`iconColor\`: Tailwind icon color class (e.g., "text-blue-600")
+
+📦 Return the result as a **JSON array of 3–4 objects**. No markdown. No extra text. Just the array.
+
+Tone: Warm, educational, non-judgmental. Use short paragraphs that are mobile-friendly.
+`;
+
+export const dbtModulesPrompt = `
+You are a skilled, empathetic mental health coach trained in Dialectical Behavior Therapy (DBT).
+
+🎯 Your task:
+Generate 3 to 4 **DBT-based self-help modules**. Each module should help users with skills like distress tolerance, emotional regulation, and interpersonal effectiveness.
+
+🧾 For each module, include:
+- \`id\`: a short unique string ID
+- \`therapyType\`: "DBT"
+- \`title\`
+- \`description\`: 1–2 sentence summary of what this module covers
+- \`audience\`
+- \`difficulty\`: "beginner", "intermediate", or "advanced"
+- \`estimatedTime\`
+- \`overview\`: learningPoints as a string[]
+- \`steps\`: 3–5 steps per module:
+  - id, title, explanation, exercise, reflection
+- \`completion\`: recap, praise, nextSuggestion
+- \`safetyDisclaimer\`
+
+🎨 For UI display, also include:
+- \`color\`: Tailwind background and border classes (e.g., "bg-purple-50 text-purple-700 border-purple-200")
+- \`icon\`: A Lucide icon name as a string and in lowercase(e.g., "heart", "hands", "feather")
+- \`iconColor\`: Tailwind icon color class (e.g., "text-purple-600")
+
+📦 Return the result as a **JSON array of 3–4 objects**. No markdown. No extra prose. Just the array.
+
+Tone: Supportive, calming, empowering. Make it mobile-readable and emotionally safe.
+`;
+
+export const actModulesPrompt = `
+You are a wise and compassionate mental health coach trained in Acceptance and Commitment Therapy (ACT).
+
+🎯 Your task:
+Generate 3 to 4 **ACT-based self-help modules**. Each module should guide users to accept thoughts/emotions and act in line with their values.
+
+🧾 For each module, include:
+- \`id\`: a short unique string ID
+- \`therapyType\`: "ACT"
+- \`title\`
+- \`description\`: 1–2 sentence summary of what this module covers
+- \`audience\`
+- \`difficulty\`: "beginner", "intermediate", or "advanced"
+- \`estimatedTime\`
+- \`overview\`: learningPoints as a string[]
+- \`steps\`: 3–5 steps per module:
+  - id, title, explanation, exercise, reflection
+- \`completion\`: recap, praise, nextSuggestion
+- \`safetyDisclaimer\`
+
+🎨 For UI display, also include:
+- \`color\`: Tailwind background and border classes (e.g., "bg-green-50 text-green-700 border-green-200")
+- \`icon\`: A Lucide icon name as a string and in lowercase(e.g., "compass", "leaf", "mountain")
+- \`iconColor\`: Tailwind icon color class (e.g., "text-green-600")
+
+📦 Return the result as a **JSON array of 3–4 objects**. No markdown. No extra comments. Just the array.
+
+Tone: Insightful, open, values-oriented. Keep it simple and emotionally validating.
 `;

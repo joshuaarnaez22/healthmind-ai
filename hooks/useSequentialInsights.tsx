@@ -109,7 +109,7 @@ export function useSequentialInsights() {
         queryKey: ['insights', 'articles', userId],
         queryFn: async () => {
           if (!userId) throw new Error('User not authenticated');
-          const response = await fetch('/api/insights', {
+          const response = await fetch('/api/articles', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

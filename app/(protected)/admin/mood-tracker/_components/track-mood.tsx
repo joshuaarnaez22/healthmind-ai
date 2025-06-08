@@ -20,9 +20,7 @@ export default function TrackMood() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-semibold">Mood Tracker</h2>
-      </div>
+      <h2 className="text-xl font-semibold">Mood Tracker</h2>
 
       <Card>
         <CardHeader>

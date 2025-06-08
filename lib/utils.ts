@@ -2,6 +2,7 @@ import { Decimal } from 'decimal.js';
 import { clsx, type ClassValue } from 'clsx';
 import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
+import DOMPurify from 'dompurify';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -125,4 +126,11 @@ export const processMedicalSummary = (chunk: string): string => {
   );
 
   return cleaned;
+};
+
+export const isContentEmpty = (htmlString: string) => {
+  const clean = DOMPurify.sanitize(htmlString);
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = clean;
+  return tempDiv.textContent?.trim() === '';
 };

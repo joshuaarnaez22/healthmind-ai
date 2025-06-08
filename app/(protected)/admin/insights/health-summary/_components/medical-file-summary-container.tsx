@@ -21,6 +21,7 @@ export default function MedicalFileSummaryContainer() {
   const [files, setFiles] = useState<FileState[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [summary, setSummary] = useState('');
+
   const uploadMutation = useMutation({
     mutationFn: async ({
       file,

@@ -14,6 +14,8 @@ const persistentInsightKeys = [
   'articles',
 ];
 
+const persistentModuleKeys = ['cbt_module'];
+
 export default function QueryProvider({
   children,
 }: {
@@ -54,6 +56,16 @@ export default function QueryProvider({
               const userId = queryKey[2];
               return (
                 persistentInsightKeys.includes(insightType as string) &&
+                typeof userId === 'string' &&
+                userId.length > 0
+              );
+            }
+
+            if (namespace === 'therapy_modules') {
+              const moduleType = queryKey[1];
+              const userId = queryKey[2];
+              return (
+                persistentModuleKeys.includes(moduleType as string) &&
                 typeof userId === 'string' &&
                 userId.length > 0
               );
