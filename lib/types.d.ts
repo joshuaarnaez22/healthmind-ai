@@ -58,3 +58,36 @@ export type ArticleProps = {
   url: string;
   benefit: string;
 };
+
+export interface ModuleStep {
+  id: string;
+  title: string;
+  explanation: string;
+  exercise: string;
+  reflection: string;
+}
+
+export interface ModuleCompletion {
+  recap: string;
+  praise: string;
+  nextSuggestion: string;
+}
+
+export interface TherapyModule {
+  id: string;
+  description: string;
+  therapyType: 'CBT' | 'DBT' | 'ACT';
+  title: string;
+  audience: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  estimatedTime: string;
+  overview: string[];
+  steps: ModuleStep[];
+  completion: ModuleCompletion;
+  safetyDisclaimer: string;
+
+  // UI-related
+  color: string; // e.g., "bg-blue-50 text-blue-700 border-blue-200"
+  icon: string; // e.g., "Brain", "Heart", "Compass"
+  iconColor: string; // e.g., "text-blue-600"
+}

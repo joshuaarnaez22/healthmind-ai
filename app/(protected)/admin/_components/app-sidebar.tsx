@@ -5,8 +5,8 @@ import {
   Brain,
   FileText,
   BookOpen,
-  PlayCircle,
-  Bookmark,
+  // PlayCircle,
+  // Bookmark,
   Notebook,
   SquareTerminal,
 } from 'lucide-react';
@@ -98,69 +98,61 @@ const data = {
       isActive: false,
       items: [
         {
-          title: 'CBT',
-          url: '/admin/modules/cbt',
-        },
-        {
-          title: 'DBT',
-          url: '/admin/modules/dbt',
-        },
-        {
-          title: 'ACT',
-          url: '/admin/modules/act',
+          title: 'Modules',
+          url: '/admin/therapy_modules',
         },
       ],
     },
-    {
-      title: 'Videos',
-      url: '#',
-      icon: PlayCircle,
-      isActive: false,
-      items: [
-        {
-          title: 'Anxiety',
-          url: '/videos/anxiety',
-        },
-        {
-          title: 'Depression',
-          url: '/videos/depression',
-        },
-        {
-          title: 'Relationships',
-          url: '/videos/relationships',
-        },
-        {
-          title: 'Burnout',
-          url: '/videos/burnout',
-        },
-      ],
-    },
-    {
-      title: 'Articles',
-      url: '#',
-      icon: FileText,
-      isActive: false,
-      items: [
-        {
-          title: 'Stress & Coping',
-          url: '/articles/stress',
-        },
-        {
-          title: 'Grief & Trauma',
-          url: '/articles/grief',
-        },
-        {
-          title: 'Workplace Mental Health',
-          url: '/articles/workplace',
-        },
-      ],
-    },
-    {
-      title: 'Bookmarks',
-      url: '/bookmarks',
-      icon: Bookmark,
-      isActive: false,
-    },
+    // {
+    //   title: 'Videos',
+    //   url: '#',
+    //   icon: PlayCircle,
+    //   isActive: false,
+    //   items: [
+    //     {
+    //       title: 'Anxiety',
+    //       url: '/videos/anxiety',
+    //     },
+    //     {
+    //       title: 'Depression',
+    //       url: '/videos/depression',
+    //     },
+    //     {
+    //       title: 'Relationships',
+    //       url: '/videos/relationships',
+    //     },
+    //     {
+    //       title: 'Burnout',
+    //       url: '/videos/burnout',
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: 'Articles',
+    //   url: '#',
+    //   icon: FileText,
+    //   isActive: false,
+    //   items: [
+    //     {
+    //       title: 'Stress & Coping',
+    //       url: '/articles/stress',
+    //     },
+    //     {
+    //       title: 'Grief & Trauma',
+    //       url: '/articles/grief',
+    //     },
+    //     {
+    //       title: 'Workplace Mental Health',
+    //       url: '/articles/workplace',
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: 'Bookmarks',
+    //   url: '/bookmarks',
+    //   icon: Bookmark,
+    //   isActive: false,
+    // },
   ],
 };
 
