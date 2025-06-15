@@ -125,3 +125,10 @@ export interface EmotionInsight {
 export type GoalWithCheckIns = Goal & {
   checkIns: CheckIn[];
 };
+
+export interface EmotionInsight {
+  emotion: string;
+  count: number;
+  percentage: number;
+  activities: string[];
+}

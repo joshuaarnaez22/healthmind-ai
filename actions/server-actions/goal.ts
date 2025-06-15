@@ -89,3 +89,53 @@ export const saveCheckIn = async (
     return { success: false, message: 'Something went wrong' };
   }
 };
+
+export const updateGoal = async (goalId: string, values: unknown) => {
+  try {
+    const id = await getUserId();
+    const parsedData = goalFormSchema.safeParse(values);
+
+    if (!parsedData.success) {
+      console.error(parsedData.error.flatten());
+      return { success: false, message: 'Invalid input data' };
+    }
+
+    const { emotion, frequency, duration } = parsedData.data;
+
+    const emotionEnum = enumConvertor(Emotion, emotion);
+    const frequencyEnum = enumConvertor(Frequency, frequency);
+    const durationEnum = enumConvertor(GoalDuration, duration);
+
+    if (!emotionEnum || !frequencyEnum || !durationEnum) {
+      return { success: false, message: 'Invalid enum values' };
+    }
+
+    const updatedGoal = await prisma.goal.update({
+      where: {
+        id: goalId,
+        userId: id,
+      },
+      data: {
+        ...parsedData.data,
+        emotion: emotionEnum,
+        frequency: frequencyEnum,
+        duration: durationEnum,
+      },
+      include: {
+        checkIns: true,
+      },
+    });
+
+    return {
+      success: true,
+      message: 'Goal updated successfully',
+      data: updatedGoal,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Something went wrong while updating the goal',
+    };
+  }
+};

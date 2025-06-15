@@ -4,6 +4,8 @@ import { Progress } from '@/components/ui/progress';
 import { CheckCircle, Clock } from 'lucide-react';
 import Link from 'next/link';
 import EmotionBadge from './emotion-badge';
+import GoalDetailsModal from './goal-details-modal';
+import { Goal } from '@/lib/types';
 
 interface GoalCardProps {
   id: string;
@@ -13,6 +15,7 @@ interface GoalCardProps {
   daysLeft: number;
   completed: number;
   total: number;
+  goal: Goal;
 }
 
 export default function GoalCard({
@@ -23,6 +26,7 @@ export default function GoalCard({
   daysLeft,
   completed,
   total,
+  goal,
 }: GoalCardProps) {
   return (
     <Card className="overflow-hidden">
@@ -57,11 +61,7 @@ export default function GoalCard({
             Check-in
           </Button>
         </Link>
-        <Link href={`/goals/${id}`}>
-          <Button variant="ghost" size="sm" className="h-8 text-xs">
-            Details
-          </Button>
-        </Link>
+        <GoalDetailsModal goal={goal} />
       </CardFooter>
     </Card>
   );

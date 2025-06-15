@@ -28,7 +28,7 @@ export default function MindfulGoals() {
   const userId = user?.id;
 
   const {
-    data: goals,
+    data: goals = [],
     isLoading,
     isError,
   } = useQuery<GoalWithCheckIns[]>({
@@ -53,19 +53,25 @@ export default function MindfulGoals() {
   if (isError) {
     return <p className="text-center text-red-500">Failed to load goals.</p>;
   }
-  const completedGoals = goals?.filter((goal) => goal.isCompleted) || [];
+  const completedGoals = goals.filter((goal) => goal.isCompleted) || [];
 
-  const activeGoals =
-    goals?.filter(
-      (goal) =>
-        !goal.isCompleted &&
-        getDaysLeft({ duration: goal.duration, createdAt: goal.createdAt })
-    ) || [];
+  const activeGoals = goals.filter((goal) => !goal.isCompleted) || [];
 
-  console.log(activeGoals);
+  const allCheckIns = goals.flatMap((goal) =>
+    goal.checkIns.map((checkIn) => ({
+      ...checkIn,
+      title: goal.title,
+    }))
+  );
+
+  const recentCheckIns = allCheckIns
+    .sort(
+      (a, b) =>
+        new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime()
+    )
+    .slice(0, 5);
 
   const getGoalProgress = (goalId: string) => {
-    if (!goals?.length) return 0;
     const goal = goals.find((g) => g.id === goalId);
     if (!goal) return 0;
     return Math.min((goal.completedCount / goal.targetCount) * 100, 100);
@@ -133,6 +139,7 @@ export default function MindfulGoals() {
                     })}
                     completed={goal.completedCount}
                     total={goal.targetCount}
+                    goal={goal}
                   />
                 ))}
               </div>
@@ -176,7 +183,7 @@ export default function MindfulGoals() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <RecentReflections />
+                <RecentReflections recentCheckIns={recentCheckIns} />
               </CardContent>
             </Card>
           </TabsContent>
@@ -189,7 +196,14 @@ export default function MindfulGoals() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <InsightsChart />
+                <InsightsChart
+                  totalCheckIns={allCheckIns.length}
+                  totalReflection={
+                    allCheckIns.filter((checkIn) => checkIn.reflection).length
+                  }
+                  totalCompletedGoals={completedGoals.length}
+                  totalActiveGoals={activeGoals.length}
+                />
               </CardContent>
             </Card>
           </TabsContent>
