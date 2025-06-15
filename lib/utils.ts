@@ -3,6 +3,7 @@ import { clsx, type ClassValue } from 'clsx';
 import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 import DOMPurify from 'dompurify';
+import { CheckIn } from '@prisma/client';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -143,7 +144,7 @@ export const getDaysLeft = ({
   createdAt: Date;
 }) => {
   const durationDays =
-    duration === '1-week' ? 7 : duration === '2-weeks' ? 14 : 30;
+    duration === 'ONE_WEEK' ? 7 : duration === 'TWO_WEEKS' ? 14 : 30;
   const createdDate = new Date(createdAt);
   const daysSinceCreated = Math.floor(
     (Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24)
