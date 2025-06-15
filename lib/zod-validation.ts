@@ -1,5 +1,8 @@
 import {
   ArmType,
+  Emotion,
+  Frequency,
+  GoalDuration,
   MealType,
   MeasurementType,
   PostureType,
@@ -59,6 +62,19 @@ export const glucoseSchema = z.object({
   carbs: z.coerce.number().min(0).optional().nullable(),
   notes: z.string().optional().nullable(),
 });
+
+export const goalFormSchema = z.object({
+  title: z.string().min(1, 'Goal title is required'),
+  emotion: z.nativeEnum(Emotion),
+  frequency: z.nativeEnum(Frequency),
+  targetCount: z
+    .number({ invalid_type_error: 'Target count must be a number' })
+    .min(1, 'Must be at least 1'),
+  duration: z.nativeEnum(GoalDuration),
+  why: z.string().optional(),
+});
+
+export type GoalFormValues = z.infer<typeof goalFormSchema>;
 export type JournalEntryFormValues = z.infer<typeof journalEntrySchema>;
 export type BloodPressureFormValues = z.infer<typeof bloodPressureSchema>;
 export type GlucoseFormValues = z.infer<typeof glucoseSchema>;

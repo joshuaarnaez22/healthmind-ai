@@ -18,7 +18,8 @@ import { useUser } from '@clerk/nextjs';
 import { cbtModulesPrompt } from '@/lib/prompts';
 import { ONE_DAY_IN_MS } from '@/lib/constant';
 import { TherapyModule } from '@/lib/types';
-import { DynamicIcon } from 'lucide-react/dynamic';
+import AIGeneratedBadge from '@/components/custom-icons/ai-generated-badge';
+import ModulesSkeleton from '@/components/loaders/module-loader';
 
 export default function Modules() {
   const { user, isLoaded: isUserLoaded } = useUser();
@@ -52,7 +53,7 @@ export default function Modules() {
   });
 
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return <ModulesSkeleton />;
   }
   if (isError) {
     return <h1>Error</h1>;
@@ -61,7 +62,12 @@ export default function Modules() {
     <motion.div {...pageAnimations}>
       <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Therapy Modules</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Therapy Modules{' '}
+            <span>
+              <AIGeneratedBadge />
+            </span>
+          </h1>
           <p className="mt-1 text-muted-foreground">
             Simple, evidence-based tools to support your mental health journey.
             Each module is designed for clarity, ease of use, and small wins.
@@ -71,19 +77,11 @@ export default function Modules() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {cbtModule?.map((module, index) => {
           return (
-            <Card
-              key={index}
-              className="transition-shadow duration-200 hover:shadow-lg"
-            >
+            <Card key={index}>
               <CardHeader className="pb-4">
                 <div
                   className={`h-12 w-12 rounded-lg ${module.color} mb-3 flex items-center justify-center`}
-                >
-                  <DynamicIcon
-                    className={`h-6 w-6 ${module.iconColor}`}
-                    name={module.icon as never}
-                  />
-                </div>
+                ></div>
                 <CardTitle className="text-xl text-slate-800">
                   {module.title}
                 </CardTitle>

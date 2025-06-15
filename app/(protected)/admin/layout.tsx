@@ -5,5 +5,9 @@ export default function AdminLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <AdminLayoutWrapper>{children}</AdminLayoutWrapper>;
+  return (
+    <AdminLayoutWrapper>
+      <main className="container mx-auto py-10">{children}</main>
+    </AdminLayoutWrapper>
+  );
 }

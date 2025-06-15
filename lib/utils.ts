@@ -134,3 +134,19 @@ export const isContentEmpty = (htmlString: string) => {
   tempDiv.innerHTML = clean;
   return tempDiv.textContent?.trim() === '';
 };
+
+export const getDaysLeft = ({
+  duration,
+  createdAt,
+}: {
+  duration: string;
+  createdAt: Date;
+}) => {
+  const durationDays =
+    duration === '1-week' ? 7 : duration === '2-weeks' ? 14 : 30;
+  const createdDate = new Date(createdAt);
+  const daysSinceCreated = Math.floor(
+    (Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24)
+  );
+  return Math.max(durationDays - daysSinceCreated, 0);
+};

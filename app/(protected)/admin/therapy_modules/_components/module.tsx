@@ -1,25 +1,27 @@
 'use client';
 
-// import Link from 'next/link';
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardHeader,
-//   CardTitle,
-// } from '@/components/ui/card';
-// import { Button } from '@/components/ui/button';
-// import { Badge } from '@/components/ui/badge';
-// import {
-//   ArrowLeft,
-//   Clock,
-//   Target,
-//   Users,
-//   CheckCircle,
-//   Brain,
-//   Heart,
-//   Lightbulb,
-// } from 'lucide-react';
+import { TherapyModule } from '@/lib/types';
+
+import Link from 'next/link';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  ArrowLeft,
+  Clock,
+  Target,
+  Users,
+  CheckCircle,
+  // Brain,
+  // Heart,
+  // Lightbulb,
+} from 'lucide-react';
 // import { ModuleData } from '@/lib/types';
 
 // const therapyIcons = {
@@ -34,20 +36,18 @@
 //   ACT: 'bg-amber-50 text-amber-700 border-amber-200',
 // };
 
-// {
-// moduleData,
-// moduleId,
-// }: {
-//   moduleData: ModuleData;
-//   moduleId: string;
-// }
-export default function Module() {
+export default function Module({
+  moduleData,
+  moduleId,
+}: {
+  moduleData: TherapyModule;
+  moduleId: string;
+}) {
   // const TherapyIcon = therapyIcons[moduleData.therapyType];
   // const colorClass = therapyColors[moduleData.therapyType];
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      \ Module
-      {/* <div className="container mx-auto max-w-4xl px-4 py-8">
+      <div className="container mx-auto max-w-4xl px-4 py-8">
         <div className="mb-6">
           <Link
             href="/admin/therapy_modules"
@@ -60,11 +60,11 @@ export default function Module() {
 
         <div className="mb-8">
           <div className="mb-4 flex items-center gap-3">
-            <div
+            {/* <div
               className={`h-12 w-12 rounded-lg ${colorClass} flex items-center justify-center`}
             >
               <TherapyIcon className="h-6 w-6" />
-            </div>
+            </div> */}
             <div>
               <Badge variant="secondary" className="mb-2">
                 {moduleData.therapyType}
@@ -85,9 +85,7 @@ export default function Module() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-600">
-                {moduleData.overview.estimatedTime}
-              </p>
+              <p className="text-slate-600">{moduleData.estimatedTime}</p>
             </CardContent>
           </Card>
 
@@ -99,7 +97,7 @@ export default function Module() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-600">{moduleData.overview.audience}</p>
+              <p className="text-slate-600">{moduleData.audience}</p>
             </CardContent>
           </Card>
 
@@ -112,7 +110,7 @@ export default function Module() {
             </CardHeader>
             <CardContent>
               <ul className="space-y-1">
-                {moduleData.overview.learningPoints.map((point, index) => (
+                {moduleData.overview.map((point, index) => (
                   <li
                     key={index}
                     className="flex items-start gap-2 text-sm text-slate-600"
@@ -136,13 +134,13 @@ export default function Module() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {moduleData.steps.map((step) => (
+              {moduleData.steps.map((step, index) => (
                 <div
                   key={step.id}
                   className="flex items-start gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4"
                 >
                   <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-700">
-                    {step.id}
+                    {index + 1}
                   </div>
                   <div className="flex-1">
                     <h3 className="mb-1 font-semibold text-slate-800">
@@ -176,7 +174,7 @@ export default function Module() {
             </p>
           </CardContent>
         </Card>
-      </div> */}
+      </div>
     </div>
   );
 }

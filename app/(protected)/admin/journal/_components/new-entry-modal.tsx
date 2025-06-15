@@ -58,6 +58,7 @@ export default function NewEntryModal({
 
   const { watch } = form;
   const content = watch('content');
+
   const onSubmit = async (values: JournalEntryFormValues) => {
     startTransition(async () => {
       const response = await createJournal(values, date);
@@ -68,11 +69,10 @@ export default function NewEntryModal({
         );
       }
       setOpen(false);
-      form.reset();
     });
   };
 
-  const handlEnhanceJournal = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleEnhanceJournal = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!content || isContentEmpty(content)) {
       console.log('No meaningful content to enhance');
@@ -165,7 +165,7 @@ export default function NewEntryModal({
                   <FormItem>
                     <div className="flex items-center justify-between">
                       <FormLabel>Journal Entry</FormLabel>
-                      <Button variant="outline" onClick={handlEnhanceJournal}>
+                      <Button variant="outline" onClick={handleEnhanceJournal}>
                         Improve with AI
                         <Sparkles
                           className="-me-1 ms-2 opacity-60"

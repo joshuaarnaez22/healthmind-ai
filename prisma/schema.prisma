@@ -31,6 +31,7 @@ model User {
   bloodPressureLog BloodPressureLog[]
   glucoseLog       GlucoseLog[]
   file             File[]
+  goal             Goal[]
 
   @@index([clerkUserId])
   @@index([email])
@@ -122,6 +123,38 @@ model File {
   @@index([userId])
 }
 
+model Goal {
+  id             String       @id @default(cuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title          String
+  emotion        Emotion
+  frequency      Frequency
+  targetCount    Int
+  duration       GoalDuration
+  why            String?
+  completedCount Int          @default(0)
+  isCompleted    Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  checkIns CheckIn[]
+
+  @@index([userId])
+}
+
+model CheckIn {
+  id            String   @id @default(cuid())
+  goalId        String
+  goal          Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  completedAt   DateTime @default(now())
+  actualEmotion Emotion
+  reflection    String
+  rating        Int
+
+  @@index([goalId])
+}
+
 // Enums for controlled values
 enum PostureType {
   SITTING
@@ -167,4 +200,27 @@ enum Mood {
   NEUTRAL
   GOOD
   GREAT
+}
+
+enum Emotion {
+  CALM
+  ENERGIZED
+  FOCUSED
+  CONNECTED
+  GRATEFUL
+  CONFIDENT
+  PEACEFUL
+  INSPIRED
+}
+
+enum Frequency {
+  DAILY
+  WEEKLY
+  CUSTOM
+}
+
+enum GoalDuration {
+  ONE_WEEK  @map("1-week")
+  TWO_WEEKS @map("2-weeks")
+  ONE_MONTH @map("1-month")
 }
