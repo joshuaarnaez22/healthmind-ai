@@ -2,13 +2,14 @@
 
 import * as React from 'react';
 import {
-  Brain,
   FileText,
   BookOpen,
   // PlayCircle,
   // Bookmark,
-  Notebook,
   SquareTerminal,
+  Goal,
+  NotebookPen,
+  // HeartHandshake,
 } from 'lucide-react';
 
 import NavMain from './nav-main';
@@ -48,26 +49,18 @@ const data = {
       ],
     },
     {
-      title: 'Mental',
+      title: 'MindLog',
       url: '#',
-      icon: Brain,
-      items: [
-        {
-          title: 'Mood Tracker',
-          url: '/admin/mood-tracker',
-        },
-      ],
-    },
-
-    {
-      title: 'Journal', // Main title
-      url: '#',
-      icon: Notebook, // Icon for journaling
+      icon: NotebookPen, // from Lucide or similar icon set
       isActive: false,
       items: [
         {
           title: 'Entries', // Nested item
           url: '/admin/journal',
+        },
+        {
+          title: 'Mood Tracker',
+          url: '/admin/mood-tracker',
         },
       ],
     },
@@ -103,6 +96,29 @@ const data = {
         },
       ],
     },
+    {
+      title: 'Goals',
+      url: '#',
+      icon: Goal,
+      isActive: false,
+      items: [
+        {
+          title: 'Mindful Goals',
+          url: '/admin/goals',
+        },
+      ],
+    },
+    // {
+    //   title: 'AI Therapist',
+    //   url: '#',
+    //   icon: HeartHandshake,
+    //   items: [
+    //     {
+    //       title: 'Talk to AI',
+    //       url: '/admin/ai-therapy',
+    //     },
+    //   ],
+    // },
     // {
     //   title: 'Videos',
     //   url: '#',

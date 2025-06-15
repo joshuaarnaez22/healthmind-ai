@@ -33,7 +33,7 @@ export const createJournal = async (
     const journal = await prisma.journal.create({
       data: {
         title,
-        mood: Mood[moodEnum],
+        mood: moodEnum,
         content,
         userId: id,
         addedAt: adjustedDate,

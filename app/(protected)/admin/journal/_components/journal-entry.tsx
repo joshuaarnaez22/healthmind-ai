@@ -9,6 +9,7 @@ import React from 'react';
 import DateSearch from './date-search';
 import JournalEntryAccordionItem from './journal-entry-accordion';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { pageAnimations } from '@/lib/motion';
 
 export default function JournalEntry() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
@@ -37,11 +38,7 @@ export default function JournalEntry() {
   const hasEntries = journals && journals.length > 0;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <motion.div {...pageAnimations}>
       <Card>
         {/* Header Section */}
         <CardHeader>

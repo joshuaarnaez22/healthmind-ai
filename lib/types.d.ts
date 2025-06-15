@@ -91,3 +91,37 @@ export interface TherapyModule {
   icon: string; // e.g., "Brain", "Heart", "Compass"
   iconColor: string; // e.g., "text-blue-600"
 }
+
+export interface Goal {
+  id: string;
+  title: string;
+  emotion: string;
+  frequency: string;
+  targetCount: number;
+  duration: string;
+  why?: string | null;
+  createdAt: Date;
+  completedCount: number;
+  checkIns: CheckIn[];
+  isCompleted: boolean;
+}
+
+export interface CheckIn {
+  id: string;
+  goalId: string;
+  completedAt: Date;
+  actualEmotion: string;
+  reflection: string;
+  rating: number;
+}
+
+export interface EmotionInsight {
+  emotion: string;
+  count: number;
+  percentage: number;
+  activities: string[];
+}
+
+export type GoalWithCheckIns = Goal & {
+  checkIns: CheckIn[];
+};
