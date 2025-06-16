@@ -1,4 +1,5 @@
 'use client';
+import { motion } from 'framer-motion';
 import {
   Card,
   CardContent,
@@ -19,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { saveCheckIn } from '@/actions/server-actions/goal';
 import { useRouter } from 'next/navigation';
 import { GoalWithCheckIns } from '@/lib/types';
+import { pageAnimations } from '@/lib/motion';
 
 export default function GoalCheckIn({ id }: { id: string }) {
   const { user } = useUser();
@@ -100,7 +102,7 @@ export default function GoalCheckIn({ id }: { id: string }) {
   };
 
   return (
-    <div className="py-6">
+    <motion.div {...pageAnimations} className="py-6">
       <Link
         href="/admin/goals"
         className="mb-6 flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
@@ -173,6 +175,6 @@ export default function GoalCheckIn({ id }: { id: string }) {
           </CardFooter>
         </form>
       </Card>
-    </div>
+    </motion.div>
   );
 }

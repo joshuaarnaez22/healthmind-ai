@@ -19,30 +19,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import RecentReflections from './recent-reflections';
 import InsightsChart from './insight-chart';
 import NewGoalModal from './new-goal-modal';
-import { useQuery } from '@tanstack/react-query';
-import { useUser } from '@clerk/nextjs';
-import { GoalWithCheckIns } from '@/lib/types';
+import { useGoals } from '@/hooks/useGoals';
 
 export default function MindfulGoals() {
-  const { user, isLoaded: isUserLoaded } = useUser();
-  const userId = user?.id;
-
-  const {
-    data: goals = [],
-    isLoading,
-    isError,
-  } = useQuery<GoalWithCheckIns[]>({
-    queryKey: ['goals', userId],
-    queryFn: async ({ signal }) => {
-      const response = await fetch(`/api/goals`, { signal });
-      if (!response.ok) {
-        throw new Error('Failed to fetch journal');
-      }
-      const data = await response.json();
-      return data.goals;
-    },
-    enabled: !!userId && isUserLoaded,
-  });
+  const { data: goals = [], isLoading, isError } = useGoals();
 
   if (isLoading) {
     return (
@@ -160,7 +140,7 @@ export default function MindfulGoals() {
           </CardContent>
           {activeGoals.length > 0 && (
             <CardFooter>
-              <Link href="/goals">
+              <Link href="/admin/goals/all-goals">
                 <Button variant="ghost" className="text-green-700">
                   View all goals
                 </Button>
