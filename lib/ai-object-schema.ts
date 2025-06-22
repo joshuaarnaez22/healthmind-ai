@@ -75,7 +75,7 @@ export const moduleSchema = z.object({
   difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
   estimatedTime: z.string(),
   overview: z.array(z.string()),
-  steps: z.array(stepSchema).min(3).max(5),
+  steps: z.array(stepSchema).min(1).max(5),
   completion: z.object({
     recap: z.string(),
     praise: z.string(),
@@ -88,5 +88,5 @@ export const moduleSchema = z.object({
 
 // ✅ Wrap the array in a named object
 export const ModulesSchema = z.object({
-  modules: z.array(moduleSchema).min(9).max(12),
+  modules: z.array(moduleSchema).min(1).max(12),
 });

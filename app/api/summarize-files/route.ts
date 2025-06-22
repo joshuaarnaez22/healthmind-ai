@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error uploading  files:', error);
+    console.error('Error summarize  files:', error);
     return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
     });

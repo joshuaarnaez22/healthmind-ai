@@ -57,8 +57,7 @@ ${combinedTherapyModulesPrompt}
       }
     );
   } catch (error) {
-    console.error('Error uploading  files:', error);
-    console.error('Error uploading files:', error);
+    console.error('Error modules:', error);
     return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
     });
