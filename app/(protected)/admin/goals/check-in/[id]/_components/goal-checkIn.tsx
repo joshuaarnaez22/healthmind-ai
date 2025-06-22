@@ -1,5 +1,5 @@
 'use client';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import {
   Card,
   CardContent,
@@ -60,7 +60,6 @@ export default function GoalCheckIn({ id }: { id: string }) {
   if (!goal) {
     return <p className="text-center text-red-500">No goal Found.</p>;
   }
-  const handleSkip = () => {};
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -96,7 +95,7 @@ export default function GoalCheckIn({ id }: { id: string }) {
             });
           }
         );
-        router.push('/admin/goals');
+        router.push('/user/goals');
       }
     });
   };
@@ -104,7 +103,7 @@ export default function GoalCheckIn({ id }: { id: string }) {
   return (
     <motion.div {...pageAnimations} className="py-6">
       <Link
-        href="/admin/goals"
+        href="/user/goals"
         className="mb-6 flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" />
@@ -165,10 +164,7 @@ export default function GoalCheckIn({ id }: { id: string }) {
               </p>
             </div>
           </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button variant="outline" type="button" onClick={handleSkip}>
-              Skip Reflection
-            </Button>
+          <CardFooter className="flex justify-end">
             <Button type="submit" disabled={pending}>
               Save Check-in
             </Button>

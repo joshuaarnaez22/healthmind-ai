@@ -56,11 +56,11 @@ const data = {
       items: [
         {
           title: 'Entries', // Nested item
-          url: '/admin/journal',
+          url: '/user/journal',
         },
         {
           title: 'Mood Tracker',
-          url: '/admin/mood-tracker',
+          url: '/user/mood-tracker',
         },
       ],
     },
@@ -72,15 +72,15 @@ const data = {
       items: [
         {
           title: 'Health Insights',
-          url: '/admin/insights/health-insights',
+          url: '/user/insights/health-insights',
         },
         {
           title: 'Health Tracker',
-          url: '/admin/insights/health-tracker',
+          url: '/user/insights/health-tracker',
         },
         {
           title: 'Health Summary',
-          url: '/admin/insights/health-summary',
+          url: '/user/insights/health-summary',
         },
       ],
     },
@@ -115,7 +115,7 @@ const data = {
     //   items: [
     //     {
     //       title: 'Talk to AI',
-    //       url: '/admin/ai-therapy',
+    //       url: '/user/ai-therapy',
     //     },
     //   ],
     // },

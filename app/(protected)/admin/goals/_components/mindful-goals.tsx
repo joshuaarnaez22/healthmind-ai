@@ -9,11 +9,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { pageAnimations } from '@/lib/motion';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Trophy } from 'lucide-react';
 import Link from 'next/link';
 import EmotionBadge from './emotion-badge';
-import { getDaysLeft } from '@/lib/utils';
+import { getDaysLeft, getGoalProgress } from '@/lib/utils';
 import GoalCard from './goal-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import RecentReflections from './recent-reflections';
@@ -50,12 +50,6 @@ export default function MindfulGoals() {
         new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime()
     )
     .slice(0, 5);
-
-  const getGoalProgress = (goalId: string) => {
-    const goal = goals.find((g) => g.id === goalId);
-    if (!goal) return 0;
-    return Math.min((goal.completedCount / goal.targetCount) * 100, 100);
-  };
 
   return (
     <motion.div {...pageAnimations}>
@@ -112,7 +106,7 @@ export default function MindfulGoals() {
                     id={goal.id}
                     title={goal.title}
                     emotion={goal.emotion}
-                    progress={getGoalProgress(goal.id)}
+                    progress={getGoalProgress(goal.id, goals)}
                     daysLeft={getDaysLeft({
                       duration: goal.duration,
                       createdAt: goal.createdAt,
@@ -140,7 +134,7 @@ export default function MindfulGoals() {
           </CardContent>
           {activeGoals.length > 0 && (
             <CardFooter>
-              <Link href="/admin/goals/all-goals">
+              <Link href="/user/goals/all-goals">
                 <Button variant="ghost" className="text-green-700">
                   View all goals
                 </Button>

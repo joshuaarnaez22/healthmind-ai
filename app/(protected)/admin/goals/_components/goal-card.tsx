@@ -6,6 +6,7 @@ import Link from 'next/link';
 import EmotionBadge from './emotion-badge';
 import GoalDetailsModal from './goal-details-modal';
 import { Goal } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 interface GoalCardProps {
   id: string;
@@ -38,7 +39,14 @@ export default function GoalCard({
       </div>
       <CardContent className="p-4">
         <div className="mb-3 flex items-start justify-between">
-          <h3 className="font-medium">{title}</h3>
+          <h3
+            className={cn(
+              'font-medium',
+              progress === 100 && 'text-muted-foreground line-through'
+            )}
+          >
+            {title}
+          </h3>
           <EmotionBadge emotion={emotion} />
         </div>
 
@@ -56,12 +64,16 @@ export default function GoalCard({
         </div>
       </CardContent>
       <CardFooter className="flex justify-between p-2 pt-0">
-        <Link href={`/admin/goals/check-in/${id}`}>
-          <Button variant="ghost" size="sm" className="h-8 text-xs">
-            Check-in
-          </Button>
-        </Link>
-        <GoalDetailsModal goal={goal} />
+        {progress < 100 ? (
+          <Link href={`/user/goals/check-in/${id}`}>
+            <Button variant="ghost" size="sm" className="h-8 text-xs">
+              Check-in
+            </Button>
+          </Link>
+        ) : (
+          <p className="p-2 text-xs text-muted-foreground">Completed</p>
+        )}
+        <GoalDetailsModal goal={goal} progress={progress} />
       </CardFooter>
     </Card>
   );

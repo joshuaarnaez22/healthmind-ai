@@ -59,6 +59,23 @@ export type ArticleProps = {
   benefit: string;
 };
 
+export interface Step {
+  id: string;
+  description: string;
+  duration: number; // in seconds
+  isComplete: boolean;
+}
+
+export interface Exercise {
+  id: string;
+  name: string;
+  isDone: boolean;
+  steps: Step[];
+  rationale: string;
+}
+
+export type ValidLucideIcon = (typeof validLucideIcons)[number];
+
 export interface ModuleStep {
   id: string;
   title: string;
@@ -86,10 +103,7 @@ export interface TherapyModule {
   completion: ModuleCompletion;
   safetyDisclaimer: string;
 
-  // UI-related
-  color: string; // e.g., "bg-blue-50 text-blue-700 border-blue-200"
-  icon: string; // e.g., "Brain", "Heart", "Compass"
-  iconColor: string; // e.g., "text-blue-600"
+  icon: string;
 }
 
 export interface Goal {
@@ -132,3 +146,9 @@ export interface EmotionInsight {
   percentage: number;
   activities: string[];
 }
+export type SchemaName =
+  | 'analysis'
+  | 'affirmations'
+  | 'articles'
+  | 'exercises'
+  | 'summary';

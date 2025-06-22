@@ -11,6 +11,7 @@ const publicRoutes = createRouteMatcher([
   '/',
   '/api/webhooks/clerk',
 ]);
+
 const adminRoutes = createRouteMatcher(['/admin(.*)']);
 const userRoutes = createRouteMatcher(['/user(.*)']);
 
@@ -18,43 +19,48 @@ export default clerkMiddleware(async (auth, req) => {
   try {
     const { userId } = await auth();
     const client = await clerkClient();
-
     if (!userId && publicRoutes(req)) {
-      return NextResponse.next();
+      return NextResponse.next(); // Allow unauthenticated users on public routes
     }
+
     if (!userId) {
-      const signInUrl = new URL('/', req.url);
-      return NextResponse.redirect(signInUrl);
-    }
-
-    const { publicMetadata } = await client.users.getUser(userId);
-    const { role: userRole } = publicMetadata as { role: string };
-
-    if (userRole === 'admin' && publicRoutes(req)) {
-      return NextResponse.redirect(new URL('/admin/dashboard', req.url));
-    }
-    if (userRole !== 'admin' && adminRoutes(req)) {
+      // Not authenticated and not a public route → redirect to homepage
       return NextResponse.redirect(new URL('/', req.url));
     }
-    if (userRole === 'user' && publicRoutes(req)) {
+
+    // ✅ Authenticated
+    const { publicMetadata } = await client.users.getUser(userId);
+    const userRole = (publicMetadata?.role as string) || 'user'; // Default to 'user' if missing
+
+    // ✅ Redirect logged-in users away from public pages to appropriate dashboards
+    if (publicRoutes(req)) {
+      if (userRole === 'admin') {
+        return NextResponse.redirect(new URL('/admin/dashboard', req.url));
+      }
       return NextResponse.redirect(new URL('/user/dashboard', req.url));
     }
-    if (userRole !== 'user' && userRoutes(req)) {
+
+    // ✅ Block 'user' role from admin routes
+    if (adminRoutes(req) && userRole !== 'admin') {
       return NextResponse.redirect(new URL('/', req.url));
     }
 
+    // ✅ Block 'admin' role from user-only routes (optional, depends on your needs)
+    if (userRoutes(req) && userRole !== 'user') {
+      return NextResponse.redirect(new URL('/', req.url));
+    }
+
+    // ✅ Allow access
     return NextResponse.next();
   } catch (error) {
-    console.error('Failed to fetch user:', error);
+    console.error('Middleware error:', error);
     return NextResponse.redirect(new URL('/error', req.url));
   }
 });
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
     '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    // Always run for API routes
     '/(api|trpc)(.*)',
   ],
 };

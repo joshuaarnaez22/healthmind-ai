@@ -158,7 +158,20 @@ const insightCards = [
   },
 ];
 
+const validLucideIcons = [
+  'brain',
+  'sun',
+  'tool',
+  'eye',
+  'hand',
+  'heart',
+  'cloud-rain',
+  'target',
+  'cloud',
+] as const;
+
 export {
+  validLucideIcons,
   moods,
   commonSymptoms,
   getBPCategory,
