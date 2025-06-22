@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { pageAnimations } from '@/lib/motion';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import {
   Card,
   CardContent,
@@ -15,7 +15,7 @@ import { Badge } from '@/components/ui/badge';
 import { Clock, Users } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useUser } from '@clerk/nextjs';
-import { cbtModulesPrompt } from '@/lib/prompts';
+
 import { ONE_DAY_IN_MS } from '@/lib/constant';
 import { TherapyModule } from '@/lib/types';
 import AIGeneratedBadge from '@/components/custom-icons/ai-generated-badge';
@@ -30,14 +30,13 @@ export default function Modules() {
     isLoading,
     isError,
   } = useQuery<TherapyModule[]>({
-    queryKey: ['therapy_modules', 'cbt_module', userId],
+    queryKey: ['therapy_modules', 'modules', userId],
     queryFn: async () => {
       const response = await fetch('/api/modules', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt: cbtModulesPrompt,
-          cachedKey: `cbt_module:${userId}`,
+          cachedKey: `modules:${userId}`,
         }),
       });
       if (!response.ok) {

@@ -3,6 +3,18 @@ import { clsx, type ClassValue } from 'clsx';
 import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 import DOMPurify from 'dompurify';
+import { GoalWithCheckIns } from './types';
+import {
+  Brain,
+  Cloud,
+  CloudRain,
+  Eye,
+  Hand,
+  Heart,
+  Sun,
+  Target,
+  Wrench,
+} from 'lucide-react';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -149,4 +161,51 @@ export const getDaysLeft = ({
     (Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24)
   );
   return Math.max(durationDays - daysSinceCreated, 0);
+};
+
+export const getGoalProgress = (goalId: string, goals: GoalWithCheckIns[]) => {
+  const goal = goals.find((g) => g.id === goalId);
+  if (!goal) return 0;
+  return Math.min((goal.completedCount / goal.targetCount) * 100, 100);
+};
+
+export const getIcon = (iconName: string) => {
+  const icons = {
+    brain: Brain,
+    sun: Sun,
+    tool: Wrench,
+    eye: Eye,
+    hand: Hand,
+    heart: Heart,
+    'cloud-rain': CloudRain,
+    target: Target,
+    cloud: Cloud,
+  };
+  return icons[iconName as keyof typeof icons] || Brain;
+};
+
+export const getDifficultyColor = (difficulty: string) => {
+  switch (difficulty) {
+    case 'beginner':
+      return 'bg-green-100 text-green-800';
+    case 'intermediate':
+      return 'bg-yellow-100 text-yellow-800';
+    case 'advanced':
+      return 'bg-red-100 text-red-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
+  }
+};
+
+export const getTherapyTypeColor = (type: string) => {
+  switch (type) {
+    case 'CBT':
+      return 'bg-blue-100 text-blue-800';
+    case 'DBT':
+      return 'bg-purple-100 text-purple-800';
+    case 'ACT':
+      return 'bg-green-100 text-green-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
+  }
 };

@@ -24,6 +24,7 @@ export function useSequentialInsights() {
         body: JSON.stringify({
           prompt: systemPrompt_observations,
           cachedKey: `insights-observations:${userId}`,
+          schema: 'analysis',
         }),
       });
       if (!response.ok) throw new Error('Observations request failed');
@@ -45,6 +46,7 @@ export function useSequentialInsights() {
         body: JSON.stringify({
           prompt: systemPrompt_mental_summary,
           cachedKey: `insights-mental-summary:${userId}`,
+          schema: 'summary',
         }),
       });
       if (!response.ok) throw new Error('Mental summary request failed');
@@ -66,6 +68,7 @@ export function useSequentialInsights() {
         body: JSON.stringify({
           prompt: systemPrompt_affirmations,
           cachedKey: `insights-affirmations:${userId}`,
+          schema: 'affirmations',
         }),
       });
       if (!response.ok) throw new Error('Affirmations request failed');
@@ -96,10 +99,13 @@ export function useSequentialInsights() {
             body: JSON.stringify({
               prompt: systemPrompt_exercises,
               cachedKey: `insights-exercises:${userId}`,
+              schema: 'exercises',
             }),
           });
           if (!response.ok) throw new Error('Exercises request failed');
-          return response.json();
+          const { data } = await response.json();
+
+          return data.exercises;
         },
         staleTime: ONE_DAY_IN_MS,
         gcTime: ONE_DAY_IN_MS,
@@ -115,6 +121,7 @@ export function useSequentialInsights() {
             body: JSON.stringify({
               prompt: systemPrompt_articles,
               cachedKey: `insights-articles:${userId}`,
+              schema: 'articles',
             }),
           });
           if (!response.ok) throw new Error('Articles request failed');

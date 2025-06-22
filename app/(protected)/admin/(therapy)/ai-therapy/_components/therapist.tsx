@@ -1,5 +1,5 @@
 'use client';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { pageAnimations } from '@/lib/motion';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -26,7 +26,7 @@ export default function Therapist() {
             voice conversations. Experience personalized support and guidance
             from the comfort of your home.
           </p>
-          <Link href="/admin/ai-therapy/session">
+          <Link href="/user/ai-therapy/session">
             <Button
               size="lg"
               className="bg-gradient-to-r from-blue-500 to-green-500 px-8 py-6 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:from-blue-600 hover:to-green-600 hover:shadow-xl"

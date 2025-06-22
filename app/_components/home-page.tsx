@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Heart, Activity, Apple } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { ModeToggle } from '@/components/dark-mode';
 import FeatureCard from './feature-card';
 import MobileNav from './mobile-nav';

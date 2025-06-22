@@ -1,15 +1,28 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { generateText } from 'ai';
-// import { deepseek } from '@ai-sdk/deepseek';
+import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { getUserId } from '@/actions/server-actions/user';
 import redis from '@/lib/upstash';
 import { prisma } from '@/lib/client';
+import {
+  affirmationsSchema,
+  analysisSchema,
+  articlesSchema,
+  exercisesSchema,
+  moodSummarySchema,
+} from '@/lib/ai-object-schema';
+import { SchemaName } from '@/lib/types';
+import { z } from 'zod';
 
 export async function POST(request: NextRequest) {
   try {
     const user_id = await getUserId();
-    const { prompt, cachedKey } = await request.json();
+    const { prompt, cachedKey, schema } = (await request.json()) as {
+      prompt: string;
+      cachedKey: string;
+      schema: SchemaName;
+    };
+
     const cached = await redis.get(cachedKey);
     if (cached) {
       return NextResponse.json({ data: cached }, { status: 200 });
@@ -38,28 +51,27 @@ export async function POST(request: NextRequest) {
         }
       );
     }
-    const { text: rawResponse } = await generateText({
-      model: openai('gpt-4.1-mini'),
-      messages: [
-        {
-          role: 'system',
-          content: prompt,
-        },
-        {
-          role: 'user',
-          content: JSON.stringify(journals),
-        },
-      ],
+    const schemaMap: Record<SchemaName, z.ZodTypeAny> = {
+      analysis: analysisSchema,
+      affirmations: affirmationsSchema,
+      articles: articlesSchema,
+      exercises: exercisesSchema,
+      summary: moodSummarySchema,
+    };
+    const selectedSchema = schemaMap[schema];
+
+    const { object } = await generateObject({
+      model: openai('gpt-4-turbo'),
+      schema: selectedSchema,
+      prompt: `${prompt}\n\nUser's recent journal entries:\n${JSON.stringify(
+        journals,
+        null,
+        2
+      )}`,
     });
-    const cleanJsonString = rawResponse.replace(/^```json\n|\n```$/g, '');
-    const parsed = JSON.parse(cleanJsonString);
-    await redis.setex(cachedKey, 86400, parsed);
-    return NextResponse.json(
-      { data: parsed },
-      {
-        status: 200,
-      }
-    );
+
+    await redis.setex(cachedKey, 86400, object);
+    return NextResponse.json({ data: object }, { status: 200 });
   } catch (error) {
     console.error('Error uploading  files:', error);
     console.error('Error uploading files:', error);
