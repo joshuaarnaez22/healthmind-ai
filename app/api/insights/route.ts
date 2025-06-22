@@ -73,8 +73,7 @@ export async function POST(request: NextRequest) {
     await redis.setex(cachedKey, 86400, object);
     return NextResponse.json({ data: object }, { status: 200 });
   } catch (error) {
-    console.error('Error uploading  files:', error);
-    console.error('Error uploading files:', error);
+    console.error('Error insights:', error);
     return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
     });
