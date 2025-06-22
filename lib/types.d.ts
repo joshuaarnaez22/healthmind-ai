@@ -103,7 +103,9 @@ export interface TherapyModule {
   completion: ModuleCompletion;
   safetyDisclaimer: string;
 
-  icon: string;
+  // UI-related
+  color: string; // e.g., "bg-blue-50 text-blue-700 border-blue-200"
+  icon: string; // e.g., "Brain", "Heart", "Compass"
 }
 
 export interface Goal {

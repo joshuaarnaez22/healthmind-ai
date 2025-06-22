@@ -82,6 +82,7 @@ export const moduleSchema = z.object({
     nextSuggestion: z.string(),
   }),
   safetyDisclaimer: z.string(),
+  color: z.string(),
   icon: z.enum(validLucideIcons),
 });
 
