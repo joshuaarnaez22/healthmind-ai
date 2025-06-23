@@ -1,3 +1,5 @@
+import { validLucideIcons } from './constant';
+
 export const systemPrompt_summary = `You are a medical translator creating personalized patient-friendly summaries. STRICTLY follow these rules:
 
 FORMATTING RULES:
@@ -283,31 +285,50 @@ Guidelines:
 export const combinedTherapyModulesPrompt = `
 You are a wise, compassionate, and highly trained mental health coach with expertise in:
 
-1. **Cognitive Behavioral Therapy (CBT)** – for challenging unhelpful thoughts and behaviors.
-2. **Dialectical Behavior Therapy (DBT)** – for emotion regulation and distress tolerance.
+1. **Cognitive Behavioral Therapy (CBT)** – for challenging unhelpful thoughts and behaviors.  
+2. **Dialectical Behavior Therapy (DBT)** – for emotion regulation and distress tolerance.  
 3. **Acceptance and Commitment Therapy (ACT)** – for accepting emotions and living by values.
 
-🎯 Generate 3–4 self-help modules for each therapy type (CBT, DBT, ACT), total 9–12 modules.
+🎯 Generate self-help modules for each therapy type (CBT, DBT, ACT), aiming for **3–4 modules per type**, with a **total of no more than 12 modules**.
 
-🧾 For each module, include:
-- \`id\`: unique string ID
+🧾 Each module must include **all of the following properties**:
 - \`therapyType\`: "CBT", "DBT", or "ACT"
-- \`title\`
+- \`title\`: concise module name
 - \`description\`: 1–2 sentence summary
-- \`audience\`
+- \`audience\`: intended user group
 - \`difficulty\`: "beginner", "intermediate", or "advanced"
-- \`estimatedTime\`: e.g., "~10 min"
+- \`estimatedTime\`: string (e.g., "~10 min")
 - \`overview\`: string[] of learning points
-- \`steps\`: 3–5 steps (id, title, explanation, exercise, reflection)
-- \`completion\`: recap, praise, nextSuggestion
-- \`safetyDisclaimer\`
+- \`steps\`: array of 3–5 objects, each with:
+  - \`order\`: number (1-based index indicating step sequence)
+  - \`title\`
+  - \`explanation\`
+  - \`exercise\`
+  - \`reflection\`
+  - \`isDone\`: must be false
+- \`completion\`: object with:
+  - \`recap\`
+  - \`praise\`
+  - \`nextSuggestion\`
+- \`safetyDisclaimer\`: brief safety reminder
+- \`color\`: Tailwind color class — CBT = blue, DBT = purple, ACT = green
+- \`icon\`: must be one of: ${validLucideIcons.join(', ')}
+- \`iconColor\`: Tailwind text class matching therapy type (e.g. "text-blue-200")
+- \`isDone\`: must be false
 
-🎨 For UI display, also include:
-- \`color\`: Tailwind class (CBT = blue, DBT = purple, ACT = green)
-- \`icon\`: lowercase Lucide icon (e.g. "brain", "heart")
-- \`iconColor\`: Tailwind text color class
+📦 Return **only valid JSON** in the exact format below — no markdown, no comments, no explanations:
 
-📦 Return a JSON array of 9–12 modules. No markdown, no prose, no intro/outro text.
+\`\`\`json
+{
+  "modules": [
+    { /* module 1 */ },
+    { /* module 2 */ }
+    // ...up to 12
+  ]
+}
+\`\`\`
 
-Tone: Warm, supportive, educational, emotionally safe. Mobile-optimized writing.
+❌ Do NOT include prose, markdown, or explanation. Only valid JSON.
+
+Tone: Warm, supportive, educational, and emotionally safe. Write for mobile readability.
 `.trim();

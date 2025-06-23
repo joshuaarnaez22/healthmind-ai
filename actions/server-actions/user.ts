@@ -17,6 +17,8 @@ export const getUserId = async () => {
       select: { id: true },
     });
 
+    console.log({ user });
+
     if (!user) {
       redirect('/sign-in');
     }

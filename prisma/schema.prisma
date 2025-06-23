@@ -32,6 +32,7 @@ model User {
   glucoseLog       GlucoseLog[]
   file             File[]
   goal             Goal[]
+  therapyModule    TherapyModule[]
 
   @@index([clerkUserId])
   @@index([email])
@@ -153,6 +154,62 @@ model CheckIn {
   rating        Int
 
   @@index([goalId])
+}
+
+model TherapyModule {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  therapyType      String
+  title            String
+  description      String
+  audience         String
+  difficulty       String
+  estimatedTime    String
+  overview         String[]
+  safetyDisclaimer String
+  color            String
+  icon             String
+  isDone           Boolean  @default(false)
+
+  steps      TherapyStep[]
+  completion ModuleCompletion?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model TherapyStep {
+  id       String        @id @default(cuid())
+  moduleId String
+  module   TherapyModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  order              Int
+  title              String
+  explanation        String
+  exercise           String
+  exerciseResponse   String?
+  reflection         String
+  reflectionResponse String?
+  isDone             Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([moduleId])
+}
+
+model ModuleCompletion {
+  id       String        @id @default(cuid())
+  moduleId String        @unique
+  module   TherapyModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  recap          String
+  praise         String
+  nextSuggestion String
 }
 
 // Enums for controlled values
