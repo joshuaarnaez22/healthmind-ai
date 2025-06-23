@@ -6,7 +6,7 @@ import { pageAnimations } from '@/lib/motion';
 import { motion } from 'motion/react';
 import { Card, CardContent } from '@/components/ui/card';
 import { CheckCircle2, Clock, TrendingUp, Users } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@clerk/nextjs';
 
 import { ONE_DAY_IN_MS } from '@/lib/constant';
@@ -15,55 +15,74 @@ import AIGeneratedBadge from '@/components/custom-icons/ai-generated-badge';
 import ModulesSkeleton from '@/components/loaders/module-loader';
 import { useState } from 'react';
 import ModuleCard from './module-card';
+import { Button } from '@/components/ui/button';
 
 export default function Modules() {
   const { user, isLoaded: isUserLoaded } = useUser();
   const userId = user?.id;
-  const [completedModules, setCompletedModules] = useState<string[]>([]);
+
+  const queryClient = useQueryClient();
   const {
-    data: modules = [],
-    isLoading,
-    isError,
-  } = useQuery<TherapyModule[]>({
-    queryKey: ['therapy_modules', 'modules', userId],
-    queryFn: async () => {
-      const response = await fetch('/api/modules', {
+    mutate,
+    isPending: isGenerating,
+    error: generateError,
+  } = useMutation<TherapyModule[]>({
+    mutationFn: async () => {
+      const response = await fetch('/api/generate-modules', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cachedKey: `modules:${userId}`,
-        }),
       });
       if (!response.ok) {
         throw new Error('Failed to generate modules');
       }
       const { data } = await response.json();
 
-      return data.modules;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['therapy_modules', 'modules', userId],
+      });
+    },
+  });
+
+  const {
+    data: modules = [],
+    isLoading: isModulesLoading,
+    isError: modulesError,
+  } = useQuery<TherapyModule[]>({
+    queryKey: ['therapy_modules', 'modules', userId],
+    queryFn: async () => {
+      const response = await fetch('/api/modules');
+      if (!response.ok) {
+        throw new Error('Failed to get modules');
+      }
+      const { data } = await response.json();
+      return data;
     },
     staleTime: ONE_DAY_IN_MS,
     gcTime: ONE_DAY_IN_MS,
     enabled: isUserLoaded,
   });
 
-  if (isLoading) {
+  if (isModulesLoading || isGenerating) {
     return <ModulesSkeleton />;
   }
-  if (isError) {
+  if (modulesError || generateError) {
     return <h1>Error</h1>;
   }
 
   const cbtModules = modules.filter((m) => m.therapyType === 'CBT');
   const dbtModules = modules.filter((m) => m.therapyType === 'DBT');
   const actModules = modules.filter((m) => m.therapyType === 'ACT');
-
+  const completedModules = modules.filter((m) => m.isDone).length;
   return (
     <motion.div {...pageAnimations}>
       <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
             Mental Health Therapy Modules
-            <span>
+            <span className="mx-2">
               <AIGeneratedBadge />
             </span>
           </h1>
@@ -72,6 +91,7 @@ export default function Modules() {
             journey. Choose from CBT, DBT, and ACT approaches.
           </p>
         </div>
+        <Button onClick={() => mutate()}>Generate new modules</Button>
       </div>
       <div className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-4">
         <Card>
@@ -90,7 +110,7 @@ export default function Modules() {
             <CheckCircle2 className="mr-4 h-8 w-8 text-green-600" />
             <div>
               <p className="text-2xl font-bold text-gray-900">
-                {completedModules.length}
+                {completedModules}
               </p>
               <p className="text-gray-600">Completed</p>
             </div>
@@ -115,7 +135,7 @@ export default function Modules() {
           </CardContent>
         </Card>
       </div>
-      {completedModules.length > 0 && (
+      {completedModules > 0 && (
         <Card className="mb-12 border-green-200 bg-gradient-to-r from-green-50 to-blue-50">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -124,14 +144,13 @@ export default function Modules() {
                   Your Progress
                 </h3>
                 <p className="text-gray-600">
-                  Youve completed {completedModules.length} out of{' '}
-                  {modules.length} modules. Great work!
+                  Youve completed {completedModules} out of {modules.length}{' '}
+                  modules. Great work!
                 </p>
               </div>
               <div className="text-right">
                 <div className="text-3xl font-bold text-green-600">
-                  {Math.round((completedModules.length / modules.length) * 100)}
-                  %
+                  {Math.round((completedModules / modules.length) * 100)}%
                 </div>
                 <div className="text-sm text-gray-600">Complete</div>
               </div>
@@ -200,54 +219,30 @@ export default function Modules() {
           ))}
         </div>
       </section>
-      {/* <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {modules?.map((module, index) => {
-          return (
-            <Card key={index}>
-              <CardHeader className="pb-4">
-                <div
-                  className={`h-12 w-12 rounded-lg ${module.color} mb-3 flex items-center justify-center`}
-                ></div>
-                <CardTitle className="text-xl text-slate-800">
-                  {module.title}
-                </CardTitle>
-                <CardDescription className="text-slate-600">
-                  {module.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="mb-4 flex items-center gap-4 text-sm text-slate-500">
-                  <div className="flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    {module.estimatedTime}
-                  </div>
-                  <Badge variant="secondary" className="text-xs">
-                    {module.difficulty}
-                  </Badge>
-                </div>
-                <Link href={`/admin/therapy_modules/${module.id}`}>
-                  <Button className="w-full">Start Module</Button>
-                </Link>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div> */}
 
-      <div className="mt-16 text-center">
-        <Card className="border-slate-200 bg-slate-50">
-          <CardContent className="pt-6">
-            <Users className="mx-auto mb-3 h-8 w-8 text-slate-600" />
-            <h3 className="mb-2 text-lg font-semibold text-slate-800">
-              Take Your Time
-            </h3>
-            <p className="mx-auto max-w-md text-slate-600">
-              These modules are self-paced. You can pause, revisit, or redo any
-              step whenever you need to. Your progress is automatically saved.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="mt-6 border-amber-200 bg-amber-50">
+        <CardContent className="p-6">
+          <div className="flex items-start">
+            <div className="mx-2 flex-shrink-0">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100">
+                <span className="font-semibold text-amber-600">!</span>
+              </div>
+            </div>
+            <div className="ml-4">
+              <h3 className="mb-2 text-lg font-semibold text-amber-800">
+                Important Safety Information
+              </h3>
+              <p className="text-amber-700">
+                These modules are educational tools and not a substitute for
+                professional mental health care. If youre experiencing severe
+                distress, thoughts of self-harm, or mental health crisis, please
+                contact a mental health professional, your doctor, or emergency
+                services immediately.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </motion.div>
   );
 }

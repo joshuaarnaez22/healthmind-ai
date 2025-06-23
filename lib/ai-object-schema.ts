@@ -59,15 +59,15 @@ export const analysisSchema = z.object({
 });
 
 export const stepSchema = z.object({
-  id: z.string(),
+  order: z.number(),
   title: z.string(),
   explanation: z.string(),
   exercise: z.string(),
   reflection: z.string(),
+  isDone: z.boolean().optional().default(false),
 });
 
 export const moduleSchema = z.object({
-  id: z.string(),
   therapyType: z.enum(['CBT', 'DBT', 'ACT']),
   title: z.string(),
   description: z.string(),
@@ -84,9 +84,10 @@ export const moduleSchema = z.object({
   safetyDisclaimer: z.string(),
   color: z.string(),
   icon: z.enum(validLucideIcons),
+  isDone: z.boolean().optional().default(false),
 });
 
 // ✅ Wrap the array in a named object
 export const ModulesSchema = z.object({
-  modules: z.array(moduleSchema).min(1).max(12),
+  modules: z.array(moduleSchema),
 });

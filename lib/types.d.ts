@@ -85,27 +85,40 @@ export interface ModuleStep {
 }
 
 export interface ModuleCompletion {
-  recap: string;
-  praise: string;
-  nextSuggestion: string;
+  id: string;
+  moduleId: string;
+  module: TherapyModule;
+  order: number;
+  title: string;
+  explanation: string;
+  exercise: string;
+  exerciseResponse?: string | null;
+  reflection: string;
+  reflectionResponse?: string | null;
+  isDone: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface TherapyModule {
   id: string;
-  description: string;
-  therapyType: 'CBT' | 'DBT' | 'ACT';
+  userId: string;
+  user: User;
+  therapyType: string; // or "CBT" | "DBT" | "ACT" if you're enforcing it
   title: string;
+  description: string;
   audience: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  difficulty: string; // or "beginner" | "intermediate" | "advanced"
   estimatedTime: string;
   overview: string[];
-  steps: ModuleStep[];
-  completion: ModuleCompletion;
   safetyDisclaimer: string;
-
-  // UI-related
-  color: string; // e.g., "bg-blue-50 text-blue-700 border-blue-200"
-  icon: string; // e.g., "Brain", "Heart", "Compass"
+  color: string;
+  icon: string; // or a more specific union like from `validLucideIcons`
+  isDone: boolean;
+  steps: TherapyStep[];
+  completion?: ModuleCompletion | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Goal {
