@@ -32,6 +32,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
+import confetti from 'canvas-confetti';
 
 import type {
   TherapyModule,
@@ -77,6 +78,38 @@ export default function Module({ id }: { id: string }) {
     }
   }, [module, currentStep]);
 
+  useEffect(() => {
+    if (isCompleted) {
+      const duration = 2 * 1000;
+      const animationEnd = Date.now() + duration;
+
+      const interval = setInterval(() => {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          return;
+        }
+
+        confetti({
+          particleCount: 50,
+          angle: 60,
+          spread: 100,
+          origin: { x: 0 },
+        });
+
+        confetti({
+          particleCount: 50,
+          angle: 120,
+          spread: 100,
+          origin: { x: 1 },
+        });
+      }, 200);
+
+      return () => clearInterval(interval);
+    }
+  }, [isCompleted]);
+
   if (isLoading) return <div>Loading...</div>;
   if (isError || !module) return <div>Error loading module.</div>;
 
@@ -116,7 +149,6 @@ export default function Module({ id }: { id: string }) {
 
   const handleNext = async () => {
     await saveCurrentStep();
-
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
     } else {
@@ -128,23 +160,65 @@ export default function Module({ id }: { id: string }) {
     }
   };
 
+  const handleRestart = () => {};
+
   if (isCompleted) {
     return (
-      <div className="py-12 text-center">
-        <CheckCircle className="mx-auto mb-4 h-12 w-12 text-green-500" />
-        <h1 className="text-2xl font-semibold">Module Completed!</h1>
-        <p className="mb-6 text-gray-600">
-          You’ve completed all the steps in this module.
-        </p>
-        <div className="flex justify-center gap-4">
-          <Link href="/user/therapy_modules">
-            <Button variant="outline">Explore More Modules</Button>
-          </Link>
-          <Button onClick={() => setCurrentStep(0)}>
-            <RotateCcw className="mr-2 h-4 w-4" />
-            Restart Module
-          </Button>
-        </div>
+      <div>
+        <Link
+          href="/user/therapy_modules"
+          className="mb-6 inline-flex items-center"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Modules
+        </Link>
+
+        <Card className="text-center">
+          <CardContent className="p-8">
+            <CheckCircle className="mx-auto mb-4 h-16 w-16 text-green-600" />
+            <h1 className="mb-4 text-3xl font-bold text-gray-900">
+              Module Completed!
+            </h1>
+
+            <div className="mb-6 rounded-lg border border-green-200 bg-green-50 p-6">
+              <h3 className="mb-2 text-lg font-semibold text-green-800">
+                Recap
+              </h3>
+              <p className="mb-4 text-green-700">{module.completion?.recap}</p>
+              <p className="font-medium text-green-800">
+                {module.completion?.praise}
+              </p>
+            </div>
+
+            <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-6">
+              <h3 className="mb-2 text-lg font-semibold text-blue-800">
+                Next Steps
+              </h3>
+              <p className="text-blue-700">
+                {module.completion?.nextSuggestion}
+              </p>
+            </div>
+
+            <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
+              <p className="text-sm text-amber-800">
+                {module.safetyDisclaimer}
+              </p>
+            </div>
+
+            <div className="flex justify-center gap-4">
+              <Link href="/user/therapy_modules">
+                <Button variant="outline">Explore More Modules</Button>
+              </Link>
+              <Button
+                onClick={handleRestart}
+                className="flex items-center gap-2"
+              >
+                <RotateCcw className="h-4 w-4" />
+                Restart Module
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }

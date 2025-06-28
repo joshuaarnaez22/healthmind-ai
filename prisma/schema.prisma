@@ -33,6 +33,8 @@ model User {
   file             File[]
   goal             Goal[]
   therapyModule    TherapyModule[]
+  post             Post[]
+  comment          Comment[]
 
   @@index([clerkUserId])
   @@index([email])
@@ -210,6 +212,37 @@ model ModuleCompletion {
   recap          String
   praise         String
   nextSuggestion String
+}
+
+model Post {
+  id          String    @id @default(cuid())
+  userId      String?
+  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  content     String
+  tags        String[]
+  likes       Int       @default(0)
+  comments    Comment[]
+  isAnonymous Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Comment {
+  id          String   @id @default(cuid())
+  postId      String
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  content     String
+  likes       Int      @default(0)
+  isAnonymous Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([postId])
+  @@index([userId])
 }
 
 // Enums for controlled values

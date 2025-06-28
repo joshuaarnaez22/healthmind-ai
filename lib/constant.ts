@@ -170,6 +170,17 @@ const validLucideIcons = [
   'cloud',
 ] as const;
 
+const allTags = [
+  'anxiety',
+  'depression',
+  'healing',
+  'selfcare',
+  'breathing',
+  'journaling',
+  'thoughts',
+  'selfcompassion',
+  'mentalhealth',
+];
 export {
   validLucideIcons,
   moods,
@@ -179,4 +190,5 @@ export {
   getGlucoseCategory,
   measurementType,
   insightCards,
+  allTags,
 };

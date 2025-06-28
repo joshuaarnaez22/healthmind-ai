@@ -134,7 +134,7 @@ export default function MindfulGoals() {
           </CardContent>
           {activeGoals.length > 0 && (
             <CardFooter>
-              <Link href="/admin/goals/all-goals">
+              <Link href="/user/goals/all-goals">
                 <Button variant="ghost" className="text-green-700">
                   View all goals
                 </Button>

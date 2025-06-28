@@ -9,6 +9,7 @@ import {
   SquareTerminal,
   Goal,
   NotebookPen,
+  ShieldCheck,
   // HeartHandshake,
 } from 'lucide-react';
 
@@ -105,6 +106,18 @@ const data = {
         {
           title: 'Mindful Goals',
           url: '/user/goals',
+        },
+      ],
+    },
+    {
+      title: 'Community',
+      url: '#',
+      icon: ShieldCheck,
+      isActive: false,
+      items: [
+        {
+          title: 'Safe Haven',
+          url: '/user/community',
         },
       ],
     },
