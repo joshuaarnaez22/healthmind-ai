@@ -1,18 +1,25 @@
 'use client';
-
+import * as React from 'react';
+import { Button } from '@/components/ui/button';
 import {
   ColumnDef,
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
+  useReactTable,
   getPaginationRowModel,
   getSortedRowModel,
   SortingState,
-  useReactTable,
+  ColumnFiltersState,
   VisibilityState,
+  getFilteredRowModel,
 } from '@tanstack/react-table';
-
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -21,41 +28,32 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { TableLoading } from '@/components/loaders/table-loading';
-import { TableError } from '@/components/loaders/table-error';
-import { Input } from '@/components/ui/input';
-import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { useIsMobile } from '@/hooks/use-mobile';
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  isLoading: boolean;
-  isError: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  isLoading,
-  isError,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([
-    { id: 'loggedAt', desc: true },
-  ]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const isMobile = useIsMobile();
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
   const table = useReactTable({
     data,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
       columnFilters,
@@ -63,34 +61,43 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  // Automatically hide less important columns on mobile
-  useEffect(() => {
-    if (isMobile) {
-      // Assuming 'notes' might be less critical on mobile - adjust based on your needs
-      setColumnVisibility({ notes: false });
-    } else {
-      setColumnVisibility({});
-    }
-  }, [isMobile]);
-
-  if (isLoading) {
-    return <TableLoading columns={5} rows={6} />;
-  }
-
-  if (isError) {
-    return <TableError />;
-  }
   return (
-    <div className="space-y-4 overflow-x-auto">
-      <div className="flex items-center justify-between">
+    <div>
+      <div className="flex items-center py-4">
         <Input
-          placeholder="Filter notes..."
-          value={(table.getColumn('notes')?.getFilterValue() as string) ?? ''}
+          placeholder="Filter titles..."
+          value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
-            table.getColumn('notes')?.setFilterValue(event.target.value)
+            table.getColumn('title')?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Columns
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="grid grid-cols-1 rounded-md border">
         <Table>
@@ -135,7 +142,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No blood pressure readings found.
+                  No results.
                 </TableCell>
               </TableRow>
             )}
@@ -143,28 +150,22 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          Showing {table.getFilteredRowModel().rows.length} of {data.length}{' '}
-          readings
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
       </div>
     </div>
   );

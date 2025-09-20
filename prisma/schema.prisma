@@ -32,9 +32,12 @@ model User {
   glucoseLog       GlucoseLog[]
   file             File[]
   goal             Goal[]
+  mood             MoodLog[]
   therapyModule    TherapyModule[]
   post             Post[]
   comment          Comment[]
+  postLikes        PostLike[]
+  commentLikes     CommentLike[]
 
   @@index([clerkUserId])
   @@index([email])
@@ -48,11 +51,10 @@ model Journal {
   content   String
   mood      Mood
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  addedAt   DateTime @db.Date
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([userId, addedAt])
+  @@index([userId])
 }
 
 model BloodPressureLog {
@@ -158,6 +160,18 @@ model CheckIn {
   @@index([goalId])
 }
 
+model MoodLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mood      Mood
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
 model TherapyModule {
   id     String @id @default(cuid())
   userId String
@@ -215,34 +229,58 @@ model ModuleCompletion {
 }
 
 model Post {
-  id          String    @id @default(cuid())
+  id          String     @id @default(cuid())
   userId      String?
-  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user        User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
   content     String
   tags        String[]
-  likes       Int       @default(0)
+  likes       Int        @default(0)
   comments    Comment[]
-  isAnonymous Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  postLikes   PostLike[]
+  isAnonymous Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
   @@index([userId])
 }
 
 model Comment {
-  id          String   @id @default(cuid())
-  postId      String
-  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  userId      String?
-  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  content     String
-  likes       Int      @default(0)
-  isAnonymous Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String        @id @default(cuid())
+  postId       String
+  post         Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId       String?
+  user         User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  content      String
+  likes        Int           @default(0)
+  isAnonymous  Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  commentLikes CommentLike[]
 
   @@index([postId])
   @@index([userId])
+}
+
+model PostLike {
+  id     String @id @default(cuid())
+  postId String
+  userId String
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+}
+
+model CommentLike {
+  id        String @id @default(cuid())
+  commentId String
+  userId    String
+
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId])
 }
 
 // Enums for controlled values

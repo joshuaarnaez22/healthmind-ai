@@ -35,6 +35,7 @@ import { Button } from '@/components/ui/button';
 export default function Insights() {
   const [selectedObservation, setSelectedObservation] =
     useState<null | Observation>(null);
+
   const { data, loadingStates, isError } = useSequentialInsights();
   if (isError) return <div>Error loading some insights</div>;
 

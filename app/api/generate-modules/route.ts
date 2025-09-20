@@ -12,8 +12,8 @@ export async function POST() {
 
     const journals = await prisma.journal.findMany({
       where: { userId },
-      select: { title: true, content: true, mood: true, addedAt: true },
-      orderBy: { addedAt: 'desc' },
+      select: { title: true, content: true, mood: true, createdAt: true },
+      orderBy: { createdAt: 'desc' },
       take: 7,
     });
 
@@ -23,7 +23,7 @@ export async function POST() {
       const formattedJournals = journals
         .map(
           (j) =>
-            `Title: ${j.title}\nMood: ${j.mood}\nDate: ${j.addedAt.toISOString()}\nContent: ${j.content}`
+            `Title: ${j.title}\nMood: ${j.mood}\nDate: ${j.createdAt.toISOString()}\nContent: ${j.content}`
         )
         .join('\n\n---\n\n');
 

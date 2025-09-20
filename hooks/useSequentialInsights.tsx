@@ -29,6 +29,7 @@ export function useSequentialInsights() {
       });
       if (!response.ok) throw new Error('Observations request failed');
       const { data } = await response.json();
+
       return data.analysis;
     },
     staleTime: ONE_DAY_IN_MS,
@@ -121,7 +122,6 @@ export function useSequentialInsights() {
             body: JSON.stringify({
               prompt: systemPrompt_articles,
               cachedKey: `insights-articles:${userId}`,
-              schema: 'articles',
             }),
           });
           if (!response.ok) throw new Error('Articles request failed');

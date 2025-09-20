@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { Plus, Shield } from 'lucide-react';
+import { useState } from 'react';
 
 type PostDraft = {
   content: string;
@@ -28,8 +29,17 @@ export default function SharePostModal({
   newPost,
   createPost,
 }: SharePostModalProps) {
+  const [open, setOpen] = useState(false);
+  const [posting, setPosting] = useState(false);
+  const handleSubmit = async () => {
+    setPosting(true);
+    await createPost();
+    setOpen(false);
+    setPosting(false);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <form>
         <DialogTrigger asChild>
           <Button className="rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-orange-500 px-6 py-4 text-lg font-semibold text-white shadow-xl transition-all duration-300 hover:from-rose-600 hover:via-pink-600 hover:to-orange-600 hover:shadow-2xl">
@@ -109,7 +119,8 @@ export default function SharePostModal({
             </div>
 
             <Button
-              onClick={createPost}
+              disabled={posting}
+              onClick={handleSubmit}
               className="w-full rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-orange-500 py-4 text-lg font-semibold text-white shadow-lg transition-all duration-300 hover:from-rose-600 hover:via-pink-600 hover:to-orange-600 hover:shadow-xl"
             >
               {newPost.isAnonymous ? 'Share Anonymously' : 'Share Post'}

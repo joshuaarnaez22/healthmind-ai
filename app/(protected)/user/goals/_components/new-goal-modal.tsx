@@ -72,6 +72,7 @@ export default function NewGoalModal({
         ]);
       }
       setOpen(false);
+      form.reset();
     });
   };
   return (

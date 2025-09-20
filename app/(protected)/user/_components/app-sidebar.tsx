@@ -40,23 +40,19 @@ const data = {
       isActive: false,
       items: [
         {
-          title: 'Mental Analysis',
-          url: '#',
-        },
-        {
-          title: 'Physical Analysis',
-          url: '#',
+          title: 'Health Analytics',
+          url: '/user/dashboard',
         },
       ],
     },
     {
       title: 'MindLog',
       url: '#',
-      icon: NotebookPen, // from Lucide or similar icon set
+      icon: NotebookPen,
       isActive: false,
       items: [
         {
-          title: 'Entries', // Nested item
+          title: 'Journal Entries',
           url: '/user/journal',
         },
         {

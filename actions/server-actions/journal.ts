@@ -6,14 +6,8 @@ import { Mood } from '@prisma/client';
 import { getUserId } from './user';
 import { enumConvertor } from '@/lib/utils';
 
-export const createJournal = async (
-  values: unknown,
-  date: Date | undefined
-) => {
+export const createJournal = async (values: unknown) => {
   try {
-    if (!date || isNaN(date.getTime())) {
-      return { success: false, message: 'Invalid date' };
-    }
     const id = await getUserId();
     const parsedData = journalEntrySchema.safeParse(values);
     if (!parsedData.success) {
@@ -27,8 +21,6 @@ export const createJournal = async (
     if (!moodEnum) {
       return { success: false, message: 'Invalid mood value' };
     }
-    const adjustedDate = new Date(date);
-    adjustedDate.setHours(date.getHours() + 8);
 
     const journal = await prisma.journal.create({
       data: {
@@ -36,7 +28,6 @@ export const createJournal = async (
         mood: moodEnum,
         content,
         userId: id,
-        addedAt: adjustedDate,
       },
     });
     return {

@@ -1,4 +1,5 @@
 'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -7,9 +8,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
-import { Edit, Save } from 'lucide-react';
+import { Save } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import {
@@ -32,61 +32,59 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useState } from 'react';
 import RichTextEditor from './rich-text-editor';
-
 import { moods } from '@/lib/constant';
-
 import { cn } from '@/lib/utils';
-import { useTransition } from 'react';
-// import { createJournal } from '@/actions/server-actions/journal';
-// import { useQueryClient } from '@tanstack/react-query';
-// import { Journal } from '@prisma/client';
+import { useEffect, useTransition } from 'react';
+import { Journal } from '@prisma/client';
 
-export default function EditEntryModal() {
-  const [open, setOpen] = useState(false);
+interface EditEntryModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  journal: Journal;
+}
+
+export default function EditEntryModal({
+  open,
+  onOpenChange,
+  journal,
+}: EditEntryModalProps) {
   const [pending, startTransition] = useTransition();
-  //   const queryClient = useQueryClient();
+
   const form = useForm<JournalEntryFormValues>({
     resolver: zodResolver(journalEntrySchema),
-    defaultValues: { title: '', mood: '', content: '' },
+    defaultValues: {
+      title: '',
+      mood: '',
+      content: '',
+    },
   });
 
-  const onSubmit = async (values: JournalEntryFormValues) => {
-    console.log(values);
+  useEffect(() => {
+    if (open && journal) {
+      form.reset({
+        title: journal.title || '',
+        mood: journal.mood || '',
+        content: journal.content || '',
+      });
+    }
+  }, [open, journal, form]);
 
+  const onSubmit = async (values: JournalEntryFormValues) => {
     startTransition(async () => {
-      //   const response = await createJournal(values, date);
-      //   if (response.success && response.data) {
-      //     queryClient.setQueryData<Journal[]>(
-      //       ['journals', dateKey],
-      //       (old = []) => [response.data, ...old]
-      //     );
-      //   }
-      setOpen(false);
+      console.log('Updated values:', values);
+      onOpenChange(false);
       form.reset();
     });
   };
+
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(newOpen) => {
-        setOpen(newOpen);
-        if (!newOpen) form.reset();
-      }}
-    >
-      <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
-          <Edit className="h-4 w-4" />
-          Edit
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[700px]">
         <DialogHeader>
-          <DialogTitle>New Journal Entry</DialogTitle>
+          <DialogTitle>Edit Journal Entry</DialogTitle>
           <DialogDescription>
-            Record your thoughts and feelings. Take your time and be honest with
-            yourself.
+            Update your thoughts and feelings.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -99,7 +97,7 @@ export default function EditEntryModal() {
                   <FormItem>
                     <FormLabel>Title</FormLabel>
                     <FormControl>
-                      <Input placeholder="Give your entry a title" {...field} />
+                      <Input placeholder="Entry title" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -127,7 +125,7 @@ export default function EditEntryModal() {
                             <SelectItem value={mood.value} key={mood.value}>
                               <div className="flex items-center gap-x-2">
                                 <Icon className={cn('size-4', mood.color)} />
-                                <span className="truncate">{mood.label}</span>
+                                <span>{mood.label}</span>
                               </div>
                             </SelectItem>
                           );
@@ -154,7 +152,6 @@ export default function EditEntryModal() {
                   </FormItem>
                 )}
               />
-
               <DialogFooter>
                 <Button type="submit" disabled={pending}>
                   <Save className="mr-2 h-4 w-4" />

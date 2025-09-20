@@ -65,7 +65,7 @@ export default function GoalCard({
       </CardContent>
       <CardFooter className="flex justify-between p-2 pt-0">
         {progress < 100 ? (
-          <Link href={`/admin/goals/check-in/${id}`}>
+          <Link href={`/user/goals/check-in/${id}`}>
             <Button variant="ghost" size="sm" className="h-8 text-xs">
               Check-in
             </Button>

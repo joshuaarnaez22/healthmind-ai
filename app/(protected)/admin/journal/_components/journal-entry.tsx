@@ -47,7 +47,7 @@ export default function JournalEntry() {
               My Mental Health Journal
             </h1>
             <div className="w-full sm:w-auto">
-              <NewEntryModal date={date} cacheKey={dateKey} />
+              <NewEntryModal cacheKey={dateKey} />
             </div>
           </div>
           {/* Date Controls Section */}

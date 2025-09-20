@@ -1,5 +1,5 @@
-import React from 'react';
+import Analytics from './_components/analytics';
 
 export default function DashboardPage() {
-  return <div>DashboardPage</div>;
+  return <Analytics />;
 }

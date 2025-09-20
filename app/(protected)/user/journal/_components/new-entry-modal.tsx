@@ -41,13 +41,7 @@ import { createJournal } from '@/actions/server-actions/journal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Journal } from '@prisma/client';
 
-export default function NewEntryModal({
-  date,
-  cacheKey,
-}: {
-  date: Date | undefined;
-  cacheKey: string | undefined;
-}) {
+export default function NewEntryModal() {
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const queryClient = useQueryClient();
@@ -61,13 +55,14 @@ export default function NewEntryModal({
 
   const onSubmit = async (values: JournalEntryFormValues) => {
     startTransition(async () => {
-      const response = await createJournal(values, date);
+      const response = await createJournal(values);
       if (response.success && response.data) {
-        queryClient.setQueryData<Journal[]>(
-          ['journals', cacheKey],
-          (old = []) => [response.data, ...old]
-        );
+        queryClient.setQueryData<Journal[]>(['journals'], (old = []) => [
+          response.data,
+          ...old,
+        ]);
       }
+      form.reset();
       setOpen(false);
     });
   };

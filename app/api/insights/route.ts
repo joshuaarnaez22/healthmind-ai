@@ -34,18 +34,17 @@ export async function POST(request: NextRequest) {
       select: {
         content: true,
         mood: true,
-        addedAt: true,
         title: true,
       },
       orderBy: {
-        addedAt: 'desc',
+        createdAt: 'desc',
       },
       take: 7,
     });
 
     if (!journals || journals.length === 0) {
       return NextResponse.json(
-        { data: null, message: 'No journals found' },
+        { data: [], message: 'No journals found' },
         {
           status: 200,
         }
