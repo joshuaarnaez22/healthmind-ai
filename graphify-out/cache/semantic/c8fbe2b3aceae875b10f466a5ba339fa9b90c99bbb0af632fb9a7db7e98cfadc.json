@@ -1,1 +1,183 @@
-{"nodes": [{"id": "project_healthmind_ai", "label": "HealthMind AI Project", "file_type": "document", "source_file": "Project.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "project_phase1_setup", "label": "Phase 1: Planning & Setup", "file_type": "concept", "source_file": "Project.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "project_phase2_public", "label": "Phase 2: Public Access Features", "file_type": "concept", "source_file": "Project.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "project_phase3_private", "label": "Phase 3: Core Private Features", "file_type": "concept", "source_file": "Project.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "project_phase4_advanced", "label": "Phase 4: Advanced Features", "file_type": "concept", "source_file": "Project.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "project_phase5_security", "label": "Phase 5: Security & Deployment", "file_type": "concept", "source_file": "Project.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [{"source": "project_healthmind_ai", "target": "project_phase1_setup", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "Project.md", "source_location": null, "weight": 1.0}, {"source": "project_healthmind_ai", "target": "project_phase2_public", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "Project.md", "source_location": null, "weight": 1.0}, {"source": "project_healthmind_ai", "target": "project_phase3_private", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "Project.md", "source_location": null, "weight": 1.0}, {"source": "project_healthmind_ai", "target": "project_phase4_advanced", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "Project.md", "source_location": null, "weight": 1.0}, {"source": "project_healthmind_ai", "target": "project_phase5_security", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "Project.md", "source_location": null, "weight": 1.0}, {"source": "readme_clerk_auth", "target": "project_phase1_setup", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "Project.md", "source_location": null, "weight": 1.0}, {"source": "project_phase4_advanced", "target": "proposal1_journaling", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "Project.md", "source_location": null, "weight": 1.0}, {"source": "project_phase4_advanced", "target": "proposal1_medical_file_summarization", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "Project.md", "source_location": null, "weight": 1.0}, {"source": "project_phase3_private", "target": "proposal1_mood_tracking", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "Project.md", "source_location": null, "weight": 1.0}, {"source": "project_phase3_private", "target": "proposal1_data_visualization", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "Project.md", "source_location": null, "weight": 1.0}, {"source": "project_phase2_public", "target": "proposal1_ai_chatbot", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "Project.md", "source_location": null, "weight": 1.0}], "hyperedges": []}
+{
+  "nodes": [
+    {
+      "id": "project_healthmind_ai",
+      "label": "HealthMind AI Project",
+      "file_type": "document",
+      "source_file": "Project.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "project_phase1_setup",
+      "label": "Phase 1: Planning & Setup",
+      "file_type": "concept",
+      "source_file": "Project.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "project_phase2_public",
+      "label": "Phase 2: Public Access Features",
+      "file_type": "concept",
+      "source_file": "Project.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "project_phase3_private",
+      "label": "Phase 3: Core Private Features",
+      "file_type": "concept",
+      "source_file": "Project.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "project_phase4_advanced",
+      "label": "Phase 4: Advanced Features",
+      "file_type": "concept",
+      "source_file": "Project.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "project_phase5_security",
+      "label": "Phase 5: Security & Deployment",
+      "file_type": "concept",
+      "source_file": "Project.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "project_healthmind_ai",
+      "target": "project_phase1_setup",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Project.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "project_healthmind_ai",
+      "target": "project_phase2_public",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Project.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "project_healthmind_ai",
+      "target": "project_phase3_private",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Project.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "project_healthmind_ai",
+      "target": "project_phase4_advanced",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Project.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "project_healthmind_ai",
+      "target": "project_phase5_security",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Project.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_clerk_auth",
+      "target": "project_phase1_setup",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "Project.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "project_phase4_advanced",
+      "target": "proposal1_journaling",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "Project.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "project_phase4_advanced",
+      "target": "proposal1_medical_file_summarization",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "Project.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "project_phase3_private",
+      "target": "proposal1_mood_tracking",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "Project.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "project_phase3_private",
+      "target": "proposal1_data_visualization",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "Project.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "project_phase2_public",
+      "target": "proposal1_ai_chatbot",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "Project.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

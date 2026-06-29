@@ -65,7 +65,7 @@ const MedicalSummary = memo(function MedicalSummary({
       </CardHeader>
       <CardContent>
         <div
-          className="prose max-h-[500px] min-h-64 max-w-none space-y-4 overflow-y-auto scroll-smooth rounded-lg bg-muted/50 p-8"
+          className="bg-muted/50 prose max-h-[500px] min-h-64 max-w-none space-y-4 overflow-y-auto scroll-smooth rounded-lg p-8"
           ref={summaryContentRef}
         >
           {summary ? (

@@ -79,10 +79,10 @@ export default function Insights() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="mt-4 flex items-center gap-2 rounded-lg border border-primary/10 bg-primary/5 p-4"
+                className="border-primary/10 bg-primary/5 mt-4 flex items-center gap-2 rounded-lg border p-4"
               >
-                <SparklesIcon className="h-5 w-5 text-primary/80" />
-                <p className="text-sm text-primary/80">
+                <SparklesIcon className="text-primary/80 h-5 w-5" />
+                <p className="text-primary/80 text-sm">
                   AI is personalizing your Mental Health Insights based on your
                   journal entries and progress
                 </p>
@@ -157,10 +157,10 @@ export default function Insights() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="my-4 flex items-center gap-2 rounded-lg border border-primary/10 bg-primary/5 p-4"
+                className="border-primary/10 bg-primary/5 my-4 flex items-center gap-2 rounded-lg border p-4"
               >
-                <SparklesIcon className="h-5 w-5 text-primary/80" />
-                <p className="text-sm text-primary/80">
+                <SparklesIcon className="text-primary/80 h-5 w-5" />
+                <p className="text-primary/80 text-sm">
                   AI is personalizing your Mental Health Insights based on your
                   journal entries and progress
                 </p>
@@ -182,7 +182,7 @@ export default function Insights() {
                       articles.map((article: ArticleProps, index: number) => (
                         <Card
                           key={index}
-                          className="overflow-hidden transition-all hover:border-primary/50"
+                          className="hover:border-primary/50 overflow-hidden transition-all"
                         >
                           <CardContent className="p-6">
                             <div className="flex flex-col items-start gap-6 md:flex-row">
@@ -233,10 +233,10 @@ export default function Insights() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="my-4 flex items-center gap-2 rounded-lg border border-primary/10 bg-primary/5 p-4"
+                className="border-primary/10 bg-primary/5 my-4 flex items-center gap-2 rounded-lg border p-4"
               >
-                <SparklesIcon className="h-5 w-5 text-primary/80" />
-                <p className="text-sm text-primary/80">
+                <SparklesIcon className="text-primary/80 h-5 w-5" />
+                <p className="text-primary/80 text-sm">
                   AI is personalizing your Mental Health Insights based on your
                   journal entries and progress
                 </p>

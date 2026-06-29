@@ -87,7 +87,7 @@ export default function HomePage() {
         className={cn(
           'sticky top-0 z-[200] transition-all duration-300',
           scrolled
-            ? 'border-b border-border bg-background/95 backdrop-blur-sm'
+            ? 'bg-background/95 border-b border-border backdrop-blur-sm'
             : 'bg-primary'
         )}
       >
@@ -116,7 +116,9 @@ export default function HomePage() {
               href="#features"
               className={cn(
                 'text-sm font-medium transition-opacity hover:opacity-70',
-                scrolled ? 'text-muted-foreground' : 'text-primary-foreground/80'
+                scrolled
+                  ? 'text-muted-foreground'
+                  : 'text-primary-foreground/80'
               )}
             >
               Features
@@ -127,8 +129,8 @@ export default function HomePage() {
                 className={cn(
                   'rounded-full px-5',
                   scrolled
-                    ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                    : 'bg-primary-foreground text-primary hover:bg-primary-foreground/90'
+                    ? 'hover:bg-primary/90 bg-primary text-primary-foreground'
+                    : 'hover:bg-primary-foreground/90 bg-primary-foreground text-primary'
                 )}
               >
                 Sign in
@@ -171,7 +173,7 @@ export default function HomePage() {
           <motion.p
             {...ENTER}
             transition={{ duration: 0.65, ease: EASE_OUT, delay: 0.1 }}
-            className="mb-10 max-w-lg text-[clamp(1rem,1.4vw,1.2rem)] leading-relaxed text-primary-foreground/80"
+            className="text-primary-foreground/80 mb-10 max-w-lg text-[clamp(1rem,1.4vw,1.2rem)] leading-relaxed"
           >
             Track your mood, log your vitals, and talk to an AI therapist.
             HealthMind brings it all into one quiet place.
@@ -185,7 +187,7 @@ export default function HomePage() {
             <Link href="/sign-up">
               <Button
                 size="lg"
-                className="rounded-full bg-primary-foreground px-8 text-primary hover:bg-primary-foreground/90"
+                className="hover:bg-primary-foreground/90 rounded-full bg-primary-foreground px-8 text-primary"
               >
                 Start for free
               </Button>
@@ -194,7 +196,7 @@ export default function HomePage() {
               <Button
                 size="lg"
                 variant="ghost"
-                className="rounded-full px-8 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                className="hover:bg-primary-foreground/10 rounded-full px-8 text-primary-foreground hover:text-primary-foreground"
               >
                 Sign in
               </Button>

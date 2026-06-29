@@ -8,11 +8,26 @@ import { safeFormat } from '@/lib/utils';
 import { Mood } from '@prisma/client';
 
 const moodConfig: Record<Mood, { label: string; className: string }> = {
-  TERRIBLE: { label: 'Terrible', className: 'bg-red-100 text-red-700 border-red-200' },
-  BAD: { label: 'Bad', className: 'bg-orange-100 text-orange-700 border-orange-200' },
-  NEUTRAL: { label: 'Neutral', className: 'bg-yellow-100 text-yellow-700 border-yellow-200' },
-  GOOD: { label: 'Good', className: 'bg-green-100 text-green-700 border-green-200' },
-  GREAT: { label: 'Great', className: 'bg-blue-100 text-blue-700 border-blue-200' },
+  TERRIBLE: {
+    label: 'Terrible',
+    className: 'bg-red-100 text-red-700 border-red-200',
+  },
+  BAD: {
+    label: 'Bad',
+    className: 'bg-orange-100 text-orange-700 border-orange-200',
+  },
+  NEUTRAL: {
+    label: 'Neutral',
+    className: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+  },
+  GOOD: {
+    label: 'Good',
+    className: 'bg-green-100 text-green-700 border-green-200',
+  },
+  GREAT: {
+    label: 'Great',
+    className: 'bg-blue-100 text-blue-700 border-blue-200',
+  },
 };
 
 function getGreeting() {
@@ -70,7 +85,8 @@ export default async function DashboardPage() {
   const totalGoals = goals.length;
   const completedGoals = goals.filter((g) => g.isCompleted).length;
   const inProgressGoals = totalGoals - completedGoals;
-  const completionPct = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
+  const completionPct =
+    totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
 
   return (
     <div className="space-y-6 p-6">
@@ -232,7 +248,7 @@ export default async function DashboardPage() {
               <div className="flex gap-6">
                 {latestBP && (
                   <div className="space-y-0.5">
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                       Blood Pressure
                     </p>
                     <p className="text-xl font-semibold tabular-nums">
@@ -245,7 +261,7 @@ export default async function DashboardPage() {
                 )}
                 {latestGlucose && (
                   <div className="space-y-0.5">
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                       Glucose
                     </p>
                     <p className="text-xl font-semibold tabular-nums">

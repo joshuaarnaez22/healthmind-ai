@@ -39,9 +39,12 @@ export default function TrackMood() {
   } = useQuery<Journal[]>({
     queryKey: ['moods', dateKey],
     queryFn: async ({ signal }) => {
-      const response = await fetch(`/api/journal?date=${selectedDate.toISOString()}`, {
-        signal,
-      });
+      const response = await fetch(
+        `/api/journal?date=${selectedDate.toISOString()}`,
+        {
+          signal,
+        }
+      );
       if (!response.ok) throw new Error('Failed to fetch mood entries');
       const json = await response.json();
       return json.journals ?? [];
@@ -81,9 +84,13 @@ export default function TrackMood() {
                 {date ? (
                   <CardTitle className="text-xl font-semibold text-primary">
                     {safeFormat(date.from, 'EEEE, MMMM do, yyyy')}
-                    {date.to && date.to.toDateString() !== date.from?.toDateString() && (
-                      <> &mdash; {safeFormat(date.to, 'EEEE, MMMM do, yyyy')}</>
-                    )}
+                    {date.to &&
+                      date.to.toDateString() !== date.from?.toDateString() && (
+                        <>
+                          {' '}
+                          &mdash; {safeFormat(date.to, 'EEEE, MMMM do, yyyy')}
+                        </>
+                      )}
                   </CardTitle>
                 ) : (
                   <CardTitle className="text-xl font-semibold text-primary">
@@ -94,8 +101,8 @@ export default function TrackMood() {
                   {isLoading
                     ? 'Loading…'
                     : journals && journals.length > 0
-                    ? `${journals.length} mood entr${journals.length === 1 ? 'y' : 'ies'} recorded`
-                    : 'No mood recorded for this day'}
+                      ? `${journals.length} mood entr${journals.length === 1 ? 'y' : 'ies'} recorded`
+                      : 'No mood recorded for this day'}
                 </CardDescription>
               </div>
               <MoodModal date={selectedDate} onSuccess={handleSuccess} />
@@ -108,7 +115,9 @@ export default function TrackMood() {
                 </div>
               )}
               {isError && (
-                <p className="text-sm text-destructive">Failed to load entries.</p>
+                <p className="text-sm text-destructive">
+                  Failed to load entries.
+                </p>
               )}
               {!isLoading && !isError && journals && journals.length > 0 && (
                 <ul className="space-y-2">
@@ -118,10 +127,12 @@ export default function TrackMood() {
                     return (
                       <li
                         key={journal.id}
-                        className="flex items-start gap-3 rounded-lg border border-border bg-muted/30 p-3"
+                        className="bg-muted/30 flex items-start gap-3 rounded-lg border border-border p-3"
                       >
                         {Icon && (
-                          <Icon className={`mt-0.5 h-5 w-5 shrink-0 ${meta?.color ?? ''}`} />
+                          <Icon
+                            className={`mt-0.5 h-5 w-5 shrink-0 ${meta?.color ?? ''}`}
+                          />
                         )}
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">

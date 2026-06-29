@@ -35,7 +35,7 @@ export default function InsightCard({
         <h3 className="mb-2 text-lg font-semibold">{title}</h3>
         <p className="text-sm text-muted-foreground">{description}</p>
       </CardContent>
-      <CardFooter className="flex items-center justify-between bg-muted/50 px-6 py-4">
+      <CardFooter className="bg-muted/50 flex items-center justify-between px-6 py-4">
         <Button
           variant="ghost"
           size="sm"

@@ -10,7 +10,11 @@ import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
 import Link from 'next/link';
 
-export default function MobileNav({ scrolled = false }: { scrolled?: boolean }) {
+export default function MobileNav({
+  scrolled = false,
+}: {
+  scrolled?: boolean;
+}) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -21,7 +25,7 @@ export default function MobileNav({ scrolled = false }: { scrolled?: boolean }) 
           className={
             scrolled
               ? 'text-foreground hover:bg-muted'
-              : 'text-primary-foreground hover:bg-primary-foreground/10'
+              : 'hover:bg-primary-foreground/10 text-primary-foreground'
           }
         >
           <Menu className="h-5 w-5" />

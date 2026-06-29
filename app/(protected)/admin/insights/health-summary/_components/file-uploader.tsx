@@ -44,7 +44,7 @@ const FileUploader = memo(function FileUploader({
           className={cn(
             'rounded-lg border-2 border-dashed p-8 text-center',
             isDragging
-              ? 'border-primary bg-primary/5'
+              ? 'bg-primary/5 border-primary'
               : 'border-muted-foreground/20'
           )}
           onDragOver={handleDragOver}

@@ -73,11 +73,31 @@ export default function BarChartComponent({ data }: { data: MoodMonthData[] }) {
               content={<ChartTooltipContent indicator="dashed" />}
             />
             <ChartLegend content={<ChartLegendContent />} />
-            <Bar dataKey="TERRIBLE" fill="var(--color-TERRIBLE)" radius={4} stackId="a" />
+            <Bar
+              dataKey="TERRIBLE"
+              fill="var(--color-TERRIBLE)"
+              radius={4}
+              stackId="a"
+            />
             <Bar dataKey="BAD" fill="var(--color-BAD)" radius={4} stackId="a" />
-            <Bar dataKey="NEUTRAL" fill="var(--color-NEUTRAL)" radius={4} stackId="a" />
-            <Bar dataKey="GOOD" fill="var(--color-GOOD)" radius={4} stackId="a" />
-            <Bar dataKey="GREAT" fill="var(--color-GREAT)" radius={4} stackId="a" />
+            <Bar
+              dataKey="NEUTRAL"
+              fill="var(--color-NEUTRAL)"
+              radius={4}
+              stackId="a"
+            />
+            <Bar
+              dataKey="GOOD"
+              fill="var(--color-GOOD)"
+              radius={4}
+              stackId="a"
+            />
+            <Bar
+              dataKey="GREAT"
+              fill="var(--color-GREAT)"
+              radius={4}
+              stackId="a"
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>

@@ -1,1 +1,104 @@
-{"nodes": [{"id": "baseschema_user_model", "label": "User Model (Prisma)", "file_type": "concept", "source_file": "base-schema.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "baseschema_mental_health_entry", "label": "MentalHealthEntry Model (Prisma)", "file_type": "concept", "source_file": "base-schema.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "baseschema_physical_health_entry", "label": "PhysicalHealthEntry Model (Prisma)", "file_type": "concept", "source_file": "base-schema.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [{"source": "baseschema_mental_health_entry", "target": "baseschema_user_model", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "base-schema.md", "source_location": null, "weight": 1.0}, {"source": "baseschema_physical_health_entry", "target": "baseschema_user_model", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "base-schema.md", "source_location": null, "weight": 1.0}, {"source": "baseschema_mental_health_entry", "target": "proposal1_mood_tracking", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "base-schema.md", "source_location": null, "weight": 1.0}, {"source": "baseschema_physical_health_entry", "target": "proposal1_vitals_logging", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "base-schema.md", "source_location": null, "weight": 1.0}, {"source": "proposal1_journaling", "target": "baseschema_mental_health_entry", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.75, "source_file": "base-schema.md", "source_location": null, "weight": 1.0}], "hyperedges": [{"id": "prisma_schema_health_data_models", "label": "Prisma Health Data Schema Models", "nodes": ["baseschema_user_model", "baseschema_mental_health_entry", "baseschema_physical_health_entry"], "relation": "form", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "base-schema.md"}]}
+{
+  "nodes": [
+    {
+      "id": "baseschema_user_model",
+      "label": "User Model (Prisma)",
+      "file_type": "concept",
+      "source_file": "base-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "baseschema_mental_health_entry",
+      "label": "MentalHealthEntry Model (Prisma)",
+      "file_type": "concept",
+      "source_file": "base-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "baseschema_physical_health_entry",
+      "label": "PhysicalHealthEntry Model (Prisma)",
+      "file_type": "concept",
+      "source_file": "base-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "baseschema_mental_health_entry",
+      "target": "baseschema_user_model",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "base-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "baseschema_physical_health_entry",
+      "target": "baseschema_user_model",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "base-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "baseschema_mental_health_entry",
+      "target": "proposal1_mood_tracking",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "base-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "baseschema_physical_health_entry",
+      "target": "proposal1_vitals_logging",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "base-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "proposal1_journaling",
+      "target": "baseschema_mental_health_entry",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "base-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "prisma_schema_health_data_models",
+      "label": "Prisma Health Data Schema Models",
+      "nodes": [
+        "baseschema_user_model",
+        "baseschema_mental_health_entry",
+        "baseschema_physical_health_entry"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "base-schema.md"
+    }
+  ]
+}

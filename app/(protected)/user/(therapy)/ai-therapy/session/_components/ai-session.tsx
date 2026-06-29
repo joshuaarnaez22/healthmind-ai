@@ -91,7 +91,10 @@ export default function AiSession() {
       setTherapistSpeaking(state === AgentState.ANSWER);
     };
 
-    const handleTranscript = (_text: string, payload: { is_final?: boolean }) => {
+    const handleTranscript = (
+      _text: string,
+      payload: { is_final?: boolean }
+    ) => {
       if (payload.is_final) {
         setClientSpeaking(false);
       } else {

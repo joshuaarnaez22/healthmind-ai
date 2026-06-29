@@ -18,7 +18,14 @@ export default async function AnalyticsPage() {
   // Build a map of "Mon YYYY" -> mood counts
   const monthMap = new Map<
     string,
-    { order: number; TERRIBLE: number; BAD: number; NEUTRAL: number; GOOD: number; GREAT: number }
+    {
+      order: number;
+      TERRIBLE: number;
+      BAD: number;
+      NEUTRAL: number;
+      GOOD: number;
+      GREAT: number;
+    }
   >();
 
   for (const journal of journals) {
@@ -27,7 +34,14 @@ export default async function AnalyticsPage() {
     const order = d.getFullYear() * 100 + d.getMonth();
 
     if (!monthMap.has(label)) {
-      monthMap.set(label, { order, TERRIBLE: 0, BAD: 0, NEUTRAL: 0, GOOD: 0, GREAT: 0 });
+      monthMap.set(label, {
+        order,
+        TERRIBLE: 0,
+        BAD: 0,
+        NEUTRAL: 0,
+        GOOD: 0,
+        GREAT: 0,
+      });
     }
 
     const entry = monthMap.get(label)!;
@@ -49,7 +63,7 @@ export default async function AnalyticsPage() {
     }));
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-6">
       <h1 className="text-2xl font-semibold">Analytics</h1>
       <BarChartComponent data={chartData} />
     </div>
