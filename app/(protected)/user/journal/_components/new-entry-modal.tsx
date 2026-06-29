@@ -71,9 +71,16 @@ export default function NewEntryModal({
           ['journals', cacheKey],
           (old = []) => [response.data as Journal, ...old]
         );
-        toast({ title: 'Entry saved', description: 'Your journal entry has been recorded.' });
+        toast({
+          title: 'Entry saved',
+          description: 'Your journal entry has been recorded.',
+        });
       } else {
-        toast({ title: 'Failed to save', description: 'Something went wrong. Please try again.', variant: 'destructive' });
+        toast({
+          title: 'Failed to save',
+          description: 'Something went wrong. Please try again.',
+          variant: 'destructive',
+        });
       }
       setOpen(false);
     });

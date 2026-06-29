@@ -49,9 +49,16 @@ export default function JournalEntryAccordionItem({
           ['journals', cacheKey],
           (old = []) => old.filter((j) => j.id !== journal.id)
         );
-        toast({ title: 'Entry deleted', description: 'Your journal entry has been removed.' });
+        toast({
+          title: 'Entry deleted',
+          description: 'Your journal entry has been removed.',
+        });
       } else {
-        toast({ title: 'Failed to delete', description: 'Something went wrong. Please try again.', variant: 'destructive' });
+        toast({
+          title: 'Failed to delete',
+          description: 'Something went wrong. Please try again.',
+          variant: 'destructive',
+        });
       }
     });
   };
@@ -151,7 +158,7 @@ export default function JournalEntryAccordionItem({
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={handleDelete}
-                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        className="hover:bg-destructive/90 bg-destructive text-destructive-foreground"
                       >
                         Delete
                       </AlertDialogAction>

@@ -97,10 +97,17 @@ export default function GoalCheckIn({ id }: { id: string }) {
             });
           }
         );
-        toast({ title: 'Check-in saved', description: 'Keep up the great work!' });
+        toast({
+          title: 'Check-in saved',
+          description: 'Keep up the great work!',
+        });
         router.push('/admin/goals');
       } else {
-        toast({ title: 'Failed to save check-in', description: 'Something went wrong. Please try again.', variant: 'destructive' });
+        toast({
+          title: 'Failed to save check-in',
+          description: 'Something went wrong. Please try again.',
+          variant: 'destructive',
+        });
       }
     });
   };

@@ -91,9 +91,16 @@ export default function BloodPressureForm() {
           ['blood-pressure-logs'],
           (old = []) => [response.data, ...old]
         );
-        toast({ title: 'Blood pressure logged', description: 'Your reading has been saved.' });
+        toast({
+          title: 'Blood pressure logged',
+          description: 'Your reading has been saved.',
+        });
       } else {
-        toast({ title: 'Failed to save', description: 'Something went wrong. Please try again.', variant: 'destructive' });
+        toast({
+          title: 'Failed to save',
+          description: 'Something went wrong. Please try again.',
+          variant: 'destructive',
+        });
       }
       form.reset();
     });

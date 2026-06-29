@@ -76,9 +76,16 @@ export default function GoalDetailsModal({
         queryClient.setQueryData<Goal[]>(['goals', userId], (old = []) =>
           old.map((goal) => (goal.id === goalId ? response.data : goal))
         );
-        toast({ title: 'Goal updated', description: 'Your changes have been saved.' });
+        toast({
+          title: 'Goal updated',
+          description: 'Your changes have been saved.',
+        });
       } else {
-        toast({ title: 'Failed to update goal', description: 'Something went wrong. Please try again.', variant: 'destructive' });
+        toast({
+          title: 'Failed to update goal',
+          description: 'Something went wrong. Please try again.',
+          variant: 'destructive',
+        });
       }
       setOpen(false);
     });

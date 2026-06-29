@@ -77,9 +77,16 @@ export default function EditEntryModal({
               j.id === journal.id ? (response.data as Journal) : j
             )
         );
-        toast({ title: 'Entry updated', description: 'Your changes have been saved.' });
+        toast({
+          title: 'Entry updated',
+          description: 'Your changes have been saved.',
+        });
       } else {
-        toast({ title: 'Failed to update', description: 'Something went wrong. Please try again.', variant: 'destructive' });
+        toast({
+          title: 'Failed to update',
+          description: 'Something went wrong. Please try again.',
+          variant: 'destructive',
+        });
       }
       setOpen(false);
     });

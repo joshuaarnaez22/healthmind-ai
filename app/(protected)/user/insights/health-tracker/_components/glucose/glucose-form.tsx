@@ -107,9 +107,16 @@ export default function GlucoseForm() {
           data,
           ...old,
         ]);
-        toast({ title: 'Glucose logged', description: 'Your reading has been saved.' });
+        toast({
+          title: 'Glucose logged',
+          description: 'Your reading has been saved.',
+        });
       } else {
-        toast({ title: 'Failed to save', description: 'Something went wrong. Please try again.', variant: 'destructive' });
+        toast({
+          title: 'Failed to save',
+          description: 'Something went wrong. Please try again.',
+          variant: 'destructive',
+        });
       }
       form.reset();
     });

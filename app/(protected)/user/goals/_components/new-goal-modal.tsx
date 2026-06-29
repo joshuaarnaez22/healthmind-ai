@@ -72,9 +72,16 @@ export default function NewGoalModal({
           response.data,
           ...old,
         ]);
-        toast({ title: 'Goal created', description: 'Your wellness goal has been added.' });
+        toast({
+          title: 'Goal created',
+          description: 'Your wellness goal has been added.',
+        });
       } else {
-        toast({ title: 'Failed to create goal', description: 'Something went wrong. Please try again.', variant: 'destructive' });
+        toast({
+          title: 'Failed to create goal',
+          description: 'Something went wrong. Please try again.',
+          variant: 'destructive',
+        });
       }
       setOpen(false);
     });
