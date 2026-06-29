@@ -1,7 +1,13 @@
 'use client';
 import MoodModal from './mood-modal';
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
 import { Calendar } from '@/components/ui/calendar';
 import { safeFormat } from '@/lib/utils';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -22,10 +28,17 @@ export default function TrackMood() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const dateKey = selectedDate.toISOString();
 
-  const { data: journals, isLoading, isError } = useQuery<Journal[]>({
+  const {
+    data: journals,
+    isLoading,
+    isError,
+  } = useQuery<Journal[]>({
     queryKey: ['moods', dateKey],
     queryFn: async ({ signal }) => {
-      const response = await fetch(`/api/journal?date=${selectedDate.toISOString()}`, { signal });
+      const response = await fetch(
+        `/api/journal?date=${selectedDate.toISOString()}`,
+        { signal }
+      );
       if (!response.ok) throw new Error('Failed to fetch mood entries');
       const json = await response.json();
       return json.journals ?? [];
@@ -43,7 +56,9 @@ export default function TrackMood() {
       {/* Page header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Mood Tracker</h1>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            Mood Tracker
+          </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Log how you feel each day and spot patterns over time.
           </p>
@@ -94,7 +109,9 @@ export default function TrackMood() {
               </div>
             )}
             {isError && (
-              <p className="text-sm text-destructive">Failed to load entries.</p>
+              <p className="text-sm text-destructive">
+                Failed to load entries.
+              </p>
             )}
             {!isLoading && !isError && count > 0 && (
               <ul className="space-y-2">

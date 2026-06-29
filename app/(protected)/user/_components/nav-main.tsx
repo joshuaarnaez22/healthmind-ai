@@ -96,7 +96,11 @@ export default function NavMain({
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   <CollapsibleContent asChild>
-                    <motion.div variants={subMenuVariants} initial="hidden" animate="visible">
+                    <motion.div
+                      variants={subMenuVariants}
+                      initial="hidden"
+                      animate="visible"
+                    >
                       <SidebarMenuSub>
                         {item.items?.map((subItem, subIndex) => (
                           <motion.div
@@ -106,7 +110,10 @@ export default function NavMain({
                             transition={{ delay: subIndex * 0.05 }}
                           >
                             <SidebarMenuSubItem>
-                              <SidebarMenuSubButton asChild isActive={pathname === subItem.url}>
+                              <SidebarMenuSubButton
+                                asChild
+                                isActive={pathname === subItem.url}
+                              >
                                 <Link href={subItem.url}>
                                   <span>{subItem.title}</span>
                                 </Link>

@@ -10,7 +10,13 @@ import JournalEntryAccordionItem from './journal-entry-accordion';
 import { pageAnimations } from '@/lib/motion';
 import { BookOpen } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
 
 export default function JournalEntry() {
   const [date, setDate] = React.useState<Date>(new Date());
@@ -37,7 +43,9 @@ export default function JournalEntry() {
       {/* Page header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Journal</h1>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            Journal
+          </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Record your thoughts, feelings, and reflections.
           </p>
@@ -84,7 +92,7 @@ export default function JournalEntry() {
                 ))}
               </div>
             ) : isError ? (
-              <div className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-8 text-center text-sm text-destructive">
+              <div className="border-destructive/30 bg-destructive/5 rounded-xl border px-4 py-8 text-center text-sm text-destructive">
                 Failed to load journal entries.
               </div>
             ) : count > 0 ? (
@@ -94,7 +102,9 @@ export default function JournalEntry() {
             ) : (
               <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-16 text-center text-muted-foreground">
                 <BookOpen className="h-7 w-7 opacity-40" />
-                <p className="text-sm">No entries for this day. Start writing!</p>
+                <p className="text-sm">
+                  No entries for this day. Start writing!
+                </p>
               </div>
             )}
           </CardContent>

@@ -11,27 +11,32 @@ const THERAPY_TYPES = ['CBT', 'DBT', 'ACT'] as const;
 
 // Per-type schema: 2 modules, icon coerced to valid value on mismatch
 const perTypeSchema = z.object({
-  modules: z.array(
-    z.object({
-      title: z.string(),
-      description: z.string(),
-      audience: z.string(),
-      difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
-      estimatedTime: z.string(),
-      overview: z.array(z.string()).max(4),
-      steps: z.array(stepSchema).min(2).max(3),
-      completion: z.object({
-        recap: z.string(),
-        praise: z.string(),
-        nextSuggestion: z.string(),
-      }),
-      safetyDisclaimer: z.string(),
-      color: z.string(),
-      icon: z.string().transform((v) =>
-        (validLucideIcons as readonly string[]).includes(v) ? v : 'brain'
-      ),
-    })
-  ).min(1).max(2),
+  modules: z
+    .array(
+      z.object({
+        title: z.string(),
+        description: z.string(),
+        audience: z.string(),
+        difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
+        estimatedTime: z.string(),
+        overview: z.array(z.string()).max(4),
+        steps: z.array(stepSchema).min(2).max(3),
+        completion: z.object({
+          recap: z.string(),
+          praise: z.string(),
+          nextSuggestion: z.string(),
+        }),
+        safetyDisclaimer: z.string(),
+        color: z.string(),
+        icon: z
+          .string()
+          .transform((v) =>
+            (validLucideIcons as readonly string[]).includes(v) ? v : 'brain'
+          ),
+      })
+    )
+    .min(1)
+    .max(2),
 });
 
 function buildPrompt(type: string, journalContext: string) {
@@ -59,9 +64,10 @@ export async function POST() {
       take: 5,
     });
 
-    const journalContext = journals.length > 0
-      ? journals.map((j) => `${j.mood} — ${j.title}`).join('\n')
-      : '';
+    const journalContext =
+      journals.length > 0
+        ? journals.map((j) => `${j.mood} — ${j.title}`).join('\n')
+        : '';
 
     // 3 parallel calls, one per therapy type
     const results = await Promise.all(

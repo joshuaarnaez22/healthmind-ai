@@ -56,6 +56,9 @@ ${JSON.stringify(glucoseLogs, null, 2)}`;
     return NextResponse.json({ data: object });
   } catch (error) {
     console.error('health-trends error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

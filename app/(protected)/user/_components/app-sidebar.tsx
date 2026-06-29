@@ -8,7 +8,6 @@ import {
   BookOpen,
   Goal,
   NotebookPen,
-  HeartHandshake,
 } from 'lucide-react';
 
 import NavMain from './nav-main';
@@ -76,9 +75,7 @@ const navItems = [
     url: '/user/analytics',
     icon: BarChart2,
     isActive: false,
-    items: [
-      { title: 'Mood Analytics', url: '/user/analytics' },
-    ],
+    items: [{ title: 'Mood Analytics', url: '/user/analytics' }],
   },
 ];
 

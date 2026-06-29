@@ -71,16 +71,23 @@ export default async function AnalyticsPage() {
     <div className="space-y-6 p-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Analytics</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Your mood patterns over the last 6 months.</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Your mood patterns over the last 6 months.
+        </p>
       </div>
       {chartData.length === 0 ? (
         <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-20 text-center text-muted-foreground">
           <BarChart2 className="h-9 w-9 opacity-30" />
           <div>
             <p className="text-sm font-medium">No mood data yet</p>
-            <p className="mt-1 text-xs">Start logging your mood daily to see patterns here.</p>
+            <p className="mt-1 text-xs">
+              Start logging your mood daily to see patterns here.
+            </p>
           </div>
-          <Link href="/user/mood-tracker" className="mt-1 text-xs font-medium text-primary hover:underline">
+          <Link
+            href="/user/mood-tracker"
+            className="mt-1 text-xs font-medium text-primary hover:underline"
+          >
             Go to Mood Tracker →
           </Link>
         </div>

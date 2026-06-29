@@ -11,7 +11,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { moods } from '@/lib/constant';
 import EditEntryModal from './edit-entry-modal';
 
-export default function JournalEntryAccordionItem({ journal }: { journal: Journal }) {
+export default function JournalEntryAccordionItem({
+  journal,
+}: {
+  journal: Journal;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const mood = moods.find((m) => m.value === journal.mood);
   const MoodIcon = mood?.icon ?? ChevronDown;
@@ -49,7 +53,9 @@ export default function JournalEntryAccordionItem({ journal }: { journal: Journa
         {/* Timestamp + chevron */}
         <div className="flex shrink-0 flex-col items-end gap-1">
           <span className="text-xs text-muted-foreground">
-            {formatDistanceToNow(new Date(journal.createdAt), { addSuffix: true })}
+            {formatDistanceToNow(new Date(journal.createdAt), {
+              addSuffix: true,
+            })}
           </span>
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
@@ -65,13 +71,27 @@ export default function JournalEntryAccordionItem({ journal }: { journal: Journa
         {isOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1, transition: { height: { duration: 0.25, ease: 'easeOut' }, opacity: { duration: 0.15, delay: 0.08 } } }}
-            exit={{ height: 0, opacity: 0, transition: { height: { duration: 0.2, ease: 'easeIn' }, opacity: { duration: 0.1 } } }}
+            animate={{
+              height: 'auto',
+              opacity: 1,
+              transition: {
+                height: { duration: 0.25, ease: 'easeOut' },
+                opacity: { duration: 0.15, delay: 0.08 },
+              },
+            }}
+            exit={{
+              height: 0,
+              opacity: 0,
+              transition: {
+                height: { duration: 0.2, ease: 'easeIn' },
+                opacity: { duration: 0.1 },
+              },
+            }}
             className="overflow-hidden"
           >
             <div className="border-t px-4 pb-4 pt-3">
               <div
-                className="prose prose-sm dark:prose-invert prose-p:my-1 prose-headings:my-2 prose-blockquote:my-2 max-w-none text-sm [&_ol]:list-decimal [&_ol]:pl-4 [&_ul]:list-disc [&_ul]:pl-4"
+                className="prose prose-sm max-w-none text-sm dark:prose-invert prose-headings:my-2 prose-p:my-1 prose-blockquote:my-2 [&_ol]:list-decimal [&_ol]:pl-4 [&_ul]:list-disc [&_ul]:pl-4"
                 dangerouslySetInnerHTML={{ __html: cleanHtml }}
               />
               <div className="mt-4 flex justify-end">

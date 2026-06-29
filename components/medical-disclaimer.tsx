@@ -6,7 +6,10 @@ export default function MedicalDisclaimer() {
       <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
       <p>
         <span className="font-semibold">Medical disclaimer: </span>
-        Information provided by HealthMind is for educational purposes only and does not constitute medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional before making decisions about your health.
+        Information provided by HealthMind is for educational purposes only and
+        does not constitute medical advice, diagnosis, or treatment. Always
+        consult a qualified healthcare professional before making decisions
+        about your health.
       </p>
     </div>
   );

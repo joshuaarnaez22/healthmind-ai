@@ -1,1 +1,22 @@
-{"0": "Admin Goals UI", "1": "Admin Navigation Shell", "2": "User Analytics & API Routes", "3": "Package Dependencies", "4": "Admin Goals & Insights Views", "5": "App Shell & Auth Pages", "6": "AI Schemas & Design Tokens", "7": "Root Layout & Fonts", "8": "Admin Health Insights & Check-ins", "9": "Health Tracker Data Tables", "10": "Not Found & Goal Cards", "11": "Analytics Charts", "12": "Therapy Modules & Exercises", "13": "Dev Config & Linting", "14": "TypeScript Config", "15": "Shared Types", "16": "Component Aliases & Config", "17": "Search Command (User & Admin)", "18": "Therapy & Health Summary", "19": "Therapy Module Detail"}
+{
+  "0": "Admin Goals UI",
+  "1": "Admin Navigation Shell",
+  "2": "User Analytics & API Routes",
+  "3": "Package Dependencies",
+  "4": "Admin Goals & Insights Views",
+  "5": "App Shell & Auth Pages",
+  "6": "AI Schemas & Design Tokens",
+  "7": "Root Layout & Fonts",
+  "8": "Admin Health Insights & Check-ins",
+  "9": "Health Tracker Data Tables",
+  "10": "Not Found & Goal Cards",
+  "11": "Analytics Charts",
+  "12": "Therapy Modules & Exercises",
+  "13": "Dev Config & Linting",
+  "14": "TypeScript Config",
+  "15": "Shared Types",
+  "16": "Component Aliases & Config",
+  "17": "Search Command (User & Admin)",
+  "18": "Therapy & Health Summary",
+  "19": "Therapy Module Detail"
+}

@@ -12,7 +12,10 @@ import {
 import { Loader2, PlusIcon, Save, Sparkles, Wand2 } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { type JournalEntryFormValues, journalEntrySchema } from '@/lib/zod-validation';
+import {
+  type JournalEntryFormValues,
+  journalEntrySchema,
+} from '@/lib/zod-validation';
 import {
   Form,
   FormControl,
@@ -34,7 +37,7 @@ import RichTextEditor from './rich-text-editor';
 import { moods } from '@/lib/constant';
 import { cn, isContentEmpty } from '@/lib/utils';
 import { createJournal } from '@/actions/server-actions/journal';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { Journal } from '@prisma/client';
 
 export default function NewEntryModal({
@@ -129,7 +132,8 @@ export default function NewEntryModal({
         <DialogHeader>
           <DialogTitle>New Journal Entry</DialogTitle>
           <DialogDescription>
-            Record your thoughts and feelings. Take your time and be honest with yourself.
+            Record your thoughts and feelings. Take your time and be honest with
+            yourself.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -154,7 +158,10 @@ export default function NewEntryModal({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>How are you feeling?</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger className="flex items-center gap-2">
                           <SelectValue placeholder="Select a mood" />
@@ -197,13 +204,17 @@ export default function NewEntryModal({
                           ) : (
                             <Wand2 className="mr-1.5 h-3.5 w-3.5 opacity-60" />
                           )}
-                          {isGeneratingPrompt ? 'Getting prompt…' : 'Need a prompt?'}
+                          {isGeneratingPrompt
+                            ? 'Getting prompt…'
+                            : 'Need a prompt?'}
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={handleEnhance}
-                          disabled={isEnhancing || !content || isContentEmpty(content)}
+                          disabled={
+                            isEnhancing || !content || isContentEmpty(content)
+                          }
                         >
                           {isEnhancing ? (
                             <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
@@ -215,7 +226,10 @@ export default function NewEntryModal({
                       </div>
                     </div>
                     <FormControl>
-                      <RichTextEditor content={field.value} onChange={field.onChange} />
+                      <RichTextEditor
+                        content={field.value}
+                        onChange={field.onChange}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -225,9 +239,15 @@ export default function NewEntryModal({
               <DialogFooter>
                 <Button type="submit" disabled={pending}>
                   {pending ? (
-                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving…</>
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Saving…
+                    </>
                   ) : (
-                    <><Save className="mr-2 h-4 w-4" />Save Entry</>
+                    <>
+                      <Save className="mr-2 h-4 w-4" />
+                      Save Entry
+                    </>
                   )}
                 </Button>
               </DialogFooter>

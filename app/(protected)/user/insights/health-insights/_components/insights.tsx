@@ -57,8 +57,15 @@ export default function Insights() {
   const exercisesLoading = loadingStates.exercises;
 
   // All queries settled but API returned null → no journal data yet
-  const allSettled = !observationsLoading && !articlesLoading && !exercisesLoading;
-  const hasNoData = allSettled && !affirmations && !summary && !observationsData && !articles && !exercisesData;
+  const allSettled =
+    !observationsLoading && !articlesLoading && !exercisesLoading;
+  const hasNoData =
+    allSettled &&
+    !affirmations &&
+    !summary &&
+    !observationsData &&
+    !articles &&
+    !exercisesData;
 
   return (
     <>
@@ -82,200 +89,207 @@ export default function Insights() {
           <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed py-20 text-center text-muted-foreground">
             <NotebookPen className="h-9 w-9 opacity-30" />
             <div>
-              <p className="text-sm font-medium text-foreground">No insights yet</p>
+              <p className="text-sm font-medium text-foreground">
+                No insights yet
+              </p>
               <p className="mt-1 text-xs">
-                AI insights are generated from your journal entries. Write at least one entry to unlock them.
+                AI insights are generated from your journal entries. Write at
+                least one entry to unlock them.
               </p>
             </div>
             <Link
               href="/user/journal"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90"
+              className="hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-xs font-medium text-primary-foreground"
             >
               <NotebookPen className="h-3.5 w-3.5" />
               Write your first journal entry
             </Link>
           </div>
         ) : (
-        <Tabs defaultValue="observations" className="mb-8">
-          <TabsList className="mb-4">
-            <TabsTrigger value="observations">Observations</TabsTrigger>
-            <TabsTrigger value="articles">Articles</TabsTrigger>
-            <TabsTrigger value="exercises">Exercises</TabsTrigger>
-          </TabsList>
+          <Tabs defaultValue="observations" className="mb-8">
+            <TabsList className="mb-4">
+              <TabsTrigger value="observations">Observations</TabsTrigger>
+              <TabsTrigger value="articles">Articles</TabsTrigger>
+              <TabsTrigger value="exercises">Exercises</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="observations" className="space-y-6">
-            {observationsLoading && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="border-primary/10 bg-primary/5 mt-4 flex items-center gap-2 rounded-lg border p-4"
-              >
-                <SparklesIcon className="text-primary/80 h-5 w-5" />
-                <p className="text-primary/80 text-sm">
-                  AI is personalizing your Mental Health Insights based on your
-                  journal entries and progress
-                </p>
-              </motion.div>
-            )}
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-              <Card className="col-span-1">
+            <TabsContent value="observations" className="space-y-6">
+              {observationsLoading && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="border-primary/10 bg-primary/5 mt-4 flex items-center gap-2 rounded-lg border p-4"
+                >
+                  <SparklesIcon className="text-primary/80 h-5 w-5" />
+                  <p className="text-primary/80 text-sm">
+                    AI is personalizing your Mental Health Insights based on
+                    your journal entries and progress
+                  </p>
+                </motion.div>
+              )}
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                <Card className="col-span-1">
+                  <CardHeader>
+                    <CardTitle>Daily Affirmations</CardTitle>
+                    <CardDescription>
+                      Positive statements to reinforce mental wellness
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {loadingStates.affirmations ? (
+                      <AffirmationLoader />
+                    ) : (
+                      <Affirmations affirmations={affirmations || []} />
+                    )}
+                  </CardContent>
+                </Card>
+                <Card className="col-span-1">
+                  <CardHeader>
+                    <CardTitle>Mental Health Summary</CardTitle>
+                    <CardDescription>
+                      Overview of your mental health journey
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {loadingStates.mental_summary ? (
+                      <MentalSummaryLoader />
+                    ) : (
+                      <MentalSummarySection
+                        summary={summary || ''}
+                        moodData={moodData}
+                      />
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+              <Card>
                 <CardHeader>
-                  <CardTitle>Daily Affirmations</CardTitle>
+                  <CardTitle>Therapeutic Observations</CardTitle>
                   <CardDescription>
-                    Positive statements to reinforce mental wellness
+                    Key insights from your journal entries and therapy sessions
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {loadingStates.affirmations ? (
-                    <AffirmationLoader />
+                  {loadingStates.observations ? (
+                    <ObservationLoader />
                   ) : (
-                    <Affirmations affirmations={affirmations || []} />
+                    <div className="grid grid-cols-1 gap-4">
+                      {!!observationsData &&
+                        observationsData.observations.map(
+                          (observation: Observation, index: number) => (
+                            <ObservationCard
+                              key={index}
+                              observation={observation}
+                              onSelect={() =>
+                                setSelectedObservation(observation)
+                              }
+                            />
+                          )
+                        )}
+                    </div>
                   )}
                 </CardContent>
               </Card>
-              <Card className="col-span-1">
+            </TabsContent>
+            <TabsContent value="articles">
+              {articlesLoading && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="border-primary/10 bg-primary/5 my-4 flex items-center gap-2 rounded-lg border p-4"
+                >
+                  <SparklesIcon className="text-primary/80 h-5 w-5" />
+                  <p className="text-primary/80 text-sm">
+                    AI is personalizing your Mental Health Insights based on
+                    your journal entries and progress
+                  </p>
+                </motion.div>
+              )}
+              <Card>
                 <CardHeader>
-                  <CardTitle>Mental Health Summary</CardTitle>
+                  <CardTitle>Recommended Articles</CardTitle>
                   <CardDescription>
-                    Overview of your mental health journey
+                    Curated readings based on your journal entries and progress
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {loadingStates.mental_summary ? (
-                    <MentalSummaryLoader />
+                  {loadingStates.articles ? (
+                    <ArticleLoader />
                   ) : (
-                    <MentalSummarySection
-                      summary={summary || ''}
-                      moodData={moodData}
-                    />
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Therapeutic Observations</CardTitle>
-                <CardDescription>
-                  Key insights from your journal entries and therapy sessions
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {loadingStates.observations ? (
-                  <ObservationLoader />
-                ) : (
-                  <div className="grid grid-cols-1 gap-4">
-                    {!!observationsData &&
-                      observationsData.observations.map(
-                        (observation: Observation, index: number) => (
-                          <ObservationCard
+                    <div className="grid grid-cols-1 gap-6">
+                      {!!articles &&
+                        articles.map((article: ArticleProps, index: number) => (
+                          <Card
                             key={index}
-                            observation={observation}
-                            onSelect={() => setSelectedObservation(observation)}
-                          />
-                        )
-                      )}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="articles">
-            {articlesLoading && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="border-primary/10 bg-primary/5 my-4 flex items-center gap-2 rounded-lg border p-4"
-              >
-                <SparklesIcon className="text-primary/80 h-5 w-5" />
-                <p className="text-primary/80 text-sm">
-                  AI is personalizing your Mental Health Insights based on your
-                  journal entries and progress
-                </p>
-              </motion.div>
-            )}
-            <Card>
-              <CardHeader>
-                <CardTitle>Recommended Articles</CardTitle>
-                <CardDescription>
-                  Curated readings based on your journal entries and progress
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {loadingStates.articles ? (
-                  <ArticleLoader />
-                ) : (
-                  <div className="grid grid-cols-1 gap-6">
-                    {!!articles &&
-                      articles.map((article: ArticleProps, index: number) => (
-                        <Card
-                          key={index}
-                          className="hover:border-primary/50 overflow-hidden transition-all"
-                        >
-                          <CardContent className="p-6">
-                            <div className="flex flex-col items-start gap-6 md:flex-row">
-                              <div className="flex-1 space-y-4">
-                                <div className="space-y-2">
-                                  <div className="flex items-center gap-2">
-                                    <BookOpenIcon className="h-5 w-5 text-primary" />
-                                    <span className="text-sm text-muted-foreground">
-                                      {article.publication}
-                                    </span>
+                            className="hover:border-primary/50 overflow-hidden transition-all"
+                          >
+                            <CardContent className="p-6">
+                              <div className="flex flex-col items-start gap-6 md:flex-row">
+                                <div className="flex-1 space-y-4">
+                                  <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <BookOpenIcon className="h-5 w-5 text-primary" />
+                                      <span className="text-sm text-muted-foreground">
+                                        {article.publication}
+                                      </span>
+                                    </div>
+                                    <h3 className="text-lg font-semibold text-primary">
+                                      {article.title}
+                                    </h3>
                                   </div>
-                                  <h3 className="text-lg font-semibold text-primary">
-                                    {article.title}
-                                  </h3>
+                                  <p className="text-muted-foreground">
+                                    {article.benefit}
+                                  </p>
                                 </div>
-                                <p className="text-muted-foreground">
-                                  {article.benefit}
-                                </p>
-                              </div>
-                              <Button
-                                asChild
-                                variant="outline"
-                                className="shrink-0"
-                              >
-                                <a
-                                  href={article.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center gap-2"
+                                <Button
+                                  asChild
+                                  variant="outline"
+                                  className="shrink-0"
                                 >
-                                  Read Article
-                                  <ExternalLinkIcon className="h-4 w-4" />
-                                </a>
-                              </Button>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="exercises">
-            {exercisesLoading && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="border-primary/10 bg-primary/5 my-4 flex items-center gap-2 rounded-lg border p-4"
-              >
-                <SparklesIcon className="text-primary/80 h-5 w-5" />
-                <p className="text-primary/80 text-sm">
-                  AI is personalizing your Mental Health Insights based on your
-                  journal entries and progress
-                </p>
-              </motion.div>
-            )}
-            {!!exercisesData && <ExercisesInsights exercises={exercisesData} />}
-          </TabsContent>
-        </Tabs>
+                                  <a
+                                    href={article.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-2"
+                                  >
+                                    Read Article
+                                    <ExternalLinkIcon className="h-4 w-4" />
+                                  </a>
+                                </Button>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="exercises">
+              {exercisesLoading && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="border-primary/10 bg-primary/5 my-4 flex items-center gap-2 rounded-lg border p-4"
+                >
+                  <SparklesIcon className="text-primary/80 h-5 w-5" />
+                  <p className="text-primary/80 text-sm">
+                    AI is personalizing your Mental Health Insights based on
+                    your journal entries and progress
+                  </p>
+                </motion.div>
+              )}
+              {!!exercisesData && (
+                <ExercisesInsights exercises={exercisesData} />
+              )}
+            </TabsContent>
+          </Tabs>
         )}
       </motion.div>
       <Dialog

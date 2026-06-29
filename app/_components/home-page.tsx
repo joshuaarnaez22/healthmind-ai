@@ -11,7 +11,15 @@ import Link from 'next/link';
 import MobileNav from './mobile-nav';
 import { ModeToggle } from '@/components/dark-mode';
 import { cn } from '@/lib/utils';
-import { Heart, Brain, TrendingUp, Smile, ShieldCheck, Zap, TrendingDown, Minus } from 'lucide-react';
+import {
+  Heart,
+  Brain,
+  TrendingUp,
+  Smile,
+  ShieldCheck,
+  Zap,
+  Minus,
+} from 'lucide-react';
 
 // taste-skill: one accent color per page
 const ACCENT = 'oklch(0.65 0.18 280)';
@@ -31,7 +39,8 @@ function Sparkline({ bars, color }: { bars: number[]; color: string }) {
           className="w-[3px] rounded-full"
           style={{
             height: `${Math.round((v / max) * 100)}%`,
-            background: i === bars.length - 1 ? color : 'rgba(255,255,255,0.15)',
+            background:
+              i === bars.length - 1 ? color : 'rgba(255,255,255,0.15)',
           }}
         />
       ))}
@@ -42,24 +51,79 @@ function Sparkline({ bars, color }: { bars: number[]; color: string }) {
 // Feature illustrations — SVG scenes, not single icons
 function IllustrationJournal() {
   return (
-    <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden="true">
+    <svg
+      viewBox="0 0 200 160"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-full w-full"
+      aria-hidden="true"
+    >
       {/* Notebook */}
-      <rect x="30" y="18" width="110" height="130" rx="8" fill="rgba(105,79,193,0.12)" stroke="rgba(105,79,193,0.25)" strokeWidth="1.2"/>
+      <rect
+        x="30"
+        y="18"
+        width="110"
+        height="130"
+        rx="8"
+        fill="rgba(105,79,193,0.12)"
+        stroke="rgba(105,79,193,0.25)"
+        strokeWidth="1.2"
+      />
       {/* Spine */}
-      <rect x="30" y="18" width="14" height="130" rx="4" fill="rgba(105,79,193,0.2)"/>
+      <rect
+        x="30"
+        y="18"
+        width="14"
+        height="130"
+        rx="4"
+        fill="rgba(105,79,193,0.2)"
+      />
       {/* Binding dots */}
       {[35, 55, 75, 95, 115].map((y) => (
-        <circle key={y} cx="37" cy={y} r="2.5" fill="rgba(105,79,193,0.45)"/>
+        <circle key={y} cx="37" cy={y} r="2.5" fill="rgba(105,79,193,0.45)" />
       ))}
       {/* Lines */}
       {[50, 65, 80, 95, 110].map((y) => (
-        <line key={y} x1="55" y1={y} x2="128" y2={y} stroke="rgba(105,79,193,0.2)" strokeWidth="1.2" strokeLinecap="round"/>
+        <line
+          key={y}
+          x1="55"
+          y1={y}
+          x2="128"
+          y2={y}
+          stroke="rgba(105,79,193,0.2)"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+        />
       ))}
       {/* Shorter last line — feels written */}
-      <line x1="55" y1="125" x2="98" y2="125" stroke="rgba(105,79,193,0.2)" strokeWidth="1.2" strokeLinecap="round"/>
+      <line
+        x1="55"
+        y1="125"
+        x2="98"
+        y2="125"
+        stroke="rgba(105,79,193,0.2)"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
       {/* Date chip */}
-      <rect x="55" y="28" width="58" height="14" rx="7" fill="rgba(105,79,193,0.18)"/>
-      <text x="84" y="38.5" textAnchor="middle" fill="rgba(105,79,193,0.75)" fontSize="7" fontFamily="system-ui">June 30, 2025</text>
+      <rect
+        x="55"
+        y="28"
+        width="58"
+        height="14"
+        rx="7"
+        fill="rgba(105,79,193,0.18)"
+      />
+      <text
+        x="84"
+        y="38.5"
+        textAnchor="middle"
+        fill="rgba(105,79,193,0.75)"
+        fontSize="7"
+        fontFamily="system-ui"
+      >
+        June 30, 2025
+      </text>
       {/* Mood faces — row */}
       {[
         { cx: 158, cy: 40, smile: true, active: false },
@@ -68,15 +132,49 @@ function IllustrationJournal() {
         { cx: 158, cy: 124, smile: true, active: false },
       ].map((f, i) => (
         <g key={i}>
-          <circle cx={f.cx} cy={f.cy} r="11" fill={f.active ? 'rgba(105,79,193,0.3)' : 'rgba(105,79,193,0.08)'} stroke={f.active ? 'rgba(105,79,193,0.6)' : 'rgba(105,79,193,0.18)'} strokeWidth="1"/>
+          <circle
+            cx={f.cx}
+            cy={f.cy}
+            r="11"
+            fill={f.active ? 'rgba(105,79,193,0.3)' : 'rgba(105,79,193,0.08)'}
+            stroke={f.active ? 'rgba(105,79,193,0.6)' : 'rgba(105,79,193,0.18)'}
+            strokeWidth="1"
+          />
           {/* Eyes */}
-          <circle cx={f.cx - 3.5} cy={f.cy - 2} r="1.2" fill={f.active ? 'rgba(105,79,193,0.9)' : 'rgba(105,79,193,0.4)'}/>
-          <circle cx={f.cx + 3.5} cy={f.cy - 2} r="1.2" fill={f.active ? 'rgba(105,79,193,0.9)' : 'rgba(105,79,193,0.4)'}/>
+          <circle
+            cx={f.cx - 3.5}
+            cy={f.cy - 2}
+            r="1.2"
+            fill={f.active ? 'rgba(105,79,193,0.9)' : 'rgba(105,79,193,0.4)'}
+          />
+          <circle
+            cx={f.cx + 3.5}
+            cy={f.cy - 2}
+            r="1.2"
+            fill={f.active ? 'rgba(105,79,193,0.9)' : 'rgba(105,79,193,0.4)'}
+          />
           {/* Mouth */}
-          {f.smile
-            ? <path d={`M ${f.cx - 4} ${f.cy + 3} Q ${f.cx} ${f.cy + 6.5} ${f.cx + 4} ${f.cy + 3}`} stroke={f.active ? 'rgba(105,79,193,0.9)' : 'rgba(105,79,193,0.4)'} strokeWidth="1.2" strokeLinecap="round" fill="none"/>
-            : <line x1={f.cx - 4} y1={f.cy + 4.5} x2={f.cx + 4} y2={f.cy + 4.5} stroke="rgba(105,79,193,0.4)" strokeWidth="1.2" strokeLinecap="round"/>
-          }
+          {f.smile ? (
+            <path
+              d={`M ${f.cx - 4} ${f.cy + 3} Q ${f.cx} ${f.cy + 6.5} ${f.cx + 4} ${f.cy + 3}`}
+              stroke={
+                f.active ? 'rgba(105,79,193,0.9)' : 'rgba(105,79,193,0.4)'
+              }
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              fill="none"
+            />
+          ) : (
+            <line
+              x1={f.cx - 4}
+              y1={f.cy + 4.5}
+              x2={f.cx + 4}
+              y2={f.cy + 4.5}
+              stroke="rgba(105,79,193,0.4)"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+            />
+          )}
         </g>
       ))}
     </svg>
@@ -85,69 +183,302 @@ function IllustrationJournal() {
 
 function IllustrationVitals() {
   // ECG path points
-  const ecgPath = "M 20 80 L 45 80 L 52 80 L 57 55 L 63 105 L 68 68 L 73 80 L 90 80 L 95 80 L 100 60 L 105 100 L 110 72 L 115 80 L 145 80";
+  const ecgPath =
+    'M 20 80 L 45 80 L 52 80 L 57 55 L 63 105 L 68 68 L 73 80 L 90 80 L 95 80 L 100 60 L 105 100 L 110 72 L 115 80 L 145 80';
   return (
-    <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden="true">
+    <svg
+      viewBox="0 0 200 160"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-full w-full"
+      aria-hidden="true"
+    >
       {/* Background panel */}
-      <rect x="15" y="15" width="170" height="130" rx="10" fill="rgba(105,79,193,0.06)" stroke="rgba(105,79,193,0.15)" strokeWidth="1"/>
+      <rect
+        x="15"
+        y="15"
+        width="170"
+        height="130"
+        rx="10"
+        fill="rgba(105,79,193,0.06)"
+        stroke="rgba(105,79,193,0.15)"
+        strokeWidth="1"
+      />
       {/* Grid lines */}
       {[40, 60, 80, 100, 120].map((y) => (
-        <line key={y} x1="20" y1={y} x2="180" y2={y} stroke="rgba(105,79,193,0.08)" strokeWidth="0.8"/>
+        <line
+          key={y}
+          x1="20"
+          y1={y}
+          x2="180"
+          y2={y}
+          stroke="rgba(105,79,193,0.08)"
+          strokeWidth="0.8"
+        />
       ))}
       {[40, 75, 110, 145].map((x) => (
-        <line key={x} x1={x} y1="25" x2={x} y2="130" stroke="rgba(105,79,193,0.08)" strokeWidth="0.8"/>
+        <line
+          key={x}
+          x1={x}
+          y1="25"
+          x2={x}
+          y2="130"
+          stroke="rgba(105,79,193,0.08)"
+          strokeWidth="0.8"
+        />
       ))}
       {/* ECG line */}
-      <path d={ecgPath} stroke="rgba(105,79,193,0.5)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path
+        d={ecgPath}
+        stroke="rgba(105,79,193,0.5)"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
       {/* Highlighted pulse spike */}
-      <path d="M 95 80 L 100 60 L 105 100 L 110 72 L 115 80" stroke="rgba(105,79,193,0.95)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path
+        d="M 95 80 L 100 60 L 105 100 L 110 72 L 115 80"
+        stroke="rgba(105,79,193,0.95)"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
       {/* BPM chip */}
-      <rect x="118" y="22" width="55" height="28" rx="8" fill="rgba(105,79,193,0.18)" stroke="rgba(105,79,193,0.3)" strokeWidth="1"/>
-      <text x="145" y="32" textAnchor="middle" fill="rgba(105,79,193,0.6)" fontSize="6.5" fontFamily="system-ui">HEART RATE</text>
-      <text x="145" y="44" textAnchor="middle" fill="rgba(105,79,193,0.95)" fontSize="12" fontWeight="bold" fontFamily="system-ui">72 bpm</text>
+      <rect
+        x="118"
+        y="22"
+        width="55"
+        height="28"
+        rx="8"
+        fill="rgba(105,79,193,0.18)"
+        stroke="rgba(105,79,193,0.3)"
+        strokeWidth="1"
+      />
+      <text
+        x="145"
+        y="32"
+        textAnchor="middle"
+        fill="rgba(105,79,193,0.6)"
+        fontSize="6.5"
+        fontFamily="system-ui"
+      >
+        HEART RATE
+      </text>
+      <text
+        x="145"
+        y="44"
+        textAnchor="middle"
+        fill="rgba(105,79,193,0.95)"
+        fontSize="12"
+        fontWeight="bold"
+        fontFamily="system-ui"
+      >
+        72 bpm
+      </text>
       {/* BP chip */}
-      <rect x="20" y="108" width="60" height="30" rx="8" fill="rgba(105,79,193,0.1)" stroke="rgba(105,79,193,0.2)" strokeWidth="1"/>
-      <text x="50" y="119" textAnchor="middle" fill="rgba(105,79,193,0.55)" fontSize="6" fontFamily="system-ui">BLOOD PRESSURE</text>
-      <text x="50" y="131" textAnchor="middle" fill="rgba(105,79,193,0.85)" fontSize="11" fontWeight="bold" fontFamily="system-ui">118 / 76</text>
+      <rect
+        x="20"
+        y="108"
+        width="60"
+        height="30"
+        rx="8"
+        fill="rgba(105,79,193,0.1)"
+        stroke="rgba(105,79,193,0.2)"
+        strokeWidth="1"
+      />
+      <text
+        x="50"
+        y="119"
+        textAnchor="middle"
+        fill="rgba(105,79,193,0.55)"
+        fontSize="6"
+        fontFamily="system-ui"
+      >
+        BLOOD PRESSURE
+      </text>
+      <text
+        x="50"
+        y="131"
+        textAnchor="middle"
+        fill="rgba(105,79,193,0.85)"
+        fontSize="11"
+        fontWeight="bold"
+        fontFamily="system-ui"
+      >
+        118 / 76
+      </text>
       {/* Glucose chip */}
-      <rect x="92" y="108" width="56" height="30" rx="8" fill="rgba(105,79,193,0.1)" stroke="rgba(105,79,193,0.2)" strokeWidth="1"/>
-      <text x="120" y="119" textAnchor="middle" fill="rgba(105,79,193,0.55)" fontSize="6" fontFamily="system-ui">GLUCOSE</text>
-      <text x="120" y="131" textAnchor="middle" fill="rgba(105,79,193,0.85)" fontSize="11" fontWeight="bold" fontFamily="system-ui">94 mg/dL</text>
+      <rect
+        x="92"
+        y="108"
+        width="56"
+        height="30"
+        rx="8"
+        fill="rgba(105,79,193,0.1)"
+        stroke="rgba(105,79,193,0.2)"
+        strokeWidth="1"
+      />
+      <text
+        x="120"
+        y="119"
+        textAnchor="middle"
+        fill="rgba(105,79,193,0.55)"
+        fontSize="6"
+        fontFamily="system-ui"
+      >
+        GLUCOSE
+      </text>
+      <text
+        x="120"
+        y="131"
+        textAnchor="middle"
+        fill="rgba(105,79,193,0.85)"
+        fontSize="11"
+        fontWeight="bold"
+        fontFamily="system-ui"
+      >
+        94 mg/dL
+      </text>
     </svg>
   );
 }
 
 function IllustrationChat() {
   return (
-    <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden="true">
+    <svg
+      viewBox="0 0 200 160"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-full w-full"
+      aria-hidden="true"
+    >
       {/* User bubble */}
-      <rect x="60" y="16" width="115" height="36" rx="12" fill="rgba(105,79,193,0.18)" stroke="rgba(105,79,193,0.3)" strokeWidth="1"/>
-      <path d="M 172 52 L 178 62 L 163 52" fill="rgba(105,79,193,0.18)"/>
+      <rect
+        x="60"
+        y="16"
+        width="115"
+        height="36"
+        rx="12"
+        fill="rgba(105,79,193,0.18)"
+        stroke="rgba(105,79,193,0.3)"
+        strokeWidth="1"
+      />
+      <path d="M 172 52 L 178 62 L 163 52" fill="rgba(105,79,193,0.18)" />
       {/* User text lines */}
-      <line x1="73" y1="28" x2="158" y2="28" stroke="rgba(105,79,193,0.55)" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="73" y1="38" x2="138" y2="38" stroke="rgba(105,79,193,0.35)" strokeWidth="2" strokeLinecap="round"/>
+      <line
+        x1="73"
+        y1="28"
+        x2="158"
+        y2="28"
+        stroke="rgba(105,79,193,0.55)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <line
+        x1="73"
+        y1="38"
+        x2="138"
+        y2="38"
+        stroke="rgba(105,79,193,0.35)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
       {/* User avatar */}
-      <circle cx="46" cy="34" r="12" fill="rgba(105,79,193,0.15)" stroke="rgba(105,79,193,0.3)" strokeWidth="1"/>
-      <circle cx="46" cy="31" r="4" fill="rgba(105,79,193,0.4)"/>
-      <path d="M 36 46 Q 46 41 56 46" stroke="rgba(105,79,193,0.4)" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
+      <circle
+        cx="46"
+        cy="34"
+        r="12"
+        fill="rgba(105,79,193,0.15)"
+        stroke="rgba(105,79,193,0.3)"
+        strokeWidth="1"
+      />
+      <circle cx="46" cy="31" r="4" fill="rgba(105,79,193,0.4)" />
+      <path
+        d="M 36 46 Q 46 41 56 46"
+        stroke="rgba(105,79,193,0.4)"
+        strokeWidth="1.2"
+        fill="none"
+        strokeLinecap="round"
+      />
 
       {/* AI bubble */}
-      <rect x="25" y="74" width="130" height="48" rx="12" fill="rgba(105,79,193,0.1)" stroke="rgba(105,79,193,0.22)" strokeWidth="1"/>
-      <path d="M 28 74 L 18 65 L 38 74" fill="rgba(105,79,193,0.1)"/>
+      <rect
+        x="25"
+        y="74"
+        width="130"
+        height="48"
+        rx="12"
+        fill="rgba(105,79,193,0.1)"
+        stroke="rgba(105,79,193,0.22)"
+        strokeWidth="1"
+      />
+      <path d="M 28 74 L 18 65 L 38 74" fill="rgba(105,79,193,0.1)" />
       {/* AI text lines */}
-      <line x1="38" y1="88" x2="142" y2="88" stroke="rgba(105,79,193,0.4)" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="38" y1="98" x2="142" y2="98" stroke="rgba(105,79,193,0.3)" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="38" y1="108" x2="108" y2="108" stroke="rgba(105,79,193,0.2)" strokeWidth="2" strokeLinecap="round"/>
+      <line
+        x1="38"
+        y1="88"
+        x2="142"
+        y2="88"
+        stroke="rgba(105,79,193,0.4)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <line
+        x1="38"
+        y1="98"
+        x2="142"
+        y2="98"
+        stroke="rgba(105,79,193,0.3)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <line
+        x1="38"
+        y1="108"
+        x2="108"
+        y2="108"
+        stroke="rgba(105,79,193,0.2)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
       {/* AI avatar */}
-      <circle cx="168" cy="98" r="14" fill="rgba(105,79,193,0.2)" stroke="rgba(105,79,193,0.35)" strokeWidth="1"/>
+      <circle
+        cx="168"
+        cy="98"
+        r="14"
+        fill="rgba(105,79,193,0.2)"
+        stroke="rgba(105,79,193,0.35)"
+        strokeWidth="1"
+      />
       {/* AI brain icon simplified */}
-      <path d="M 162 95 Q 162 90 168 90 Q 174 90 174 95 Q 174 100 170 102 L 168 105 L 166 102 Q 162 100 162 95 Z" fill="none" stroke="rgba(105,79,193,0.7)" strokeWidth="1.2"/>
-      <line x1="168" y1="90" x2="168" y2="105" stroke="rgba(105,79,193,0.4)" strokeWidth="0.8"/>
+      <path
+        d="M 162 95 Q 162 90 168 90 Q 174 90 174 95 Q 174 100 170 102 L 168 105 L 166 102 Q 162 100 162 95 Z"
+        fill="none"
+        stroke="rgba(105,79,193,0.7)"
+        strokeWidth="1.2"
+      />
+      <line
+        x1="168"
+        y1="90"
+        x2="168"
+        y2="105"
+        stroke="rgba(105,79,193,0.4)"
+        strokeWidth="0.8"
+      />
 
       {/* Typing indicator */}
-      <rect x="38" y="132" width="52" height="18" rx="9" fill="rgba(105,79,193,0.1)" stroke="rgba(105,79,193,0.2)" strokeWidth="1"/>
+      <rect
+        x="38"
+        y="132"
+        width="52"
+        height="18"
+        rx="9"
+        fill="rgba(105,79,193,0.1)"
+        stroke="rgba(105,79,193,0.2)"
+        strokeWidth="1"
+      />
       {[52, 64, 76].map((cx) => (
-        <circle key={cx} cx={cx} cy="141" r="2.5" fill="rgba(105,79,193,0.4)"/>
+        <circle key={cx} cx={cx} cy="141" r="2.5" fill="rgba(105,79,193,0.4)" />
       ))}
     </svg>
   );
@@ -185,7 +516,7 @@ function LogoMark({ className }: { className?: string }) {
 function RadarRings() {
   return (
     <div
-      className="pointer-events-none absolute right-[-8%] top-1/2 h-[65vw] w-[65vw] max-h-[680px] max-w-[680px] -translate-y-1/2"
+      className="pointer-events-none absolute right-[-8%] top-1/2 h-[65vw] max-h-[680px] w-[65vw] max-w-[680px] -translate-y-1/2"
       aria-hidden="true"
     >
       {[0, 1, 2, 3].map((i) => (
@@ -214,9 +545,9 @@ function RadarRings() {
 }
 
 // Card colors are data-semantic (mood/vitals/journal), not brand accent
-const MOOD_COLOR = 'oklch(0.72 0.14 280)';   // lavender — calm
-const HEART_COLOR = 'oklch(0.68 0.18 15)';    // coral — physical
-const STREAK_COLOR = 'oklch(0.62 0.14 162)';  // sage — growth
+const MOOD_COLOR = 'oklch(0.72 0.14 280)'; // lavender — calm
+const HEART_COLOR = 'oklch(0.68 0.18 15)'; // coral — physical
+const STREAK_COLOR = 'oklch(0.62 0.14 162)'; // sage — growth
 
 const HERO_CARDS = [
   {
@@ -289,14 +620,17 @@ export default function HomePage() {
         className={cn(
           'fixed inset-x-0 top-0 z-[200] transition-all duration-500',
           scrolled
-            ? 'border-b border-border bg-background/90 backdrop-blur-md'
+            ? 'bg-background/90 border-b border-border backdrop-blur-md'
             : 'bg-transparent'
         )}
       >
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-2">
             <LogoMark
-              className={cn('h-6 w-6', scrolled ? 'text-primary' : 'text-white')}
+              className={cn(
+                'h-6 w-6',
+                scrolled ? 'text-primary' : 'text-white'
+              )}
             />
             <span
               className={cn(
@@ -326,7 +660,7 @@ export default function HomePage() {
                 className={cn(
                   'rounded-full px-5',
                   scrolled
-                    ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                    ? 'hover:bg-primary/90 bg-primary text-primary-foreground'
                     : 'border border-white/20 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20'
                 )}
               >
@@ -398,7 +732,11 @@ export default function HomePage() {
                   <Button
                     size="lg"
                     className="rounded-full px-8 font-medium"
-                    style={{ background: ACCENT, color: 'white', border: 'none' }}
+                    style={{
+                      background: ACCENT,
+                      color: 'white',
+                      border: 'none',
+                    }}
                   >
                     Start for free
                   </Button>
@@ -426,7 +764,11 @@ export default function HomePage() {
                     className={cn('absolute w-48', card.pos)}
                     initial={{ opacity: 0, y: 32 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, ease: EASE, delay: card.enterDelay }}
+                    transition={{
+                      duration: 0.6,
+                      ease: EASE,
+                      delay: card.enterDelay,
+                    }}
                   >
                     <motion.div
                       animate={{ y: [-4, 4] }}
@@ -453,7 +795,10 @@ export default function HomePage() {
                             className="flex h-6 w-6 items-center justify-center rounded-lg"
                             style={{ background: `${card.color}22` }}
                           >
-                            <Icon className="h-3 w-3" style={{ color: card.color }} />
+                            <Icon
+                              className="h-3 w-3"
+                              style={{ color: card.color }}
+                            />
                           </div>
                           <span className="text-[11px] font-medium text-white/50">
                             {card.label}
@@ -462,7 +807,7 @@ export default function HomePage() {
                         {/* Live indicator */}
                         <div className="flex items-center gap-1">
                           <span
-                            className="h-1.5 w-1.5 rounded-full animate-pulse"
+                            className="h-1.5 w-1.5 animate-pulse rounded-full"
                             style={{ background: card.color }}
                           />
                         </div>
@@ -470,11 +815,13 @@ export default function HomePage() {
 
                       {/* Value */}
                       <div className="mb-3 flex items-baseline gap-1">
-                        <span className="font-heading text-2xl font-bold text-white leading-none">
+                        <span className="font-heading text-2xl font-bold leading-none text-white">
                           {'value' in card ? card.value : ''}
                         </span>
                         {'unit' in card && (
-                          <span className="text-xs text-white/40">{card.unit}</span>
+                          <span className="text-xs text-white/40">
+                            {card.unit}
+                          </span>
                         )}
                       </div>
 
@@ -485,8 +832,14 @@ export default function HomePage() {
 
                       {/* Trend */}
                       <div className="flex items-center gap-1">
-                        <TrendIcon className="h-3 w-3" style={{ color: card.color }} />
-                        <span className="text-[11px]" style={{ color: card.color }}>
+                        <TrendIcon
+                          className="h-3 w-3"
+                          style={{ color: card.color }}
+                        />
+                        <span
+                          className="text-[11px]"
+                          style={{ color: card.color }}
+                        >
                           {card.trend}
                         </span>
                       </div>
@@ -506,7 +859,10 @@ export default function HomePage() {
 
       {/* ── Features ─────────────────────────────────────────────────── */}
       {/* taste-skill: one eyebrow per 3 sections — this is eyebrow #1 */}
-      <section id="features" className="bg-background px-4 py-24 sm:px-6 lg:py-32">
+      <section
+        id="features"
+        className="bg-background px-4 py-24 sm:px-6 lg:py-32"
+      >
         <div className="container mx-auto max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -516,7 +872,7 @@ export default function HomePage() {
             className="mb-16"
           >
             <p className="mb-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-              What's inside
+              What&apos;s inside
             </p>
             <h2
               className="font-heading font-bold tracking-tight text-foreground [text-wrap:balance]"
@@ -550,13 +906,17 @@ export default function HomePage() {
                 </p>
                 <h3
                   className="mb-3 font-heading font-bold tracking-tight text-foreground"
-                  style={{ fontSize: 'clamp(1.4rem,2.2vw,2rem)', lineHeight: 1.15 }}
+                  style={{
+                    fontSize: 'clamp(1.4rem,2.2vw,2rem)',
+                    lineHeight: 1.15,
+                  }}
                 >
                   Know yourself better.
                 </h3>
                 <p className="max-w-lg text-base leading-relaxed text-muted-foreground">
-                  Log how you're feeling and why. Your journal becomes a mirror — and
-                  over time, patterns emerge that are hard to see day to day.
+                  Log how you&apos;re feeling and why. Your journal becomes a
+                  mirror &mdash; and over time, patterns emerge that are hard to
+                  see day to day.
                 </p>
               </div>
             </motion.div>
@@ -578,13 +938,16 @@ export default function HomePage() {
                 </p>
                 <h3
                   className="mb-3 font-heading font-bold tracking-tight text-foreground"
-                  style={{ fontSize: 'clamp(1.4rem,2.2vw,2rem)', lineHeight: 1.15 }}
+                  style={{
+                    fontSize: 'clamp(1.4rem,2.2vw,2rem)',
+                    lineHeight: 1.15,
+                  }}
                 >
                   Your vitals, in context.
                 </h3>
                 <p className="max-w-lg text-base leading-relaxed text-muted-foreground">
-                  Blood pressure, glucose, and physical health tracked alongside your
-                  mental state. The full picture, not just the numbers.
+                  Blood pressure, glucose, and physical health tracked alongside
+                  your mental state. The full picture, not just the numbers.
                 </p>
               </div>
               <div
@@ -613,19 +976,27 @@ export default function HomePage() {
                   </p>
                   <h3
                     className="mb-3 font-heading font-bold tracking-tight text-foreground"
-                    style={{ fontSize: 'clamp(1.4rem,2.2vw,2rem)', lineHeight: 1.15 }}
+                    style={{
+                      fontSize: 'clamp(1.4rem,2.2vw,2rem)',
+                      lineHeight: 1.15,
+                    }}
                   >
                     Support when you need it.
                   </h3>
                   <p className="max-w-lg text-base leading-relaxed text-muted-foreground">
-                    Talk through what's on your mind with an AI therapist. Or work
-                    through CBT modules at your own pace — no appointments, no waiting.
+                    Talk through what&apos;s on your mind with an AI therapist.
+                    Or work through CBT modules at your own pace &mdash; no
+                    appointments, no waiting.
                   </p>
                   <div className="mt-6">
                     <Link href="/sign-up">
                       <Button
                         className="rounded-full px-6"
-                        style={{ background: ACCENT, color: 'white', border: 'none' }}
+                        style={{
+                          background: ACCENT,
+                          color: 'white',
+                          border: 'none',
+                        }}
                       >
                         Try it now
                       </Button>
@@ -646,7 +1017,10 @@ export default function HomePage() {
 
       {/* ── How it works ─────────────────────────────────────────────── */}
       {/* Different layout family from features: side-by-side list + visual */}
-      <section className="px-4 py-24 sm:px-6 lg:py-32" style={{ background: HERO_BG }}>
+      <section
+        className="px-4 py-24 sm:px-6 lg:py-32"
+        style={{ background: HERO_BG }}
+      >
         <div className="container mx-auto max-w-5xl">
           <div className="grid grid-cols-1 items-center gap-16 md:grid-cols-2">
             {/* Steps */}
@@ -716,7 +1090,7 @@ export default function HomePage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '-48px' }}
               transition={{ duration: 0.6, ease: EASE }}
-              className="hidden md:flex items-center justify-center"
+              className="hidden items-center justify-center md:flex"
             >
               <div
                 className="relative w-full max-w-[300px] overflow-hidden rounded-3xl"
@@ -832,8 +1206,9 @@ export default function HomePage() {
               className="flex flex-col justify-between rounded-2xl border border-border bg-card p-8 md:p-10"
             >
               <p className="mb-8 font-heading text-xl font-medium leading-relaxed text-foreground md:text-2xl">
-                "I didn't realize how connected my sleep and my anxiety were until
-                HealthMind showed me the pattern. It changed how I think about both."
+                &ldquo;I didn&apos;t realize how connected my sleep and my
+                anxiety were until HealthMind showed me the pattern. It changed
+                how I think about both.&rdquo;
               </p>
               <div className="flex items-center gap-3">
                 <div
@@ -879,8 +1254,8 @@ export default function HomePage() {
                   transition={{ duration: 0.5, ease: EASE, delay: i * 0.1 }}
                   className="flex flex-1 flex-col justify-between rounded-2xl border border-border bg-card p-6"
                 >
-                  <p className="mb-6 text-sm italic leading-relaxed text-foreground/70">
-                    "{t.quote}"
+                  <p className="text-foreground/70 mb-6 text-sm italic leading-relaxed">
+                    &ldquo;{t.quote}&rdquo;
                   </p>
                   <div className="flex items-center gap-2.5">
                     <div
@@ -893,7 +1268,9 @@ export default function HomePage() {
                       <div className="text-sm font-semibold text-foreground">
                         {t.name}
                       </div>
-                      <div className="text-xs text-muted-foreground">{t.role}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {t.role}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -905,7 +1282,7 @@ export default function HomePage() {
 
       {/* ── Why strip ────────────────────────────────────────────────── */}
       {/* taste-skill: eyebrow #2 — kept; section count now warrants it */}
-      <section className="border-y border-border bg-secondary/50 px-4 py-16 sm:px-6">
+      <section className="bg-secondary/50 border-y border-border px-4 py-16 sm:px-6">
         <div className="container mx-auto max-w-5xl">
           <p className="mb-10 text-xs font-medium uppercase tracking-widest text-muted-foreground">
             Why HealthMind
@@ -940,7 +1317,10 @@ export default function HomePage() {
                 >
                   <div
                     className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                    style={{ background: ACCENT_BG, border: `1px solid ${ACCENT_BORDER}` }}
+                    style={{
+                      background: ACCENT_BG,
+                      border: `1px solid ${ACCENT_BORDER}`,
+                    }}
                   >
                     <Icon className="h-5 w-5" style={{ color: ACCENT }} />
                   </div>

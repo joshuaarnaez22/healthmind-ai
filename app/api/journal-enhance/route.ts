@@ -13,7 +13,10 @@ export async function POST(request: NextRequest) {
     await getUserId();
     const { content } = (await request.json()) as { content: string };
 
-    const plain = content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    const plain = content
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
 
     const { object } = await generateObject({
       model: deepseek(),
@@ -31,6 +34,9 @@ ${plain}`,
     return NextResponse.json({ enhanced: object.enhanced });
   } catch (error) {
     console.error('journal-enhance error:', error);
-    return NextResponse.json({ error: 'Failed to enhance entry' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to enhance entry' },
+      { status: 500 }
+    );
   }
 }

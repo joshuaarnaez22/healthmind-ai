@@ -4,27 +4,29 @@ An AI-powered wellness companion for mental health tracking, health monitoring, 
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 15 (App Router, force-dynamic) |
-| Database | Neon PostgreSQL via Prisma ORM |
-| Auth | Clerk (webhooks, protected routes, user profile) |
-| AI | Deepseek via `@ai-sdk/deepseek` + `generateObject` |
-| Cache | Upstash Redis (24 h TTL on AI responses) |
-| Styling | Tailwind CSS + shadcn/ui |
-| Animations | motion/react (Framer Motion) |
-| State | TanStack Query (server state, mutations, cache invalidation) |
-| Deployment | Vercel |
+| Layer      | Technology                                                   |
+| ---------- | ------------------------------------------------------------ |
+| Framework  | Next.js 15 (App Router, force-dynamic)                       |
+| Database   | Neon PostgreSQL via Prisma ORM                               |
+| Auth       | Clerk (webhooks, protected routes, user profile)             |
+| AI         | Deepseek via `@ai-sdk/deepseek` + `generateObject`           |
+| Cache      | Upstash Redis (24 h TTL on AI responses)                     |
+| Styling    | Tailwind CSS + shadcn/ui                                     |
+| Animations | motion/react (Framer Motion)                                 |
+| State      | TanStack Query (server state, mutations, cache invalidation) |
+| Deployment | Vercel                                                       |
 
 ## Features
 
 ### Mental Health
+
 - **Mood Tracker** — daily mood logging with inline calendar; entries listed by selected date
 - **Journal** — rich-text entries with inline calendar; AI writing prompts; AI entry enhancement
 - **AI Insights** — affirmations, mental health summary, therapeutic observations, articles, exercises (sequential loading, cached 24 h)
 - **Mood Analytics** — stacked bar chart of mood distribution over 6 months + AI mood insights panel
 
 ### Health Tracking
+
 - **Blood Pressure** — log systolic/diastolic/pulse with posture, arm, symptoms, device
 - **Glucose** — log readings with measurement type, meal context, insulin dose
 - **Health Trends** — AI analysis of last 30 days of vitals (BP + glucose), cached 24 h
@@ -32,19 +34,23 @@ An AI-powered wellness companion for mental health tracking, health monitoring, 
 - **Medical Disclaimer** — shown on all health pages
 
 ### Therapy
+
 - **Therapy Modules** — AI-generated CBT, DBT, ACT modules (3 parallel calls, 2 per type = 6 total); step-by-step with exercises and reflections; progress tracking; auto-generated on first visit
 - **Module Detail** — step-by-step walkthrough with response fields, mark-as-done, progress bar
 
 ### Goals
+
 - **Mindful Goals** — create goals with emotion, frequency, duration, and a "why"
 - **Check-ins** — log actual emotion, reflection, and rating per check-in; progress bar
 
 ### Dashboard
+
 - Getting-started checklist (disappears once all 4 steps are completed)
 - Mood summary (last 7 days), latest journal entry, goals overview, latest vitals
 - All empty states have inline CTA links
 
 ### Navigation
+
 - Sidebar with collapsible sections, active-route highlighting
 - Command palette (⌘K) with all 9 routes
 - Dynamic breadcrumbs from route path
@@ -115,6 +121,7 @@ npm run dev
 ## Checklist
 
 ### Setup
+
 - [x] Next.js 15 App Router
 - [x] Tailwind CSS + shadcn/ui
 - [x] Neon PostgreSQL + Prisma
@@ -122,6 +129,7 @@ npm run dev
 - [x] Vercel deployment
 
 ### Mental Health
+
 - [x] Mood tracking with calendar
 - [x] AI mood insights (weekly trend, patterns)
 - [x] Journaling with rich text
@@ -132,6 +140,7 @@ npm run dev
 - [x] Redis caching for all AI responses
 
 ### Health
+
 - [x] Blood pressure logging
 - [x] Glucose logging
 - [x] AI health trends analysis
@@ -139,16 +148,19 @@ npm run dev
 - [x] Medical disclaimer on health pages
 
 ### Therapy
+
 - [x] AI-generated CBT / DBT / ACT modules (parallel generation)
 - [x] Module step tracking with response fields
 - [x] Auto-generate on first visit
 
 ### Goals
+
 - [x] Goal creation (emotion, frequency, duration)
 - [x] Check-in system
 - [x] Progress tracking
 
 ### UX
+
 - [x] Getting-started checklist for new users
 - [x] Empty states with CTAs on all pages
 - [x] Skeleton loaders on all async surfaces
@@ -156,5 +168,6 @@ npm run dev
 - [x] Command palette (⌘K)
 
 ### Observability
+
 - [ ] Sentry (configured, disabled — re-enable with env vars)
 - [ ] Performance monitoring

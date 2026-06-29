@@ -1,1 +1,122 @@
-{"nodes": [{"id": "product_healthmind_ai", "label": "HealthMind AI Product", "file_type": "concept", "source_file": "PRODUCT.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "product_brand_personality", "label": "Brand Personality (Nurturing, Grounding, Hopeful)", "file_type": "rationale", "source_file": "PRODUCT.md", "source_location": "Brand Personality section", "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "product_design_principles", "label": "Design Principles", "file_type": "rationale", "source_file": "PRODUCT.md", "source_location": "Design Principles section", "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "product_accessibility", "label": "Accessibility (WCAG AAA)", "file_type": "concept", "source_file": "PRODUCT.md", "source_location": "Accessibility & Inclusion section", "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "product_user_roles", "label": "User Roles (user, admin)", "file_type": "concept", "source_file": "PRODUCT.md", "source_location": "Users section", "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [{"source": "product_healthmind_ai", "target": "feature_mood_tracking", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "PRODUCT.md", "source_location": "Product Purpose section", "weight": 1.0}, {"source": "product_healthmind_ai", "target": "feature_journaling", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "PRODUCT.md", "source_location": "Product Purpose section", "weight": 1.0}, {"source": "product_healthmind_ai", "target": "feature_therapy_modules", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "PRODUCT.md", "source_location": "Product Purpose section", "weight": 1.0}, {"source": "product_healthmind_ai", "target": "feature_health_tracking", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "PRODUCT.md", "source_location": "Product Purpose section", "weight": 1.0}, {"source": "product_design_principles", "target": "product_accessibility", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "PRODUCT.md", "source_location": "Design Principles section", "weight": 1.0}, {"source": "feature_mood_tracking", "target": "feature_journaling", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.75, "source_file": "PRODUCT.md", "source_location": "Product Purpose section", "weight": 0.75}], "hyperedges": []}
+{
+  "nodes": [
+    {
+      "id": "product_healthmind_ai",
+      "label": "HealthMind AI Product",
+      "file_type": "concept",
+      "source_file": "PRODUCT.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "product_brand_personality",
+      "label": "Brand Personality (Nurturing, Grounding, Hopeful)",
+      "file_type": "rationale",
+      "source_file": "PRODUCT.md",
+      "source_location": "Brand Personality section",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "product_design_principles",
+      "label": "Design Principles",
+      "file_type": "rationale",
+      "source_file": "PRODUCT.md",
+      "source_location": "Design Principles section",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "product_accessibility",
+      "label": "Accessibility (WCAG AAA)",
+      "file_type": "concept",
+      "source_file": "PRODUCT.md",
+      "source_location": "Accessibility & Inclusion section",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "product_user_roles",
+      "label": "User Roles (user, admin)",
+      "file_type": "concept",
+      "source_file": "PRODUCT.md",
+      "source_location": "Users section",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "product_healthmind_ai",
+      "target": "feature_mood_tracking",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "PRODUCT.md",
+      "source_location": "Product Purpose section",
+      "weight": 1.0
+    },
+    {
+      "source": "product_healthmind_ai",
+      "target": "feature_journaling",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "PRODUCT.md",
+      "source_location": "Product Purpose section",
+      "weight": 1.0
+    },
+    {
+      "source": "product_healthmind_ai",
+      "target": "feature_therapy_modules",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "PRODUCT.md",
+      "source_location": "Product Purpose section",
+      "weight": 1.0
+    },
+    {
+      "source": "product_healthmind_ai",
+      "target": "feature_health_tracking",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "PRODUCT.md",
+      "source_location": "Product Purpose section",
+      "weight": 1.0
+    },
+    {
+      "source": "product_design_principles",
+      "target": "product_accessibility",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "PRODUCT.md",
+      "source_location": "Design Principles section",
+      "weight": 1.0
+    },
+    {
+      "source": "feature_mood_tracking",
+      "target": "feature_journaling",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "PRODUCT.md",
+      "source_location": "Product Purpose section",
+      "weight": 0.75
+    }
+  ],
+  "hyperedges": []
+}

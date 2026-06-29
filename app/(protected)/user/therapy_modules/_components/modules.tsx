@@ -85,7 +85,9 @@ export default function Modules() {
     return (
       <div className="flex flex-col items-center justify-center gap-3 py-24 text-muted-foreground">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-sm font-medium">Generating your personalised modules…</p>
+        <p className="text-sm font-medium">
+          Generating your personalised modules…
+        </p>
       </div>
     );
   }
@@ -114,14 +116,17 @@ export default function Modules() {
           </p>
         </div>
         <Button onClick={() => mutate()} disabled={isGenerating}>
-          {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+          {isGenerating ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : null}
           {isGenerating ? 'Generating…' : 'Generate new modules'}
         </Button>
       </div>
       {isGenerating && (
-        <div className="mb-6 flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm text-primary">
+        <div className="border-primary/20 bg-primary/5 mb-6 flex items-center gap-2 rounded-xl border px-4 py-3 text-sm text-primary">
           <Loader2 className="h-4 w-4 shrink-0 animate-spin" />
-          Generating new modules in the background — your current modules are still available.
+          Generating new modules in the background — your current modules are
+          still available.
         </div>
       )}
       <div className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-4">

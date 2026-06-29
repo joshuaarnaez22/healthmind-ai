@@ -6,7 +6,6 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
 } from '@/components/ui/command';
 import { useEffect, useState } from 'react';
 import {
@@ -28,9 +27,21 @@ const NAV_ITEMS = [
   { label: 'Dashboard', href: '/user/dashboard', icon: LayoutDashboard },
   { label: 'Journal Entries', href: '/user/journal', icon: NotebookPen },
   { label: 'Mood Tracker', href: '/user/mood-tracker', icon: Smile },
-  { label: 'Health Tracker', href: '/user/insights/health-tracker', icon: Activity },
-  { label: 'Health Insights', href: '/user/insights/health-insights', icon: FileText },
-  { label: 'Health Summary', href: '/user/insights/health-summary', icon: FileScan },
+  {
+    label: 'Health Tracker',
+    href: '/user/insights/health-tracker',
+    icon: Activity,
+  },
+  {
+    label: 'Health Insights',
+    href: '/user/insights/health-insights',
+    icon: FileText,
+  },
+  {
+    label: 'Health Summary',
+    href: '/user/insights/health-summary',
+    icon: FileScan,
+  },
   { label: 'Goals', href: '/user/goals', icon: Goal },
   { label: 'Therapy Modules', href: '/user/therapy_modules', icon: BookOpen },
   { label: 'Analytics', href: '/user/analytics', icon: BarChart2 },
@@ -63,7 +74,12 @@ export default function SearchCommand() {
         onClick={() => setOpen(true)}
       >
         <span className="flex grow items-center">
-          <Search className="text-muted-foreground/80 -ms-1 me-3" size={16} strokeWidth={2} aria-hidden="true" />
+          <Search
+            className="text-muted-foreground/80 -ms-1 me-3"
+            size={16}
+            strokeWidth={2}
+            aria-hidden="true"
+          />
           <span className="text-muted-foreground/70 font-normal">Search</span>
         </span>
         <kbd className="text-muted-foreground/70 -me-1 ms-12 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium">
@@ -77,7 +93,12 @@ export default function SearchCommand() {
           <CommandGroup heading="Navigation">
             {NAV_ITEMS.map(({ label, href, icon: Icon }) => (
               <CommandItem key={href} onSelect={() => navigate(href)}>
-                <Icon size={16} strokeWidth={2} className="opacity-60" aria-hidden="true" />
+                <Icon
+                  size={16}
+                  strokeWidth={2}
+                  className="opacity-60"
+                  aria-hidden="true"
+                />
                 <span>{label}</span>
               </CommandItem>
             ))}

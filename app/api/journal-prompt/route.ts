@@ -38,6 +38,9 @@ Generate a single, open-ended reflective journal prompt that encourages emotiona
     return NextResponse.json({ prompt: object.prompt });
   } catch (error) {
     console.error('journal-prompt error:', error);
-    return NextResponse.json({ error: 'Failed to generate prompt' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to generate prompt' },
+      { status: 500 }
+    );
   }
 }

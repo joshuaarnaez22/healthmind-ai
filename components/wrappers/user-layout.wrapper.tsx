@@ -37,7 +37,10 @@ const ROUTE_LABELS: Record<string, string> = {
 
 function useBreadcrumbs() {
   const pathname = usePathname();
-  const segments = pathname.replace(/^\/user\//, '').split('/').filter(Boolean);
+  const segments = pathname
+    .replace(/^\/user\//, '')
+    .split('/')
+    .filter(Boolean);
   return segments.map((seg, i) => {
     const label =
       ROUTE_LABELS[seg] ??
@@ -67,12 +70,18 @@ export default function UserLayoutWrapper({
               <BreadcrumbList>
                 {crumbs.map((crumb, i) => (
                   <span key={crumb.href} className="flex items-center gap-1.5">
-                    {i > 0 && <BreadcrumbSeparator className="hidden md:block" />}
-                    <BreadcrumbItem className={i < crumbs.length - 1 ? 'hidden md:block' : ''}>
+                    {i > 0 && (
+                      <BreadcrumbSeparator className="hidden md:block" />
+                    )}
+                    <BreadcrumbItem
+                      className={i < crumbs.length - 1 ? 'hidden md:block' : ''}
+                    >
                       {crumb.isLast ? (
                         <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
                       ) : (
-                        <BreadcrumbLink href={crumb.href}>{crumb.label}</BreadcrumbLink>
+                        <BreadcrumbLink href={crumb.href}>
+                          {crumb.label}
+                        </BreadcrumbLink>
                       )}
                     </BreadcrumbItem>
                   </span>

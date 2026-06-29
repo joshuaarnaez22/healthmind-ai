@@ -1,1 +1,156 @@
-{"nodes": [{"id": "design_color_system", "label": "OKLCH Color System", "file_type": "rationale", "source_file": "DESIGN.md", "source_location": "Color section", "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "design_typography_system", "label": "Typography System (Manrope + Libre Baskerville)", "file_type": "rationale", "source_file": "DESIGN.md", "source_location": "Typography section", "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "design_motion_system", "label": "Motion System (Framer Motion / motion-react)", "file_type": "rationale", "source_file": "DESIGN.md", "source_location": "Motion section", "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "design_component_patterns", "label": "Component Patterns (shadcn/ui)", "file_type": "rationale", "source_file": "DESIGN.md", "source_location": "Component patterns section", "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "design_layout_system", "label": "App Shell Layout (Sidebar + Main)", "file_type": "rationale", "source_file": "DESIGN.md", "source_location": "Layout section", "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [{"source": "product_brand_personality", "target": "design_typography_system", "relation": "rationale_for", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "DESIGN.md", "source_location": "Typography section", "weight": 0.85}, {"source": "product_brand_personality", "target": "design_color_system", "relation": "rationale_for", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "DESIGN.md", "source_location": "Color section", "weight": 0.85}, {"source": "product_design_principles", "target": "design_motion_system", "relation": "rationale_for", "confidence": "INFERRED", "confidence_score": 0.75, "source_file": "DESIGN.md", "source_location": "Motion section", "weight": 0.75}, {"source": "design_component_patterns", "target": "readme_tailwind_shadcn", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "DESIGN.md", "source_location": "Component patterns section", "weight": 1.0}, {"source": "design_color_system", "target": "product_accessibility", "relation": "rationale_for", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "DESIGN.md", "source_location": "Color usage rules", "weight": 1.0}, {"source": "feature_journaling", "target": "design_typography_system", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "DESIGN.md", "source_location": "Journal / Therapy surfaces", "weight": 1.0}, {"source": "feature_therapy_modules", "target": "design_typography_system", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "DESIGN.md", "source_location": "Journal / Therapy surfaces", "weight": 1.0}, {"source": "design_motion_system", "target": "product_accessibility", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "DESIGN.md", "source_location": "Reduced motion rule", "weight": 1.0}], "hyperedges": [{"id": "design_system_trio", "label": "Design System (Color + Typography + Motion)", "nodes": ["design_color_system", "design_typography_system", "design_motion_system"], "relation": "form", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "DESIGN.md"}]}
+{
+  "nodes": [
+    {
+      "id": "design_color_system",
+      "label": "OKLCH Color System",
+      "file_type": "rationale",
+      "source_file": "DESIGN.md",
+      "source_location": "Color section",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "design_typography_system",
+      "label": "Typography System (Manrope + Libre Baskerville)",
+      "file_type": "rationale",
+      "source_file": "DESIGN.md",
+      "source_location": "Typography section",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "design_motion_system",
+      "label": "Motion System (Framer Motion / motion-react)",
+      "file_type": "rationale",
+      "source_file": "DESIGN.md",
+      "source_location": "Motion section",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "design_component_patterns",
+      "label": "Component Patterns (shadcn/ui)",
+      "file_type": "rationale",
+      "source_file": "DESIGN.md",
+      "source_location": "Component patterns section",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "design_layout_system",
+      "label": "App Shell Layout (Sidebar + Main)",
+      "file_type": "rationale",
+      "source_file": "DESIGN.md",
+      "source_location": "Layout section",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "product_brand_personality",
+      "target": "design_typography_system",
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "DESIGN.md",
+      "source_location": "Typography section",
+      "weight": 0.85
+    },
+    {
+      "source": "product_brand_personality",
+      "target": "design_color_system",
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "DESIGN.md",
+      "source_location": "Color section",
+      "weight": 0.85
+    },
+    {
+      "source": "product_design_principles",
+      "target": "design_motion_system",
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "DESIGN.md",
+      "source_location": "Motion section",
+      "weight": 0.75
+    },
+    {
+      "source": "design_component_patterns",
+      "target": "readme_tailwind_shadcn",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "Component patterns section",
+      "weight": 1.0
+    },
+    {
+      "source": "design_color_system",
+      "target": "product_accessibility",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "Color usage rules",
+      "weight": 1.0
+    },
+    {
+      "source": "feature_journaling",
+      "target": "design_typography_system",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "Journal / Therapy surfaces",
+      "weight": 1.0
+    },
+    {
+      "source": "feature_therapy_modules",
+      "target": "design_typography_system",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "Journal / Therapy surfaces",
+      "weight": 1.0
+    },
+    {
+      "source": "design_motion_system",
+      "target": "product_accessibility",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md",
+      "source_location": "Reduced motion rule",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "design_system_trio",
+      "label": "Design System (Color + Typography + Motion)",
+      "nodes": [
+        "design_color_system",
+        "design_typography_system",
+        "design_motion_system"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "DESIGN.md"
+    }
+  ]
+}
