@@ -72,7 +72,7 @@ export default async function AnalyticsPage() {
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Analytics</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Your mood patterns over the last 6 months.
+          Mood patterns from your journal entries over the last 6 months.
         </p>
       </div>
       {chartData.length === 0 ? (
@@ -81,14 +81,14 @@ export default async function AnalyticsPage() {
           <div>
             <p className="text-sm font-medium">No mood data yet</p>
             <p className="mt-1 text-xs">
-              Start logging your mood daily to see patterns here.
+              Start writing journal entries to see mood patterns here.
             </p>
           </div>
           <Link
-            href="/user/mood-tracker"
+            href="/user/journal"
             className="mt-1 text-xs font-medium text-primary hover:underline"
           >
-            Go to Mood Tracker →
+            Go to Journal →
           </Link>
         </div>
       ) : (

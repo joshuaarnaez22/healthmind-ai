@@ -37,6 +37,7 @@ import { updateGoal } from '@/actions/server-actions/goal';
 import { BadgePlus } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@clerk/nextjs';
+import { useToast } from '@/hooks/use-toast';
 import { Goal as GoalType } from '@/lib/types';
 
 export default function GoalDetailsModal({
@@ -49,6 +50,7 @@ export default function GoalDetailsModal({
   const { user } = useUser();
 
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const userId = user?.id;
@@ -74,6 +76,9 @@ export default function GoalDetailsModal({
         queryClient.setQueryData<Goal[]>(['goals', userId], (old = []) =>
           old.map((goal) => (goal.id === goalId ? response.data : goal))
         );
+        toast({ title: 'Goal updated', description: 'Your changes have been saved.' });
+      } else {
+        toast({ title: 'Failed to update goal', description: 'Something went wrong. Please try again.', variant: 'destructive' });
       }
       setOpen(false);
     });

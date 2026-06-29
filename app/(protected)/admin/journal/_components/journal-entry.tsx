@@ -23,9 +23,15 @@ export default function JournalEntry() {
     queryKey: ['journals', dateKey],
     queryFn: async ({ signal }) => {
       if (!date) return [];
-      const response = await fetch(`/api/journal?date=${date}`, {
-        signal,
-      });
+      // Day boundaries in the user's local tz → tz-correct bucketing
+      const start = new Date(date);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(start);
+      end.setDate(end.getDate() + 1);
+      const response = await fetch(
+        `/api/journal?start=${start.toISOString()}&end=${end.toISOString()}`,
+        { signal }
+      );
       if (!response.ok) {
         throw new Error('Failed to fetch journal');
       }

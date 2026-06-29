@@ -1,5 +1,5 @@
-import TrackMood from './_components/track-mood';
+import { redirect } from 'next/navigation';
 
 export default function MoodTracker() {
-  return <TrackMood />;
+  redirect('/user/journal');
 }

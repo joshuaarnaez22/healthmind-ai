@@ -38,6 +38,7 @@ import { moods } from '@/lib/constant';
 import { cn, isContentEmpty } from '@/lib/utils';
 import { createJournal } from '@/actions/server-actions/journal';
 import { useQueryClient } from '@tanstack/react-query';
+import { useToast } from '@/hooks/use-toast';
 import { Journal } from '@prisma/client';
 
 export default function NewEntryModal({
@@ -52,6 +53,7 @@ export default function NewEntryModal({
   const [isGeneratingPrompt, setIsGeneratingPrompt] = useState(false);
   const [isEnhancing, setIsEnhancing] = useState(false);
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const form = useForm<JournalEntryFormValues>({
     resolver: zodResolver(journalEntrySchema),
@@ -69,6 +71,9 @@ export default function NewEntryModal({
           ['journals', cacheKey],
           (old = []) => [response.data as Journal, ...old]
         );
+        toast({ title: 'Entry saved', description: 'Your journal entry has been recorded.' });
+      } else {
+        toast({ title: 'Failed to save', description: 'Something went wrong. Please try again.', variant: 'destructive' });
       }
       setOpen(false);
     });

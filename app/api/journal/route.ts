@@ -13,29 +13,32 @@ export async function GET(request: Request) {
 
     const user_id = await getUserId();
     const { searchParams } = new URL(request.url);
-    const dateParam = searchParams.get('date');
+    const startParam = searchParams.get('start');
+    const endParam = searchParams.get('end');
 
-    if (!dateParam) {
+    if (!startParam || !endParam) {
       return NextResponse.json(
-        { error: 'Date parameter is required' },
+        { error: 'start and end parameters are required' },
         { status: 400 }
       );
     }
 
-    const date = new Date(dateParam);
-    console.log(date);
+    const start = new Date(startParam);
+    const end = new Date(endParam);
 
-    if (!date || isNaN(date.getTime())) {
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
       return NextResponse.json(
         { error: 'Invalid date format' },
         { status: 400 }
       );
     }
 
+    // Match any entry within the day range. The boundaries are computed in the
+    // user's local timezone on the client, so day-bucketing stays tz-correct.
     const journals = await prisma.journal.findMany({
       where: {
         userId: user_id,
-        addedAt: date,
+        addedAt: { gte: start, lt: end },
       },
       orderBy: { createdAt: 'desc' },
     });

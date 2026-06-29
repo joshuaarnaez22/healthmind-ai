@@ -45,11 +45,13 @@ import { useQueryClient } from '@tanstack/react-query';
 import { CalendarIcon, Heart } from 'lucide-react';
 import { useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
+import { useToast } from '@/hooks/use-toast';
 
 export default function BloodPressureForm() {
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [pending, startTransition] = useTransition();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   const [customSymptom, setCustomSymptom] = useState('');
   const form = useForm<BloodPressureFormValues>({
     resolver: zodResolver(bloodPressureSchema),
@@ -89,6 +91,9 @@ export default function BloodPressureForm() {
           ['blood-pressure-logs'],
           (old = []) => [response.data, ...old]
         );
+        toast({ title: 'Blood pressure logged', description: 'Your reading has been saved.' });
+      } else {
+        toast({ title: 'Failed to save', description: 'Something went wrong. Please try again.', variant: 'destructive' });
       }
       form.reset();
     });

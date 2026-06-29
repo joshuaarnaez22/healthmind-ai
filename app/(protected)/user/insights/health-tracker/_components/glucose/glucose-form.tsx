@@ -43,12 +43,14 @@ import { GlucoseFormValues, glucoseSchema } from '@/lib/zod-validation';
 import { getGlucoseCategory, measurementType } from '@/lib/constant';
 import { addGlucose } from '@/actions/server-actions/health-tracker';
 import { useQueryClient } from '@tanstack/react-query';
+import { useToast } from '@/hooks/use-toast';
 import { GlucoseLog } from '@prisma/client';
 import { Decimal } from 'decimal.js';
 export default function GlucoseForm() {
   const [unit, setUnit] = useState<'mmol' | 'mgdl'>('mmol');
   const [pending, startTransition] = useTransition();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const form = useForm<GlucoseFormValues>({
     resolver: zodResolver(glucoseSchema),
@@ -105,6 +107,9 @@ export default function GlucoseForm() {
           data,
           ...old,
         ]);
+        toast({ title: 'Glucose logged', description: 'Your reading has been saved.' });
+      } else {
+        toast({ title: 'Failed to save', description: 'Something went wrong. Please try again.', variant: 'destructive' });
       }
       form.reset();
     });

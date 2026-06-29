@@ -11,7 +11,6 @@ import { useEffect, useState } from 'react';
 import {
   LayoutDashboard,
   NotebookPen,
-  Smile,
   FileText,
   Activity,
   FileScan,
@@ -26,7 +25,6 @@ import { useRouter } from 'next/navigation';
 const NAV_ITEMS = [
   { label: 'Dashboard', href: '/user/dashboard', icon: LayoutDashboard },
   { label: 'Journal Entries', href: '/user/journal', icon: NotebookPen },
-  { label: 'Mood Tracker', href: '/user/mood-tracker', icon: Smile },
   {
     label: 'Health Tracker',
     href: '/user/insights/health-tracker',

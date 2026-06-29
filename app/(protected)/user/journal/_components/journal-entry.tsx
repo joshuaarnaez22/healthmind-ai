@@ -29,7 +29,15 @@ export default function JournalEntry() {
   } = useQuery<Journal[]>({
     queryKey: ['journals', dateKey],
     queryFn: async ({ signal }) => {
-      const response = await fetch(`/api/journal?date=${date}`, { signal });
+      // Day boundaries in the user's local tz → tz-correct bucketing
+      const start = new Date(date);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(start);
+      end.setDate(end.getDate() + 1);
+      const response = await fetch(
+        `/api/journal?start=${start.toISOString()}&end=${end.toISOString()}`,
+        { signal }
+      );
       if (!response.ok) throw new Error('Failed to fetch journal');
       const data = await response.json();
       return data.journals;
@@ -97,7 +105,11 @@ export default function JournalEntry() {
               </div>
             ) : count > 0 ? (
               journals!.map((journal) => (
-                <JournalEntryAccordionItem journal={journal} key={journal.id} />
+                <JournalEntryAccordionItem
+                  journal={journal}
+                  key={journal.id}
+                  cacheKey={dateKey}
+                />
               ))
             ) : (
               <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-16 text-center text-muted-foreground">

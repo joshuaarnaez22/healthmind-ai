@@ -96,11 +96,6 @@ export default async function DashboardPage() {
 
   const gettingStarted = [
     {
-      label: 'Log your mood',
-      href: '/user/mood-tracker',
-      done: moodJournals.length > 0,
-    },
-    {
       label: 'Write a journal entry',
       href: '/user/journal',
       done: !!recentJournal,
@@ -180,10 +175,10 @@ export default async function DashboardPage() {
                 Mood This Week
               </CardTitle>
               <Link
-                href="/user/mood-tracker"
+                href="/user/journal"
                 className="text-xs text-muted-foreground underline-offset-4 hover:underline"
               >
-                Track mood
+                New entry
               </Link>
             </div>
           </CardHeader>
@@ -194,10 +189,10 @@ export default async function DashboardPage() {
                   No mood entries this week.
                 </p>
                 <Link
-                  href="/user/mood-tracker"
+                  href="/user/journal"
                   className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
                 >
-                  Log your mood today <ArrowRight className="h-3 w-3" />
+                  Write your first entry <ArrowRight className="h-3 w-3" />
                 </Link>
               </div>
             ) : (

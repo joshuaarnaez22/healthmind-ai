@@ -11,6 +11,7 @@ import {
 import { useUser } from '@clerk/nextjs';
 import { Emotion } from '@prisma/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import EmotionSelector from '../../../_components/emotion-selector';
@@ -30,6 +31,7 @@ export default function GoalCheckIn({ id }: { id: string }) {
   const [reflection, setReflection] = useState('');
   const [pending, startTransition] = useTransition();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const {
     data: goal,
@@ -95,7 +97,10 @@ export default function GoalCheckIn({ id }: { id: string }) {
             });
           }
         );
+        toast({ title: 'Check-in saved', description: 'Keep up the great work!' });
         router.push('/admin/goals');
+      } else {
+        toast({ title: 'Failed to save check-in', description: 'Something went wrong. Please try again.', variant: 'destructive' });
       }
     });
   };

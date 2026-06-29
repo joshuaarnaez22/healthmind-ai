@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Edit, Save } from 'lucide-react';
+import { Edit, Loader2, Save } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import {
@@ -32,41 +32,59 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import RichTextEditor from './rich-text-editor';
-
 import { moods } from '@/lib/constant';
-
 import { cn } from '@/lib/utils';
-import { useTransition } from 'react';
-// import { createJournal } from '@/actions/server-actions/journal';
-// import { useQueryClient } from '@tanstack/react-query';
-// import { Journal } from '@prisma/client';
+import { updateJournal } from '@/actions/server-actions/journal';
+import { useQueryClient } from '@tanstack/react-query';
+import { useToast } from '@/hooks/use-toast';
+import type { Journal } from '@prisma/client';
 
-export default function EditEntryModal() {
+export default function EditEntryModal({
+  journal,
+  cacheKey,
+}: {
+  journal: Journal;
+  cacheKey: string | undefined;
+}) {
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
-  //   const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
   const form = useForm<JournalEntryFormValues>({
     resolver: zodResolver(journalEntrySchema),
-    defaultValues: { title: '', mood: '', content: '' },
+    defaultValues: {
+      title: journal.title,
+      mood: journal.mood,
+      content: journal.content,
+    },
   });
 
-  const onSubmit = async (values: JournalEntryFormValues) => {
-    console.log(values);
-
+  const onSubmit = (values: JournalEntryFormValues) => {
     startTransition(async () => {
-      //   const response = await createJournal(values, date);
-      //   if (response.success && response.data) {
-      //     queryClient.setQueryData<Journal[]>(
-      //       ['journals', dateKey],
-      //       (old = []) => [response.data, ...old]
-      //     );
-      //   }
+      const response = await updateJournal(
+        journal.id,
+        values,
+        new Date(journal.addedAt)
+      );
+      if (response.success && response.data) {
+        queryClient.setQueryData<Journal[]>(
+          ['journals', cacheKey],
+          (old = []) =>
+            old.map((j) =>
+              j.id === journal.id ? (response.data as Journal) : j
+            )
+        );
+        toast({ title: 'Entry updated', description: 'Your changes have been saved.' });
+      } else {
+        toast({ title: 'Failed to update', description: 'Something went wrong. Please try again.', variant: 'destructive' });
+      }
       setOpen(false);
-      form.reset();
     });
   };
+
   return (
     <Dialog
       open={open}
@@ -83,15 +101,14 @@ export default function EditEntryModal() {
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[700px]">
         <DialogHeader>
-          <DialogTitle>New Journal Entry</DialogTitle>
+          <DialogTitle>Edit Journal Entry</DialogTitle>
           <DialogDescription>
-            Record your thoughts and feelings. Take your time and be honest with
-            yourself.
+            Update your thoughts and feelings.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
                 name="title"
@@ -154,11 +171,19 @@ export default function EditEntryModal() {
                   </FormItem>
                 )}
               />
-
               <DialogFooter>
                 <Button type="submit" disabled={pending}>
-                  <Save className="mr-2 h-4 w-4" />
-                  {pending ? 'Saving...' : 'Save Entry'}
+                  {pending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Saving…
+                    </>
+                  ) : (
+                    <>
+                      <Save className="mr-2 h-4 w-4" />
+                      Save Changes
+                    </>
+                  )}
                 </Button>
               </DialogFooter>
             </form>

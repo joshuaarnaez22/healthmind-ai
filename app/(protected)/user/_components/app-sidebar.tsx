@@ -34,10 +34,7 @@ const navItems = [
     url: '/user/journal',
     icon: NotebookPen,
     isActive: false,
-    items: [
-      { title: 'Journal Entries', url: '/user/journal' },
-      { title: 'Mood Tracker', url: '/user/mood-tracker' },
-    ],
+    items: [{ title: 'Journal Entries', url: '/user/journal' }],
   },
   {
     title: 'Health',

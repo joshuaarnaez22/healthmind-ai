@@ -37,6 +37,7 @@ import { useState, useTransition } from 'react';
 import { newGoal } from '@/actions/server-actions/goal';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@clerk/nextjs';
+import { useToast } from '@/hooks/use-toast';
 import { Goal } from '@prisma/client';
 
 export default function NewGoalModal({
@@ -50,6 +51,7 @@ export default function NewGoalModal({
 
   const userId = user?.id;
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   const form = useForm<GoalFormValues>({
     resolver: zodResolver(goalFormSchema),
     defaultValues: {
@@ -70,6 +72,9 @@ export default function NewGoalModal({
           response.data,
           ...old,
         ]);
+        toast({ title: 'Goal created', description: 'Your wellness goal has been added.' });
+      } else {
+        toast({ title: 'Failed to create goal', description: 'Something went wrong. Please try again.', variant: 'destructive' });
       }
       setOpen(false);
     });

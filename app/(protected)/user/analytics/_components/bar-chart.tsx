@@ -55,7 +55,9 @@ export default function BarChartComponent({ data }: { data: MoodMonthData[] }) {
     <Card className="w-full">
       <CardHeader>
         <CardTitle>Mood Analytics</CardTitle>
-        <CardDescription>Last 6 months of mood entries</CardDescription>
+        <CardDescription>
+          Moods from your journal entries over the last 6 months
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[220px] w-full">

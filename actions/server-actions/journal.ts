@@ -6,6 +6,46 @@ import { Mood } from '@prisma/client';
 import { getUserId } from './user';
 import { enumConvertor } from '@/lib/utils';
 
+export const updateJournal = async (
+  id: string,
+  values: unknown,
+  date: Date | undefined
+) => {
+  try {
+    if (!date || isNaN(date.getTime())) {
+      return { success: false, message: 'Invalid date' };
+    }
+    const userId = await getUserId();
+    const parsedData = journalEntrySchema.safeParse(values);
+    if (!parsedData.success) {
+      return { success: false, message: 'Invalid input data' };
+    }
+    const { title, mood, content } = parsedData.data;
+    const moodEnum = enumConvertor(Mood, mood);
+    if (!moodEnum) return { success: false, message: 'Invalid mood value' };
+
+    const journal = await prisma.journal.update({
+      where: { id, userId },
+      data: { title, mood: moodEnum, content, addedAt: date },
+    });
+    return { success: true, data: journal };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: 'Something went wrong' };
+  }
+};
+
+export const deleteJournal = async (id: string) => {
+  try {
+    const userId = await getUserId();
+    await prisma.journal.delete({ where: { id, userId } });
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: 'Something went wrong' };
+  }
+};
+
 export const trackMoodEntry = async (
   mood: string,
   notes: string,
@@ -21,16 +61,13 @@ export const trackMoodEntry = async (
       return { success: false, message: 'Invalid mood value' };
     }
 
-    const adjustedDate = new Date(date);
-    adjustedDate.setHours(adjustedDate.getHours() + 8);
-
     const journal = await prisma.journal.create({
       data: {
         title: `Mood: ${mood.charAt(0) + mood.slice(1).toLowerCase()}`,
         mood: moodEnum,
         content: notes || '',
         userId: id,
-        addedAt: adjustedDate,
+        addedAt: date,
       },
     });
 
@@ -66,16 +103,13 @@ export const createJournal = async (
     if (!moodEnum) {
       return { success: false, message: 'Invalid mood value' };
     }
-    const adjustedDate = new Date(date);
-    adjustedDate.setHours(date.getHours() + 8);
-
     const journal = await prisma.journal.create({
       data: {
         title,
         mood: moodEnum,
         content,
         userId: id,
-        addedAt: adjustedDate,
+        addedAt: date,
       },
     });
     return {
