@@ -30,6 +30,7 @@ import ObservationLoader from '@/components/loaders/observation-loader';
 import MentalSummaryLoader from '@/components/loaders/mental-summary-loader';
 import AffirmationLoader from '@/components/loaders/affirmation-loader';
 import ArticleLoader from '@/components/loaders/article-loader';
+import InsightsLoader from '@/components/loaders/insights';
 import { Button } from '@/components/ui/button';
 import HealthTrendsPanel from './health-trends-panel';
 import MedicalDisclaimer from '@/components/medical-disclaimer';
@@ -40,7 +41,27 @@ export default function Insights() {
   const [selectedObservation, setSelectedObservation] =
     useState<null | Observation>(null);
   const { data, loadingStates, isError } = useSequentialInsights();
-  if (isError) return <div>Error loading some insights</div>;
+  if (isError)
+    return (
+      <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed border-destructive/30 bg-destructive/5 py-20 text-center">
+        <SparklesIcon className="h-9 w-9 text-destructive/40" />
+        <div>
+          <p className="text-sm font-medium text-foreground">
+            Something went wrong
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            We couldn&apos;t load your insights right now. Try refreshing the
+            page.
+          </p>
+        </div>
+        <button
+          onClick={() => window.location.reload()}
+          className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-4 py-2 text-xs font-medium text-foreground hover:bg-muted"
+        >
+          Refresh
+        </button>
+      </div>
+    );
 
   const affirmations = data?.affirmations;
   const summary = data?.mental_summary?.summary;
@@ -55,6 +76,9 @@ export default function Insights() {
 
   const articlesLoading = loadingStates.articles;
   const exercisesLoading = loadingStates.exercises;
+
+  // Show skeleton while group-1 queries are still in flight
+  const isInitialLoading = observationsLoading;
 
   // All queries settled but API returned null → no journal data yet
   const allSettled =
@@ -85,7 +109,9 @@ export default function Insights() {
           <HealthTrendsPanel />
         </div>
 
-        {hasNoData ? (
+        {isInitialLoading ? (
+          <InsightsLoader />
+        ) : hasNoData ? (
           <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed py-20 text-center text-muted-foreground">
             <NotebookPen className="h-9 w-9 opacity-30" />
             <div>

@@ -29,7 +29,7 @@ export function useSequentialInsights() {
       });
       if (!response.ok) throw new Error('Observations request failed');
       const { data } = await response.json();
-      return data.analysis;
+      return data?.analysis ?? null;
     },
     staleTime: ONE_DAY_IN_MS,
     gcTime: ONE_DAY_IN_MS,
@@ -51,7 +51,7 @@ export function useSequentialInsights() {
       });
       if (!response.ok) throw new Error('Mental summary request failed');
       const { data } = await response.json();
-      return data;
+      return data ?? null;
     },
     staleTime: ONE_DAY_IN_MS,
     gcTime: ONE_DAY_IN_MS,
@@ -73,7 +73,7 @@ export function useSequentialInsights() {
       });
       if (!response.ok) throw new Error('Affirmations request failed');
       const { data } = await response.json();
-      return data.affirmations;
+      return data?.affirmations ?? null;
     },
     staleTime: ONE_DAY_IN_MS,
     gcTime: ONE_DAY_IN_MS,
@@ -81,12 +81,12 @@ export function useSequentialInsights() {
   });
 
   /// Group 2: Exercises, Articles, Affirmations (dependent on observations)
-  const enabled =
-    !!userId &&
-    isUserLoaded &&
-    (!!observationQuery.data ||
-      !!mentalSummaryQuery.data ||
-      !!affirmationsQuery.data);
+  // Enable group-2 once group-1 has all settled (data OR null — not still loading)
+  const group1Settled =
+    observationQuery.isFetched &&
+    mentalSummaryQuery.isFetched &&
+    affirmationsQuery.isFetched;
+  const enabled = !!userId && isUserLoaded && group1Settled;
   const healthQueries = useQueries({
     queries: [
       {
@@ -104,8 +104,7 @@ export function useSequentialInsights() {
           });
           if (!response.ok) throw new Error('Exercises request failed');
           const { data } = await response.json();
-
-          return data.exercises;
+          return data?.exercises ?? null;
         },
         staleTime: ONE_DAY_IN_MS,
         gcTime: ONE_DAY_IN_MS,
@@ -126,7 +125,7 @@ export function useSequentialInsights() {
           });
           if (!response.ok) throw new Error('Articles request failed');
           const { data } = await response.json();
-          return data.articles;
+          return data?.articles ?? null;
         },
         staleTime: ONE_DAY_IN_MS,
         gcTime: ONE_DAY_IN_MS,

@@ -1,8 +1,7 @@
 'use client';
 import { pageAnimations } from '@/lib/motion';
 import { motion } from 'motion/react';
-import { ArrowLeft, CheckCircle2, Trash2 } from 'lucide-react';
-import Link from 'next/link';
+import { CheckCircle2, Trash2 } from 'lucide-react';
 import NewGoalModal from '../../_components/new-goal-modal';
 import {
   Card,
@@ -39,14 +38,6 @@ export default function ViewAllGoals() {
   };
   return (
     <motion.div {...pageAnimations} className="py-6">
-      <Link
-        href="/admin/goals"
-        className="mb-6 flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to goals
-      </Link>
-
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
