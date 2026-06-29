@@ -6,11 +6,13 @@ import BloodPressurePanel from './blood-pressure/blood-pressure-panel';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import GlucosePanel from './glucose/glucose-panel';
 import { pageAnimations } from '@/lib/motion';
+import MedicalDisclaimer from '@/components/medical-disclaimer';
 
 export default function HealthDashboard() {
   const [, setActiveTab] = useState('blood-pressure');
   return (
-    <motion.div {...pageAnimations}>
+    <motion.div {...pageAnimations} className="space-y-4">
+      <MedicalDisclaimer />
       <Card>
         <CardHeader>
           <h2 className="mb-6 text-xl font-bold">Health Tracker</h2>

@@ -1,63 +1,81 @@
-# HealthMind AI Project Checklist
+# HealthMind AI — Project Status
 
-This checklist tracks the development progress of the HealthMind AI project, an AI-powered health companion application.
+## What's Built
 
-## Phase 1: Planning & Setup (Weeks 1-2)
+### App Shell
+- [x] Next.js 15 App Router with `force-dynamic` on server pages
+- [x] Tailwind CSS + shadcn/ui component library
+- [x] Neon PostgreSQL + Prisma ORM
+- [x] Clerk auth — webhooks, protected routes, middleware
+- [x] Sidebar (user + admin) with active-route highlighting, collapsible groups
+- [x] Dynamic breadcrumbs from pathname
+- [x] Command palette (⌘K) covering all 9 routes
+- [x] Real user name / avatar / initials from Clerk; `null` src fallback on sign-out
+- [x] Dark mode toggle
+- [x] Vercel deployment
 
-- [x] Initialize Next.js project with TypeScript
-- [x] Configure Tailwind CSS and shadcn/ui
-- [x] Set up app router and API routes
-- [] Create component architecture and theme switching
-- [x] Design database schema (User, Health Records, Mood, Journal, Medications)
-- [x] Set up Clerk authentication
-- [x] Implement webhook handlers for user events
-- [x] Configure protected routes and middleware
+### Mental Health
+- [x] **Mood Tracker** — daily logging modal, inline calendar, entries listed by selected date
+- [x] **Journal** — rich-text entries (TipTap), inline calendar, date filtering
+- [x] **AI Writing Prompts** — `/api/journal-prompt`, mood-aware, injected into editor
+- [x] **AI Journal Enhancement** — `/api/journal-enhance`, strips HTML, returns clean prose
+- [x] **AI Insights** (`/api/insights`) — sequential loading: affirmations → mental summary → observations → articles → exercises
+- [x] **Mood Analytics** — stacked bar chart (Recharts, 6 months) + AI mood insights panel
+- [x] **Redis caching** — 24 h TTL on all AI responses keyed by userId
 
-## Phase 2: Public Access Features (Weeks 3-4)
+### Health Tracking
+- [x] **Blood Pressure** — systolic, diastolic, pulse, posture, arm, symptoms, device, notes
+- [x] **Glucose** — reading, measurement type, meal type, time since meal, insulin, carbs
+- [x] **AI Health Trends** (`/api/health-trends`) — last 30 days of BP + glucose, cached 24 h
+- [x] **Medical File Summary** — PDF upload to S3-compatible storage, AI-generated summary
+- [x] **Medical Disclaimer** — shown on health tracker and health insights pages
 
-- [ ] Implement AI chatbot with conversation management
-- [ ] Create mental health support prompt templates
-- [ ] Design user interface with accessibility features
-- [ ] Build landing page with benefits and call-to-actions
-- [ ] Develop mobile-first responsive design
-- [ ] Create FAQ and privacy policy pages
+### Therapy Modules
+- [x] AI-generated CBT, DBT, ACT modules via 3 parallel `generateObject` calls (2 modules each = 6 total)
+- [x] Auto-generated on first visit; manual regeneration with inline banner (existing modules stay visible)
+- [x] Step-by-step detail page — exercise + reflection response fields, mark step/module done
+- [x] Progress bar per module
+- [x] Skeleton loaders for initial load, generation states
 
-## Phase 3: Core Private Features (Weeks 5-6)
+### Goals
+- [x] Create goals with title, emotion, frequency, duration, and a "why"
+- [x] Check-in system — actual emotion, reflection, rating per check-in
+- [x] Goal progress bar (completedCount / targetCount)
 
-- [ ] Build dashboard with Chart.js/Recharts
-- [ ] Create user onboarding flow
-- [ ] Implement health tracking system (vitals, lab values, measurements)
-- [ ] Develop mood tracking with visual selection
-- [ ] Create data visualization for trends and correlations
-- [ ] Build pattern detection algorithms
+### New User Experience
+- [x] Getting-started checklist on dashboard (4 steps: mood → journal → vital → goal)
+- [x] Progress bar on checklist; disappears when all steps done
+- [x] Empty states with inline CTA links on every feature page
+- [x] Health Insights empty state for users with no journal entries
+- [x] Analytics empty state when no mood data
 
-## Phase 4: Advanced Features (Weeks 7-8)
+### UX / Polish
+- [x] Consistent calendar layout on Journal and Mood Tracker (same 2-column grid)
+- [x] Skeleton loaders using shadcn `Skeleton` component throughout (no hardcoded `bg-gray-200`)
+- [x] Therapy module `[id]/loading.tsx` replaced plain `<p>Loading...</p>` with full skeleton
+- [x] Icon enum expanded to 20 icons; unknown icons coerced to `brain` fallback
 
-- [x] Implement journaling with rich text editing
-- [ ] Add organization system for journal entries
-- [x] Create AI analysis integration
-- [ ] Build sentiment analysis for journal entries
-- [x] Develop PDF upload and processing system
-- [x] Implement medical file summarization with OpenAI
+## Pending
 
-## Phase 5: Security & Deployment (Weeks 9-10)
+- [ ] Sentry error tracking — configured but disabled; enable by adding `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT` env vars and uncommenting `sentry.*.config.ts`
+- [ ] AI voice therapy sessions
+- [ ] Medication reminders (Vercel Cron Jobs)
+- [ ] Appointment scheduling
+- [ ] User data export / deletion
+- [ ] Performance monitoring dashboard
 
-- [ ] Implement data encryption and security measures
-- [ ] Create user data export and deletion functionality
-- [ ] Write tests (unit, integration, end-to-end)
-- [ ] Optimize performance and response times
-- [ ] Configure Vercel deployment pipeline
-- [ ] Set up monitoring and analytics
+## Tech Stack (current)
 
-## Implementation Guidelines
+| | |
+|---|---|
+| Framework | Next.js 15 (App Router) |
+| Database | Neon PostgreSQL via Prisma |
+| Auth | Clerk |
+| AI | Deepseek (`@ai-sdk/deepseek`, `generateObject`) |
+| Cache | Upstash Redis |
+| Styling | Tailwind CSS + shadcn/ui |
+| Animation | motion/react (Framer Motion) |
+| State | TanStack Query |
+| Deployment | Vercel |
 
-- Start with minimal prototypes before adding complexity
-- Use feature flags for testing and rollout
-- Implement AI cost optimization (caching, token limits)
-- Document code and decisions throughout development
-- Schedule regular user testing sessions
-- Allocate time for technical debt management
-
-==========================
-additional features: Medicine Schedule
-optional features: Connect with professionals
+Previous proposal referenced OpenAI and Supabase — both replaced by Deepseek and Neon respectively.

@@ -1,21 +1,17 @@
 'use client';
 import MoodModal from './mood-modal';
 import { useState } from 'react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Calendar } from '@/components/ui/calendar';
 import { safeFormat } from '@/lib/utils';
-import { DateRange } from 'react-day-picker';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Journal } from '@prisma/client';
 import { moods } from '@/lib/constant';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { motion } from 'motion/react';
+import { pageAnimations } from '@/lib/motion';
+import { Smile } from 'lucide-react';
 
 function getMoodMeta(moodValue: string) {
   return moods.find((m) => m.value === moodValue);
@@ -23,28 +19,13 @@ function getMoodMeta(moodValue: string) {
 
 export default function TrackMood() {
   const queryClient = useQueryClient();
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(),
-    to: new Date(),
-  });
-
-  // Use the "from" date for fetching and passing to modal
-  const selectedDate = date?.from ?? new Date();
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const dateKey = selectedDate.toISOString();
 
-  const {
-    data: journals,
-    isLoading,
-    isError,
-  } = useQuery<Journal[]>({
+  const { data: journals, isLoading, isError } = useQuery<Journal[]>({
     queryKey: ['moods', dateKey],
     queryFn: async ({ signal }) => {
-      const response = await fetch(
-        `/api/journal?date=${selectedDate.toISOString()}`,
-        {
-          signal,
-        }
-      );
+      const response = await fetch(`/api/journal?date=${selectedDate.toISOString()}`, { signal });
       if (!response.ok) throw new Error('Failed to fetch mood entries');
       const json = await response.json();
       return json.journals ?? [];
@@ -55,112 +36,111 @@ export default function TrackMood() {
     queryClient.invalidateQueries({ queryKey: ['moods', dateKey] });
   };
 
+  const count = journals?.length ?? 0;
+
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold">Mood Tracker</h2>
+    <motion.div {...pageAnimations} className="space-y-6">
+      {/* Page header */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Mood Tracker</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Log how you feel each day and spot patterns over time.
+          </p>
+        </div>
+        <MoodModal date={selectedDate} onSuccess={handleSuccess} />
+      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Calendar</CardTitle>
-          <CardDescription>
-            Select a date to view or add mood entries
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4 lg:flex-row">
-          <Calendar
-            mode="range"
-            selected={date}
-            onSelect={setDate}
-            className="rounded-lg border border-border bg-background p-2"
-            classNames={{
-              month_caption: 'ms-2.5 me-20 justify-start',
-              nav: 'justify-end',
-            }}
-          />
+      {/* Two-column layout */}
+      <div className="grid gap-6 lg:grid-cols-[auto_1fr]">
+        {/* Calendar card */}
+        <Card className="h-fit">
+          <CardContent className="p-3">
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={(d) => d && setSelectedDate(d)}
+              classNames={{
+                month_caption: 'ms-2.5 me-20 justify-start',
+                nav: 'justify-end',
+              }}
+            />
+          </CardContent>
+        </Card>
 
-          <Card className="w-full">
-            <CardHeader className="flex items-start justify-between space-y-3 pb-2 sm:flex-row sm:items-center sm:space-y-0">
+        {/* Entries panel */}
+        <Card className="flex flex-col">
+          <CardHeader className="pb-3">
+            <div className="flex items-start justify-between gap-2">
               <div>
-                {date ? (
-                  <CardTitle className="text-xl font-semibold text-primary">
-                    {safeFormat(date.from, 'EEEE, MMMM do, yyyy')}
-                    {date.to &&
-                      date.to.toDateString() !== date.from?.toDateString() && (
-                        <>
-                          {' '}
-                          &mdash; {safeFormat(date.to, 'EEEE, MMMM do, yyyy')}
-                        </>
-                      )}
-                  </CardTitle>
-                ) : (
-                  <CardTitle className="text-xl font-semibold text-primary">
-                    {safeFormat(new Date(), 'EEEE, MMMM do, yyyy')}
-                  </CardTitle>
-                )}
-                <CardDescription className="mt-1 text-sm text-muted-foreground">
+                <CardTitle className="text-base font-semibold">
+                  {safeFormat(selectedDate, 'EEEE, MMMM do, yyyy')}
+                </CardTitle>
+                <CardDescription className="mt-0.5 text-xs">
                   {isLoading
                     ? 'Loading…'
-                    : journals && journals.length > 0
-                      ? `${journals.length} mood entr${journals.length === 1 ? 'y' : 'ies'} recorded`
+                    : count > 0
+                      ? `${count} mood ${count === 1 ? 'entry' : 'entries'} recorded`
                       : 'No mood recorded for this day'}
                 </CardDescription>
               </div>
-              <MoodModal date={selectedDate} onSuccess={handleSuccess} />
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {isLoading && (
-                <div className="space-y-2">
-                  <Skeleton className="h-14 w-full rounded-lg" />
-                  <Skeleton className="h-14 w-full rounded-lg" />
-                </div>
-              )}
-              {isError && (
-                <p className="text-sm text-destructive">
-                  Failed to load entries.
-                </p>
-              )}
-              {!isLoading && !isError && journals && journals.length > 0 && (
-                <ul className="space-y-2">
-                  {journals.map((journal) => {
-                    const meta = getMoodMeta(journal.mood);
-                    const Icon = meta?.icon;
-                    return (
-                      <li
-                        key={journal.id}
-                        className="bg-muted/30 flex items-start gap-3 rounded-lg border border-border p-3"
+            </div>
+          </CardHeader>
+          <CardContent className="flex-1 space-y-2">
+            {isLoading && (
+              <div className="space-y-2">
+                <Skeleton className="h-14 w-full rounded-xl" />
+                <Skeleton className="h-14 w-full rounded-xl" />
+              </div>
+            )}
+            {isError && (
+              <p className="text-sm text-destructive">Failed to load entries.</p>
+            )}
+            {!isLoading && !isError && count > 0 && (
+              <ul className="space-y-2">
+                {journals!.map((journal) => {
+                  const meta = getMoodMeta(journal.mood);
+                  const Icon = meta?.icon;
+                  return (
+                    <li
+                      key={journal.id}
+                      className="flex items-start gap-3 rounded-xl border bg-card p-3 transition-shadow hover:shadow-sm"
+                    >
+                      {/* Mood badge */}
+                      <Badge
+                        className={`mt-0.5 shrink-0 gap-1 px-2 py-0.5 text-xs font-medium hover:opacity-90 ${meta?.bgColor ?? ''} ${meta?.color ?? ''}`}
                       >
-                        {Icon && (
-                          <Icon
-                            className={`mt-0.5 h-5 w-5 shrink-0 ${meta?.color ?? ''}`}
-                          />
+                        {Icon && <Icon className="h-3 w-3" />}
+                        {meta?.label ?? journal.mood}
+                      </Badge>
+
+                      {/* Content */}
+                      <div className="min-w-0 flex-1">
+                        {journal.content && (
+                          <p className="truncate text-sm text-muted-foreground">
+                            {journal.content}
+                          </p>
                         )}
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
-                            <Badge
-                              variant="secondary"
-                              className={`text-xs ${meta?.bgColor ?? ''} ${meta?.color ?? ''}`}
-                            >
-                              {meta?.label ?? journal.mood}
-                            </Badge>
-                            <span className="text-xs text-muted-foreground">
-                              {safeFormat(new Date(journal.addedAt), 'h:mm a')}
-                            </span>
-                          </div>
-                          {journal.content && (
-                            <p className="mt-1 truncate text-sm text-muted-foreground">
-                              {journal.content}
-                            </p>
-                          )}
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </CardContent>
-          </Card>
-        </CardContent>
-      </Card>
-    </div>
+                      </div>
+
+                      {/* Time */}
+                      <span className="shrink-0 text-xs text-muted-foreground">
+                        {safeFormat(new Date(journal.addedAt), 'h:mm a')}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+            {!isLoading && !isError && count === 0 && (
+              <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-12 text-center text-muted-foreground">
+                <Smile className="h-7 w-7 opacity-40" />
+                <p className="text-sm">No mood logged for this day yet.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </motion.div>
   );
 }

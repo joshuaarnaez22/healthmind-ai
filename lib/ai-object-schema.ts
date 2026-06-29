@@ -91,3 +91,31 @@ export const moduleSchema = z.object({
 export const ModulesSchema = z.object({
   modules: z.array(moduleSchema),
 });
+
+export const moodInsightsSchema = z.object({
+  dominantMood: z.enum(['TERRIBLE', 'BAD', 'NEUTRAL', 'GOOD', 'GREAT']),
+  summary: z.string(),
+  insights: z.array(
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      type: z.enum(['pattern', 'warning', 'positive', 'suggestion']),
+    })
+  ),
+  weeklyTrend: z.enum(['improving', 'declining', 'stable']),
+});
+
+export const healthTrendsSchema = z.object({
+  bloodPressure: z.object({
+    trend: z.enum(['improving', 'worsening', 'stable', 'insufficient_data']),
+    summary: z.string(),
+    alerts: z.array(z.string()),
+  }),
+  glucose: z.object({
+    trend: z.enum(['improving', 'worsening', 'stable', 'insufficient_data']),
+    summary: z.string(),
+    alerts: z.array(z.string()),
+  }),
+  overallAssessment: z.string(),
+  recommendations: z.array(z.string()),
+});

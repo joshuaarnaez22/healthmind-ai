@@ -166,4 +166,6 @@ export type SchemaName =
   | 'affirmations'
   | 'articles'
   | 'exercises'
-  | 'summary';
+  | 'summary'
+  | 'mood_insights'
+  | 'health_trends';

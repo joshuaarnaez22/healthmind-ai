@@ -6,13 +6,14 @@ import { useQuery } from '@tanstack/react-query';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Journal } from '@prisma/client';
 import React from 'react';
-import DateSearch from './date-search';
 import JournalEntryAccordionItem from './journal-entry-accordion';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { pageAnimations } from '@/lib/motion';
+import { BookOpen } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 export default function JournalEntry() {
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const [date, setDate] = React.useState<Date>(new Date());
   const dateKey = formatDateKey(date);
 
   const {
@@ -22,72 +23,83 @@ export default function JournalEntry() {
   } = useQuery<Journal[]>({
     queryKey: ['journals', dateKey],
     queryFn: async ({ signal }) => {
-      if (!date) return [];
-      const response = await fetch(`/api/journal?date=${date}`, {
-        signal,
-      });
-      if (!response.ok) {
-        throw new Error('Failed to fetch journal');
-      }
+      const response = await fetch(`/api/journal?date=${date}`, { signal });
+      if (!response.ok) throw new Error('Failed to fetch journal');
       const data = await response.json();
       return data.journals;
     },
-    enabled: !!date,
   });
 
-  const hasEntries = journals && journals.length > 0;
+  const count = journals?.length ?? 0;
 
   return (
-    <motion.div {...pageAnimations}>
-      <Card>
-        {/* Header Section */}
-        <CardHeader>
-          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <h1 className="w-full text-2xl font-bold tracking-tight sm:w-auto sm:text-3xl">
-              My Mental Health Journal
-            </h1>
-            <div className="w-full sm:w-auto">
-              <NewEntryModal date={date} cacheKey={dateKey} />
-            </div>
-          </div>
-          {/* Date Controls Section */}
-          <div className="mb-4 flex flex-col justify-between gap-3 md:flex-row md:items-center">
-            <DateSearch onDateChange={setDate} />
-            <div className="text-sm text-muted-foreground">
-              {`Showing  ${journals?.length || 0} entries from ${safeFormat(date, 'EEE, MMM do')}`}
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {/* Journal Entries Section */}
-          <div className="pb-6">
+    <motion.div {...pageAnimations} className="space-y-6">
+      {/* Page header */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Journal</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Record your thoughts, feelings, and reflections.
+          </p>
+        </div>
+        <NewEntryModal date={date} cacheKey={dateKey} />
+      </div>
+
+      {/* Two-column layout */}
+      <div className="grid gap-6 lg:grid-cols-[auto_1fr]">
+        {/* Calendar card */}
+        <Card className="h-fit">
+          <CardContent className="p-3">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={(d) => d && setDate(d)}
+              classNames={{
+                month_caption: 'ms-2.5 me-20 justify-start',
+                nav: 'justify-end',
+              }}
+            />
+          </CardContent>
+        </Card>
+
+        {/* Entries panel */}
+        <Card className="flex flex-col">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base font-semibold">
+              {safeFormat(date, 'EEEE, MMMM do, yyyy')}
+            </CardTitle>
+            <CardDescription className="text-xs">
+              {isLoading
+                ? 'Loading…'
+                : count > 0
+                  ? `${count} ${count === 1 ? 'entry' : 'entries'} recorded`
+                  : 'No entries for this day'}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex-1 space-y-3">
             {isLoading ? (
               <div className="space-y-3">
-                {[...Array(6)].map((_, index) => (
-                  <Skeleton className="h-20 w-full" key={index} />
+                {[...Array(3)].map((_, i) => (
+                  <Skeleton key={i} className="h-20 w-full rounded-xl" />
                 ))}
               </div>
             ) : isError ? (
-              <div className="py-4 text-center text-destructive">
-                Error loading journals
+              <div className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-8 text-center text-sm text-destructive">
+                Failed to load journal entries.
               </div>
-            ) : hasEntries ? (
-              <div className="space-y-3">
-                {journals.map((journal) => (
-                  <JournalEntryAccordionItem
-                    journal={journal}
-                    key={journal.id}
-                  />
-                ))}
-              </div>
+            ) : count > 0 ? (
+              journals!.map((journal) => (
+                <JournalEntryAccordionItem journal={journal} key={journal.id} />
+              ))
             ) : (
-              <div className="py-8 text-center text-muted-foreground">
-                No entries found for this date
+              <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-16 text-center text-muted-foreground">
+                <BookOpen className="h-7 w-7 opacity-40" />
+                <p className="text-sm">No entries for this day. Start writing!</p>
               </div>
             )}
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </motion.div>
   );
 }

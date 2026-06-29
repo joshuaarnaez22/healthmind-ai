@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { pageAnimations } from '@/lib/motion';
 import { motion } from 'motion/react';
 import { Card, CardContent } from '@/components/ui/card';
-import { CheckCircle2, Clock, TrendingUp, Users } from 'lucide-react';
+import { CheckCircle2, Clock, Loader2, TrendingUp, Users } from 'lucide-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@clerk/nextjs';
 
@@ -13,7 +13,7 @@ import { ONE_DAY_IN_MS } from '@/lib/constant';
 import { TherapyModule } from '@/lib/types';
 import AIGeneratedBadge from '@/components/custom-icons/ai-generated-badge';
 import ModulesSkeleton from '@/components/loaders/module-loader';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ModuleCard from './module-card';
 import { Button } from '@/components/ui/button';
 
@@ -46,6 +46,8 @@ export default function Modules() {
     },
   });
 
+  const autoTriggered = useRef(false);
+
   const {
     data: modules = [],
     isLoading: isModulesLoading,
@@ -65,9 +67,29 @@ export default function Modules() {
     enabled: isUserLoaded,
   });
 
-  if (isModulesLoading || isGenerating) {
+  // Auto-generate only when the DB is truly empty (not just loading)
+  useEffect(() => {
+    if (!isModulesLoading && modules.length === 0 && !autoTriggered.current) {
+      autoTriggered.current = true;
+      mutate();
+    }
+  }, [isModulesLoading, modules.length, mutate]);
+
+  // Full-screen skeleton only on initial fetch with no data
+  if (isModulesLoading) {
     return <ModulesSkeleton />;
   }
+
+  // Empty + generating → centred spinner (no modules to show yet)
+  if (modules.length === 0 && isGenerating) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-3 py-24 text-muted-foreground">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="text-sm font-medium">Generating your personalised modules…</p>
+      </div>
+    );
+  }
+
   if (modulesError || generateError) {
     return <h1>Error</h1>;
   }
@@ -91,8 +113,17 @@ export default function Modules() {
             journey. Choose from CBT, DBT, and ACT approaches.
           </p>
         </div>
-        <Button onClick={() => mutate()}>Generate new modules</Button>
+        <Button onClick={() => mutate()} disabled={isGenerating}>
+          {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+          {isGenerating ? 'Generating…' : 'Generate new modules'}
+        </Button>
       </div>
+      {isGenerating && (
+        <div className="mb-6 flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm text-primary">
+          <Loader2 className="h-4 w-4 shrink-0 animate-spin" />
+          Generating new modules in the background — your current modules are still available.
+        </div>
+      )}
       <div className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-4">
         <Card>
           <CardContent className="flex items-center p-6">

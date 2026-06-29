@@ -9,6 +9,8 @@ import {
   analysisSchema,
   articlesSchema,
   exercisesSchema,
+  healthTrendsSchema,
+  moodInsightsSchema,
   moodSummarySchema,
 } from '@/lib/ai-object-schema';
 import { SchemaName } from '@/lib/types';
@@ -57,6 +59,8 @@ export async function POST(request: NextRequest) {
       articles: articlesSchema,
       exercises: exercisesSchema,
       summary: moodSummarySchema,
+      mood_insights: moodInsightsSchema,
+      health_trends: healthTrendsSchema,
     };
     const selectedSchema = schemaMap[schema];
 

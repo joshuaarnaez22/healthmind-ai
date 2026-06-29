@@ -1,10 +1,52 @@
 import { NextResponse } from 'next/server';
 import { generateObject } from 'ai';
+import { z } from 'zod';
 import { deepseek } from '@/lib/ai';
 import { getUserId } from '@/actions/server-actions/user';
 import { prisma } from '@/lib/client';
-import { combinedTherapyModulesPrompt } from '@/lib/prompts';
-import { ModulesSchema } from '@/lib/ai-object-schema';
+import { stepSchema } from '@/lib/ai-object-schema';
+import { validLucideIcons } from '@/lib/constant';
+
+const THERAPY_TYPES = ['CBT', 'DBT', 'ACT'] as const;
+
+// Per-type schema: 2 modules, icon coerced to valid value on mismatch
+const perTypeSchema = z.object({
+  modules: z.array(
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      audience: z.string(),
+      difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
+      estimatedTime: z.string(),
+      overview: z.array(z.string()).max(4),
+      steps: z.array(stepSchema).min(2).max(3),
+      completion: z.object({
+        recap: z.string(),
+        praise: z.string(),
+        nextSuggestion: z.string(),
+      }),
+      safetyDisclaimer: z.string(),
+      color: z.string(),
+      icon: z.string().transform((v) =>
+        (validLucideIcons as readonly string[]).includes(v) ? v : 'brain'
+      ),
+    })
+  ).min(1).max(2),
+});
+
+function buildPrompt(type: string, journalContext: string) {
+  return `Generate exactly 2 therapy modules for the ${type} therapy type.
+${journalContext ? `User journal context:\n${journalContext}\n\n` : ''}
+Each module must have:
+- A clear title and short description
+- 2-3 concise steps (keep each field under 200 chars)
+- A completion summary
+- icon: choose ONLY from this exact list: ${validLucideIcons.join(', ')}
+- color: one of "blue", "purple", "green", "orange"
+- difficulty: "beginner", "intermediate", or "advanced"
+
+Be concise. Avoid long paragraphs.`;
+}
 
 export async function POST() {
   try {
@@ -12,33 +54,29 @@ export async function POST() {
 
     const journals = await prisma.journal.findMany({
       where: { userId },
-      select: { title: true, content: true, mood: true, addedAt: true },
+      select: { title: true, mood: true, addedAt: true },
       orderBy: { addedAt: 'desc' },
-      take: 7,
+      take: 5,
     });
 
-    let finalPrompt = combinedTherapyModulesPrompt;
+    const journalContext = journals.length > 0
+      ? journals.map((j) => `${j.mood} — ${j.title}`).join('\n')
+      : '';
 
-    if (journals.length > 0) {
-      const formattedJournals = journals
-        .map(
-          (j) =>
-            `Title: ${j.title}\nMood: ${j.mood}\nDate: ${j.addedAt.toISOString()}\nContent: ${j.content}`
+    // 3 parallel calls, one per therapy type
+    const results = await Promise.all(
+      THERAPY_TYPES.map((type) =>
+        generateObject({
+          model: deepseek(),
+          schema: perTypeSchema,
+          prompt: buildPrompt(type, journalContext),
+        }).then(({ object }) =>
+          object.modules.map((m) => ({ ...m, therapyType: type }))
         )
-        .join('\n\n---\n\n');
+      )
+    );
 
-      finalPrompt = `
-Below are recent journal entries from the user. Use these to tailor the modules. ${formattedJournals} 
-
-${combinedTherapyModulesPrompt}`.trim();
-    }
-
-    const { object } = await generateObject({
-      model: deepseek(),
-      schema: ModulesSchema,
-      prompt: finalPrompt,
-    });
-    const modulesArray = object.modules;
+    const modulesArray = results.flat();
 
     const operations = modulesArray.map((module) =>
       prisma.therapyModule.create({
@@ -54,13 +92,8 @@ ${combinedTherapyModulesPrompt}`.trim();
           safetyDisclaimer: module.safetyDisclaimer,
           color: module.color,
           icon: module.icon,
-          steps: {
-            create: module.steps,
-          },
-
-          completion: {
-            create: module.completion,
-          },
+          steps: { create: module.steps },
+          completion: { create: module.completion },
         },
       })
     );

@@ -5,15 +5,25 @@ import { twMerge } from 'tailwind-merge';
 import DOMPurify from 'dompurify';
 import { GoalWithCheckIns } from './types';
 import {
+  Activity,
+  Anchor,
   Brain,
   Cloud,
   CloudRain,
+  Compass,
   Eye,
+  Flame,
   Hand,
   Heart,
+  Leaf,
+  Shield,
+  Smile,
+  Star,
   Sun,
   Target,
+  Wind,
   Wrench,
+  Zap,
 } from 'lucide-react';
 
 export function cn(...inputs: ClassValue[]) {
@@ -180,6 +190,16 @@ export const getIcon = (iconName: string) => {
     'cloud-rain': CloudRain,
     target: Target,
     cloud: Cloud,
+    anchor: Anchor,
+    compass: Compass,
+    wind: Wind,
+    leaf: Leaf,
+    shield: Shield,
+    flame: Flame,
+    activity: Activity,
+    smile: Smile,
+    star: Star,
+    zap: Zap,
   };
   return icons[iconName as keyof typeof icons] || Brain;
 };

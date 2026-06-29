@@ -168,6 +168,16 @@ const validLucideIcons = [
   'cloud-rain',
   'target',
   'cloud',
+  'anchor',
+  'compass',
+  'wind',
+  'leaf',
+  'shield',
+  'flame',
+  'activity',
+  'smile',
+  'star',
+  'zap',
 ] as const;
 
 export {

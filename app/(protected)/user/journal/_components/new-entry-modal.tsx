@@ -9,13 +9,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { PlusIcon, Save, Sparkles } from 'lucide-react';
+import { Loader2, PlusIcon, Save, Sparkles, Wand2 } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import {
-  type JournalEntryFormValues,
-  journalEntrySchema,
-} from '@/lib/zod-validation';
+import { type JournalEntryFormValues, journalEntrySchema } from '@/lib/zod-validation';
 import {
   Form,
   FormControl,
@@ -32,11 +29,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import RichTextEditor from './rich-text-editor';
 import { moods } from '@/lib/constant';
 import { cn, isContentEmpty } from '@/lib/utils';
-import { useTransition } from 'react';
 import { createJournal } from '@/actions/server-actions/journal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Journal } from '@prisma/client';
@@ -50,14 +46,17 @@ export default function NewEntryModal({
 }) {
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
+  const [isGeneratingPrompt, setIsGeneratingPrompt] = useState(false);
+  const [isEnhancing, setIsEnhancing] = useState(false);
   const queryClient = useQueryClient();
+
   const form = useForm<JournalEntryFormValues>({
     resolver: zodResolver(journalEntrySchema),
     defaultValues: { title: '', mood: '', content: '' },
   });
 
-  const { watch } = form;
-  const content = watch('content');
+  const content = form.watch('content');
+  const mood = form.watch('mood');
 
   const onSubmit = async (values: JournalEntryFormValues) => {
     startTransition(async () => {
@@ -65,28 +64,53 @@ export default function NewEntryModal({
       if (response.success && response.data) {
         queryClient.setQueryData<Journal[]>(
           ['journals', cacheKey],
-          (old = []) => [response.data, ...old]
+          (old = []) => [response.data as Journal, ...old]
         );
       }
       setOpen(false);
     });
   };
 
-  const handleEnhanceJournal = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleGetPrompt = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (!content || isContentEmpty(content)) {
-      console.log('No meaningful content to enhance');
-      return;
+    setIsGeneratingPrompt(true);
+    try {
+      const res = await fetch('/api/journal-prompt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mood }),
+      });
+      if (!res.ok) throw new Error();
+      const { prompt } = await res.json();
+      // Inject the prompt as italic HTML into the editor
+      form.setValue('content', `<p><em>${prompt}</em></p>`);
+    } catch {
+      // fail silently — prompt is non-critical
+    } finally {
+      setIsGeneratingPrompt(false);
     }
-    journalMutation.mutate();
   };
 
-  const journalMutation = useMutation({
-    mutationFn: async () => {},
-    onSuccess: (data) => {
-      console.log(data);
-    },
-  });
+  const handleEnhance = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!content || isContentEmpty(content)) return;
+    setIsEnhancing(true);
+    try {
+      const res = await fetch('/api/journal-enhance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content }),
+      });
+      if (!res.ok) throw new Error();
+      const { enhanced } = await res.json();
+      form.setValue('content', enhanced);
+    } catch {
+      // fail silently
+    } finally {
+      setIsEnhancing(false);
+    }
+  };
+
   return (
     <Dialog
       open={open}
@@ -105,13 +129,12 @@ export default function NewEntryModal({
         <DialogHeader>
           <DialogTitle>New Journal Entry</DialogTitle>
           <DialogDescription>
-            Record your thoughts and feelings. Take your time and be honest with
-            yourself.
+            Record your thoughts and feelings. Take your time and be honest with yourself.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
                 name="title"
@@ -131,10 +154,7 @@ export default function NewEntryModal({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>How are you feeling?</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="flex items-center gap-2">
                           <SelectValue placeholder="Select a mood" />
@@ -163,23 +183,39 @@ export default function NewEntryModal({
                 name="content"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
                       <FormLabel>Journal Entry</FormLabel>
-                      <Button variant="outline" onClick={handleEnhanceJournal}>
-                        Improve with AI
-                        <Sparkles
-                          className="-me-1 ms-2 opacity-60"
-                          size={16}
-                          strokeWidth={2}
-                          aria-hidden="true"
-                        />
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleGetPrompt}
+                          disabled={isGeneratingPrompt}
+                        >
+                          {isGeneratingPrompt ? (
+                            <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                          ) : (
+                            <Wand2 className="mr-1.5 h-3.5 w-3.5 opacity-60" />
+                          )}
+                          {isGeneratingPrompt ? 'Getting prompt…' : 'Need a prompt?'}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleEnhance}
+                          disabled={isEnhancing || !content || isContentEmpty(content)}
+                        >
+                          {isEnhancing ? (
+                            <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                          ) : (
+                            <Sparkles className="mr-1.5 h-3.5 w-3.5 opacity-60" />
+                          )}
+                          {isEnhancing ? 'Enhancing…' : 'Improve with AI'}
+                        </Button>
+                      </div>
                     </div>
                     <FormControl>
-                      <RichTextEditor
-                        content={field.value}
-                        onChange={field.onChange}
-                      />
+                      <RichTextEditor content={field.value} onChange={field.onChange} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -188,8 +224,11 @@ export default function NewEntryModal({
 
               <DialogFooter>
                 <Button type="submit" disabled={pending}>
-                  <Save className="mr-2 h-4 w-4" />
-                  {pending ? 'Saving...' : 'Save Entry'}
+                  {pending ? (
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving…</>
+                  ) : (
+                    <><Save className="mr-2 h-4 w-4" />Save Entry</>
+                  )}
                 </Button>
               </DialogFooter>
             </form>

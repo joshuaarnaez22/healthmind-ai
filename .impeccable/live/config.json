@@ -1,7 +1,0 @@
-{
-  "files": ["app/layout.tsx"],
-  "insertBefore": "</body>",
-  "commentSyntax": "html",
-  "framework": "nextjs-app-router",
-  "cspChecked": true
-}

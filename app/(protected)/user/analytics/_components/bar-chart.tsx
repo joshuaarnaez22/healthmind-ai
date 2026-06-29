@@ -58,8 +58,8 @@ export default function BarChartComponent({ data }: { data: MoodMonthData[] }) {
         <CardDescription>Last 6 months of mood entries</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
-          <BarChart accessibilityLayer data={data}>
+        <ChartContainer config={chartConfig} className="h-[220px] w-full">
+          <BarChart accessibilityLayer data={data} barSize={28}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="month"

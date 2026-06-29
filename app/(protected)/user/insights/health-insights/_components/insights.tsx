@@ -31,6 +31,10 @@ import MentalSummaryLoader from '@/components/loaders/mental-summary-loader';
 import AffirmationLoader from '@/components/loaders/affirmation-loader';
 import ArticleLoader from '@/components/loaders/article-loader';
 import { Button } from '@/components/ui/button';
+import HealthTrendsPanel from './health-trends-panel';
+import MedicalDisclaimer from '@/components/medical-disclaimer';
+import Link from 'next/link';
+import { NotebookPen } from 'lucide-react';
 
 export default function Insights() {
   const [selectedObservation, setSelectedObservation] =
@@ -52,6 +56,10 @@ export default function Insights() {
   const articlesLoading = loadingStates.articles;
   const exercisesLoading = loadingStates.exercises;
 
+  // All queries settled but API returned null → no journal data yet
+  const allSettled = !observationsLoading && !articlesLoading && !exercisesLoading;
+  const hasNoData = allSettled && !affirmations && !summary && !observationsData && !articles && !exercisesData;
+
   return (
     <>
       <motion.div {...pageAnimations}>
@@ -65,6 +73,29 @@ export default function Insights() {
             </p>
           </div>
         </div>
+        <div className="mb-8 space-y-4">
+          <MedicalDisclaimer />
+          <HealthTrendsPanel />
+        </div>
+
+        {hasNoData ? (
+          <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed py-20 text-center text-muted-foreground">
+            <NotebookPen className="h-9 w-9 opacity-30" />
+            <div>
+              <p className="text-sm font-medium text-foreground">No insights yet</p>
+              <p className="mt-1 text-xs">
+                AI insights are generated from your journal entries. Write at least one entry to unlock them.
+              </p>
+            </div>
+            <Link
+              href="/user/journal"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90"
+            >
+              <NotebookPen className="h-3.5 w-3.5" />
+              Write your first journal entry
+            </Link>
+          </div>
+        ) : (
         <Tabs defaultValue="observations" className="mb-8">
           <TabsList className="mb-4">
             <TabsTrigger value="observations">Observations</TabsTrigger>
@@ -245,6 +276,7 @@ export default function Insights() {
             {!!exercisesData && <ExercisesInsights exercises={exercisesData} />}
           </TabsContent>
         </Tabs>
+        )}
       </motion.div>
       <Dialog
         open={selectedObservation !== null}
