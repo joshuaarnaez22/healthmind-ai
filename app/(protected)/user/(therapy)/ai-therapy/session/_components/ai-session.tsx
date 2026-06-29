@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 // import { vapi } from '@/lib/vapi';
 import { msClient } from '@/lib/millis';
+import { AgentState } from '@millisai/web-sdk';
 
 export default function AiSession() {
   // const [transcript, setTranscript] = useState<
@@ -85,68 +86,41 @@ export default function AiSession() {
 
   //   return () => vapi?.stop();
   // }, []);
-  // useEffect(() => {
-  //   msClient.on('onopen', () => {
-  //     console.log('WebSocket connection opened.');
-  //   });
+  useEffect(() => {
+    const handleAgentState = (state: AgentState) => {
+      setTherapistSpeaking(state === AgentState.ANSWER);
+    };
 
-  //   msClient.on('onready', () => {
-  //     console.log('Client is ready.');
-  //   });
+    const handleTranscript = (_text: string, payload: { is_final?: boolean }) => {
+      if (payload.is_final) {
+        setClientSpeaking(false);
+      } else {
+        setClientSpeaking(true);
+      }
+    };
 
-  //   msClient.on('onsessionended', () => {
-  //     console.log('Session ended.');
-  //   });
+    const handleSessionEnded = () => {
+      setIsCallActive(false);
+      setSessionTime(0);
+      setTherapistSpeaking(false);
+      setClientSpeaking(false);
+    };
 
-  //   // msClient.on('onaudio', (audio) => {
-  //   //   console.log('Audio received:', audio);
-  //   // });
+    msClient.on('onagentstate', handleAgentState);
+    msClient.on('ontranscript', handleTranscript);
+    msClient.on('onsessionended', handleSessionEnded);
 
-  //   msClient.on('onresponsetext', (text, payload) => {
-  //     console.log('Response text:', text, 'Payload:', payload);
-  //   });
+    return () => {
+      msClient.off('onagentstate', handleAgentState);
+      msClient.off('ontranscript', handleTranscript);
+      msClient.off('onsessionended', handleSessionEnded);
+    };
+  }, []);
 
-  //   msClient.on('ontranscript', (text, payload) => {
-  //     console.log('Transcript:', text, 'Payload:', payload);
-  //   });
-
-  //   msClient.on('analyzer', (analyzer) => {
-  //     console.log('Analyzer node:', analyzer);
-  //   });
-
-  //   msClient.on('useraudioready', (data) => {
-  //     console.log('User audio ready:', data);
-  //   });
-
-  //   msClient.on('onlatency', (latency) => {
-  //     console.log('Latency:', latency);
-  //   });
-
-  //   msClient.on('onclose', (event) => {
-  //     console.log('WebSocket connection closed:', event);
-  //   });
-
-  //   msClient.on('onerror', (error) => {
-  //     console.error('WebSocket error:', error);
-  //   });
-
-  //   return () => {
-  //     msClient.off("onerror")
-  //     msClient.off("onerror")
-
-  //     msClient.off("onerror")
-
-  //     msClient.off("onerror")
-  //     msClient.off("onerror")
-  //     msClient.off("onerror")
-  //     msClient.off("onerror")
-
-  //   }
-  // }, []);
   const handleStartCall = async () => {
     msClient.start({
       agent: {
-        agent_id: '-OSX3OChFdUUmGj6Aj8R',
+        agent_id: process.env.NEXT_PUBLIC_MILLIS_AGENT_ID,
       },
       metadata: {
         name: 'Joshua',
@@ -315,7 +289,15 @@ export default function AiSession() {
             {isCallActive && (
               <>
                 <Button
-                  onClick={() => setIsMuted(!isMuted)}
+                  onClick={() => {
+                    const next = !isMuted;
+                    setIsMuted(next);
+                    if (next) {
+                      msClient.mute();
+                    } else {
+                      msClient.unmute();
+                    }
+                  }}
                   variant={isMuted ? 'destructive' : 'outline'}
                   size="lg"
                   className="px-6 py-6 shadow-md transition-all duration-300 hover:shadow-lg"
@@ -323,6 +305,7 @@ export default function AiSession() {
                   {isMuted ? <MicOff size={20} /> : <Mic size={20} />}
                 </Button>
 
+                {/* TODO: speaker control requires audio element ref — Millis SDK has no volume/speaker API */}
                 <Button
                   onClick={() => setIsSpeakerOn(!isSpeakerOn)}
                   variant={isSpeakerOn ? 'default' : 'outline'}

@@ -1,5 +1,5 @@
-import AiSession from './_components/ai-session';
+import { redirect } from 'next/navigation';
 
 export default function TherapySession() {
-  return <AiSession />;
+  redirect('/user/ai-therapy');
 }

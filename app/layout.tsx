@@ -1,19 +1,32 @@
 import type { Metadata } from 'next';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { ClerkProvider } from '@clerk/nextjs';
-import { Poppins } from 'next/font/google';
+import { Manrope, Libre_Baskerville } from 'next/font/google';
+import { MotionConfig } from 'motion/react';
 import NextTopLoader from 'nextjs-toploader';
 import QueryProvider from '@/components/wrappers/query-client';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 
-const poppins = Poppins({ weight: '400', subsets: ['latin'] });
+const manrope = Manrope({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const libreBaskerville = Libre_Baskerville({
+  weight: ['400', '700'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  variable: '--font-heading',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
-  title: 'HealthMind - Your Wellness Journey',
+  title: 'HealthMind — Your Wellness Journey',
   description:
-    'Track, improve, and celebrate your health milestones with HealthMind',
+    'Track your mood, log your vitals, and talk to an AI therapist. HealthMind brings mental and physical health into one place.',
 };
 
 export default function RootLayout({
@@ -22,15 +35,17 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={poppins.className}>
-          <NextTopLoader showSpinner={true} />
+        <body className={`${manrope.variable} ${libreBaskerville.variable}`}>
+          <NextTopLoader color="oklch(0.490 0.150 270)" showSpinner={false} />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
-            <QueryProvider>{children}</QueryProvider>
+            <MotionConfig reducedMotion="user">
+              <QueryProvider>{children}</QueryProvider>
+            </MotionConfig>
             <Toaster />
             <SpeedInsights />
           </ThemeProvider>

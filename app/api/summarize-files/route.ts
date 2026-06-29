@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { streamText } from 'ai';
 import { systemPrompt_summary } from '@/lib/prompts';
 import { getUserId } from '@/actions/server-actions/user';
-// import { deepseek } from '@ai-sdk/deepseek';
-import { openai } from '@ai-sdk/openai';
+import { deepseek } from '@/lib/ai';
 export const config = {
   runtime: 'edge',
 };
@@ -23,7 +22,7 @@ export async function POST(request: NextRequest) {
       .map((text: string) => text.replace(/\n{2,}/g, '\n').trim())
       .join('\n\n');
     const result = streamText({
-      model: openai('gpt-4.1-mini'),
+      model: deepseek(),
       messages: [
         {
           role: 'system',

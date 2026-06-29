@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { generateObject } from 'ai';
-import { openai } from '@ai-sdk/openai';
+import { deepseek } from '@/lib/ai';
 import { getUserId } from '@/actions/server-actions/user';
 import { prisma } from '@/lib/client';
 import { combinedTherapyModulesPrompt } from '@/lib/prompts';
@@ -34,7 +34,7 @@ ${combinedTherapyModulesPrompt}`.trim();
     }
 
     const { object } = await generateObject({
-      model: openai('gpt-4.1-mini'),
+      model: deepseek(),
       schema: ModulesSchema,
       prompt: finalPrompt,
     });

@@ -14,15 +14,44 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { moods } from '@/lib/constant';
 import { cn, safeFormat } from '@/lib/utils';
-import { PlusIcon } from 'lucide-react';
+import { trackMoodEntry } from '@/actions/server-actions/journal';
+import { PlusIcon, Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
-export default function MoodModal() {
+interface MoodModalProps {
+  date: Date;
+  onSuccess: () => void;
+}
+
+export default function MoodModal({ date, onSuccess }: MoodModalProps) {
+  const { toast } = useToast();
   const [notes, setNotes] = useState('');
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const handleSave = async () => {
+    if (!selectedMood) {
+      toast({ title: 'Please select a mood', variant: 'destructive' });
+      return;
+    }
+    setLoading(true);
+    const result = await trackMoodEntry(selectedMood, notes, date);
+    setLoading(false);
+    if (result.success) {
+      toast({ title: result.message });
+      setOpen(false);
+      setNotes('');
+      setSelectedMood(null);
+      onSuccess();
+    } else {
+      toast({ title: result.message, variant: 'destructive' });
+    }
+  };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="gap-2">
           <PlusIcon className="size-4" />
@@ -32,7 +61,7 @@ export default function MoodModal() {
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>How are you feeling?</DialogTitle>
-          <DialogDescription>{`Record your mood for ${safeFormat(new Date(), 'EEEE, MMMM do')}`}</DialogDescription>
+          <DialogDescription>{`Record your mood for ${safeFormat(date, 'EEEE, MMMM do')}`}</DialogDescription>
         </DialogHeader>
         <div className="space-y-6 py-4">
           <div className="space-y-4">
@@ -75,9 +104,20 @@ export default function MoodModal() {
         </div>
         <DialogFooter className="gap-4">
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" disabled={loading}>
+              Cancel
+            </Button>
           </DialogClose>
-          <Button>Save Entry</Button>
+          <Button onClick={handleSave} disabled={loading || !selectedMood}>
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving…
+              </>
+            ) : (
+              'Save Entry'
+            )}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

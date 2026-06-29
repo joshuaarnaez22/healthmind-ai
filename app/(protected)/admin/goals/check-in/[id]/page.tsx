@@ -3,7 +3,7 @@ import GoalCheckIn from './_components/goal-checkIn';
 export default async function CheckInPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
 

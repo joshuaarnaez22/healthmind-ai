@@ -6,6 +6,45 @@ import { Mood } from '@prisma/client';
 import { getUserId } from './user';
 import { enumConvertor } from '@/lib/utils';
 
+export const trackMoodEntry = async (
+  mood: string,
+  notes: string,
+  date: Date
+) => {
+  try {
+    if (!date || isNaN(date.getTime())) {
+      return { success: false, message: 'Invalid date' };
+    }
+    const id = await getUserId();
+    const moodEnum = enumConvertor(Mood, mood);
+    if (!moodEnum) {
+      return { success: false, message: 'Invalid mood value' };
+    }
+
+    const adjustedDate = new Date(date);
+    adjustedDate.setHours(adjustedDate.getHours() + 8);
+
+    const journal = await prisma.journal.create({
+      data: {
+        title: `Mood: ${mood.charAt(0) + mood.slice(1).toLowerCase()}`,
+        mood: moodEnum,
+        content: notes || '',
+        userId: id,
+        addedAt: adjustedDate,
+      },
+    });
+
+    return {
+      success: true,
+      message: 'Mood entry saved',
+      data: journal,
+    };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: 'Something went wrong' };
+  }
+};
+
 export const createJournal = async (
   values: unknown,
   date: Date | undefined

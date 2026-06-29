@@ -1,0 +1,14 @@
+<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle in brand violet -->
+  <circle cx="16" cy="16" r="16" fill="#6d4fc2"/>
+  <!-- Outer soft circle (the subtle ring from LogoMark) -->
+  <circle cx="16" cy="16" r="15" fill="white" fill-opacity="0.12"/>
+  <!-- Upper arc (mind) -->
+  <path d="M8 16 C8 11 12 8 16 8 C20 8 24 11 24 16"
+        stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <!-- Lower arc (body), softer -->
+  <path d="M8 16 C8 21 12 24 16 24 C20 24 24 21 24 16"
+        stroke="white" stroke-width="2" stroke-linecap="round" stroke-opacity="0.5"/>
+  <!-- Center dot -->
+  <circle cx="16" cy="16" r="2.25" fill="white"/>
+</svg>

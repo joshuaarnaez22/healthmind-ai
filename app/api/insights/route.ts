@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { generateObject } from 'ai';
-import { openai } from '@ai-sdk/openai';
+import { deepseek } from '@/lib/ai';
 import { getUserId } from '@/actions/server-actions/user';
 import redis from '@/lib/upstash';
 import { prisma } from '@/lib/client';
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     const selectedSchema = schemaMap[schema];
 
     const { object } = await generateObject({
-      model: openai('gpt-4-turbo'),
+      model: deepseek(),
       schema: selectedSchema,
       prompt: `${prompt}\n\nUser's recent journal entries:\n${JSON.stringify(
         journals,
