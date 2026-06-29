@@ -43,8 +43,8 @@ export default function Insights() {
   const { data, loadingStates, isError } = useSequentialInsights();
   if (isError)
     return (
-      <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed border-destructive/30 bg-destructive/5 py-20 text-center">
-        <SparklesIcon className="h-9 w-9 text-destructive/40" />
+      <div className="border-destructive/30 bg-destructive/5 flex flex-col items-center gap-4 rounded-xl border border-dashed py-20 text-center">
+        <SparklesIcon className="text-destructive/40 h-9 w-9" />
         <div>
           <p className="text-sm font-medium text-foreground">
             Something went wrong
