@@ -1,16 +1,7 @@
 'use client';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { pageAnimations } from '@/lib/motion';
 import { motion } from 'motion/react';
-import { Trophy } from 'lucide-react';
+import { ArrowRight, Trophy } from 'lucide-react';
 import Link from 'next/link';
 import EmotionBadge from './emotion-badge';
 import { getDaysLeft, getGoalProgress } from '@/lib/utils';
@@ -24,8 +15,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 function GoalsSkeleton() {
   return (
-    <div className="space-y-12">
-      {/* Header */}
+    <div className="space-y-10">
       <div className="flex items-center justify-between">
         <div className="space-y-2">
           <Skeleton className="h-8 w-48" />
@@ -34,52 +24,11 @@ function GoalsSkeleton() {
         <Skeleton className="h-9 w-28 rounded-md" />
       </div>
 
-      {/* Active goals card */}
-      <Card>
-        <CardHeader className="pb-2">
-          <Skeleton className="h-5 w-36" />
-          <Skeleton className="h-4 w-56" />
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="space-y-3 rounded-xl border p-4">
-                <div className="flex items-center justify-between">
-                  <Skeleton className="h-5 w-32" />
-                  <Skeleton className="h-5 w-16 rounded-full" />
-                </div>
-                <Skeleton className="h-2 w-full rounded-full" />
-                <div className="flex justify-between">
-                  <Skeleton className="h-4 w-20" />
-                  <Skeleton className="h-4 w-16" />
-                </div>
-                <Skeleton className="h-8 w-full rounded-md" />
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <Skeleton className="h-48 w-full rounded-3xl" />
 
-      {/* Tabs */}
       <div className="space-y-4">
         <Skeleton className="h-9 w-64 rounded-md" />
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-5 w-40" />
-            <Skeleton className="h-4 w-60" />
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <Skeleton className="h-8 w-8 shrink-0 rounded-full" />
-                <div className="flex-1 space-y-1.5">
-                  <Skeleton className="h-4 w-40" />
-                  <Skeleton className="h-3 w-56" />
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+        <Skeleton className="h-56 w-full rounded-3xl" />
       </div>
     </div>
   );
@@ -97,7 +46,13 @@ export default function MindfulGoals() {
   }
 
   if (isError) {
-    return <p className="text-center text-red-500">Failed to load goals.</p>;
+    return (
+      <div className="rounded-3xl border border-border/80 bg-secondary px-6 py-16 text-center">
+        <p className="text-sm font-medium text-foreground">
+          Failed to load goals
+        </p>
+      </div>
+    );
   }
   const completedGoals = goals.filter((goal) => goal.isCompleted) || [];
 
@@ -119,51 +74,52 @@ export default function MindfulGoals() {
 
   return (
     <motion.div {...pageAnimations}>
-      <div className="space-y-12">
-        <header className="flex items-center justify-between">
+      <div className="space-y-10">
+        <header className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Mindful Goals</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+              Mindful Goals
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
               Track goals that nurture your emotional wellbeing
             </p>
           </div>
           <NewGoalModal />
         </header>
+
         {completedGoals.length > 0 && (
-          <Card className="border-green-200 bg-green-50">
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Trophy className="h-5 w-5 text-green-600" />
+          <section className="rounded-3xl border border-border/80 bg-secondary p-6">
+            <div className="mb-3 flex items-center gap-2">
+              <Trophy className="h-5 w-5 text-primary" />
+              <h2 className="text-lg font-semibold text-foreground">
                 Completed Goals
-              </CardTitle>
-              <CardDescription>
-                Congratulations on achieving these goals!
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-2">
-                {completedGoals.map((goal) => (
-                  <div
-                    key={goal.id}
-                    className="flex items-center gap-2 rounded-full border bg-white px-3 py-1"
-                  >
-                    <span className="text-sm font-medium">{goal.title}</span>
-                    <EmotionBadge emotion={goal.emotion} />
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+              </h2>
+            </div>
+            <p className="mb-4 text-sm text-muted-foreground">
+              Congratulations on achieving these goals!
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {completedGoals.map((goal) => (
+                <div
+                  key={goal.id}
+                  className="flex items-center gap-2 rounded-full border border-border/80 bg-card px-3 py-1"
+                >
+                  <span className="text-sm font-medium">{goal.title}</span>
+                  <EmotionBadge emotion={goal.emotion} />
+                </div>
+              ))}
+            </div>
+          </section>
         )}
 
-        <Card className="border-green-100 bg-green-50/30">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">This Weeks Focus</CardTitle>
-            <CardDescription>
-              Your active goals and their emotional anchors
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+        <section className="rounded-3xl border border-border/80 bg-card p-6">
+          <h2 className="text-lg font-semibold text-foreground">
+            This Week’s Focus
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Your active goals and their emotional anchors
+          </p>
+          <div className="mt-5">
             {activeGoals.length > 0 ? (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {activeGoals.map((goal) => (
@@ -184,11 +140,9 @@ export default function MindfulGoals() {
                 ))}
               </div>
             ) : (
-              <div className="py-8 text-center">
-                <p className="mb-4 text-muted-foreground">
-                  No active goals yet.{' '}
-                  {!goals?.length ? 'Create Your First Goal' : 'Add New Goal'}{' '}
-                  to get started!
+              <div className="rounded-2xl bg-secondary px-4 py-10 text-center">
+                <p className="mb-4 text-sm text-muted-foreground">
+                  No active goals yet. Create one to get started.
                 </p>
                 <NewGoalModal
                   label={
@@ -197,17 +151,19 @@ export default function MindfulGoals() {
                 />
               </div>
             )}
-          </CardContent>
+          </div>
           {activeGoals.length > 0 && (
-            <CardFooter>
-              <Link href="/admin/goals/all-goals">
-                <Button variant="ghost" className="text-green-700">
-                  View all goals
-                </Button>
+            <div className="mt-4">
+              <Link
+                href="/user/goals/all-goals"
+                className="inline-flex items-center gap-1 text-xs font-bold text-primary"
+              >
+                View all goals
+                <ArrowRight className="h-3.5 w-3.5" />
               </Link>
-            </CardFooter>
+            </div>
           )}
-        </Card>
+        </section>
 
         <Tabs defaultValue="reflections" className="w-full">
           <TabsList className="grid w-full max-w-md grid-cols-2">
@@ -215,27 +171,27 @@ export default function MindfulGoals() {
             <TabsTrigger value="insights">Emotional Insights</TabsTrigger>
           </TabsList>
           <TabsContent value="reflections" className="mt-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Your Reflections</CardTitle>
-                <CardDescription>
-                  How your activities made you feel recently
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
+            <section className="rounded-3xl border border-border/80 bg-card p-6">
+              <h2 className="text-lg font-semibold text-foreground">
+                Your Reflections
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                How your activities made you feel recently
+              </p>
+              <div className="mt-5">
                 <RecentReflections recentCheckIns={recentCheckIns} />
-              </CardContent>
-            </Card>
+              </div>
+            </section>
           </TabsContent>
           <TabsContent value="insights" className="mt-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Emotional Patterns</CardTitle>
-                <CardDescription>
-                  Visualizing how your activities affect your emotions
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
+            <section className="rounded-3xl border border-border/80 bg-card p-6">
+              <h2 className="text-lg font-semibold text-foreground">
+                Emotional Patterns
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Visualizing how your activities affect your emotions
+              </p>
+              <div className="mt-5">
                 <InsightsChart
                   totalCheckIns={allCheckIns.length}
                   totalReflection={
@@ -244,8 +200,8 @@ export default function MindfulGoals() {
                   totalCompletedGoals={completedGoals.length}
                   totalActiveGoals={activeGoals.length}
                 />
-              </CardContent>
-            </Card>
+              </div>
+            </section>
           </TabsContent>
         </Tabs>
       </div>

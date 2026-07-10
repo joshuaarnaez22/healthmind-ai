@@ -65,8 +65,8 @@ const config = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
-        heading: ['var(--font-heading)', 'Georgia', 'serif'],
+        sans: ['var(--font-sans)', 'Helvetica', 'Arial', 'sans-serif'],
+        heading: ['var(--font-sans)', 'Helvetica', 'Arial', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',

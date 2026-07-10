@@ -3,13 +3,6 @@
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
   ChartConfig,
   ChartContainer,
   ChartLegend,
@@ -46,63 +39,61 @@ const chartConfig = {
   },
   GREAT: {
     label: 'Great',
-    color: 'oklch(0.490 0.150 270)',
+    color: 'oklch(0.55 0.2 250)',
   },
 } satisfies ChartConfig;
 
 export default function BarChartComponent({ data }: { data: MoodMonthData[] }) {
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Mood Analytics</CardTitle>
-        <CardDescription>
+    <section className="w-full rounded-3xl border border-border/80 bg-card p-6">
+      <div className="mb-4">
+        <h2 className="text-lg font-semibold text-foreground">Mood Analytics</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           Moods from your journal entries over the last 6 months
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="h-[220px] w-full">
-          <BarChart accessibilityLayer data={data} barSize={28}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
-            <YAxis tickLine={false} axisLine={false} allowDecimals={false} />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dashed" />}
-            />
-            <ChartLegend content={<ChartLegendContent />} />
-            <Bar
-              dataKey="TERRIBLE"
-              fill="var(--color-TERRIBLE)"
-              radius={4}
-              stackId="a"
-            />
-            <Bar dataKey="BAD" fill="var(--color-BAD)" radius={4} stackId="a" />
-            <Bar
-              dataKey="NEUTRAL"
-              fill="var(--color-NEUTRAL)"
-              radius={4}
-              stackId="a"
-            />
-            <Bar
-              dataKey="GOOD"
-              fill="var(--color-GOOD)"
-              radius={4}
-              stackId="a"
-            />
-            <Bar
-              dataKey="GREAT"
-              fill="var(--color-GREAT)"
-              radius={4}
-              stackId="a"
-            />
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+        </p>
+      </div>
+      <ChartContainer config={chartConfig} className="h-[220px] w-full">
+        <BarChart accessibilityLayer data={data} barSize={28}>
+          <CartesianGrid vertical={false} />
+          <XAxis
+            dataKey="month"
+            tickLine={false}
+            tickMargin={10}
+            axisLine={false}
+          />
+          <YAxis tickLine={false} axisLine={false} allowDecimals={false} />
+          <ChartTooltip
+            cursor={false}
+            content={<ChartTooltipContent indicator="dashed" />}
+          />
+          <ChartLegend content={<ChartLegendContent />} />
+          <Bar
+            dataKey="TERRIBLE"
+            fill="var(--color-TERRIBLE)"
+            radius={4}
+            stackId="a"
+          />
+          <Bar dataKey="BAD" fill="var(--color-BAD)" radius={4} stackId="a" />
+          <Bar
+            dataKey="NEUTRAL"
+            fill="var(--color-NEUTRAL)"
+            radius={4}
+            stackId="a"
+          />
+          <Bar
+            dataKey="GOOD"
+            fill="var(--color-GOOD)"
+            radius={4}
+            stackId="a"
+          />
+          <Bar
+            dataKey="GREAT"
+            fill="var(--color-GREAT)"
+            radius={4}
+            stackId="a"
+          />
+        </BarChart>
+      </ChartContainer>
+    </section>
   );
 }

@@ -8,15 +8,8 @@ import { Journal } from '@prisma/client';
 import React from 'react';
 import JournalEntryAccordionItem from './journal-entry-accordion';
 import { pageAnimations } from '@/lib/motion';
-import { BookOpen } from 'lucide-react';
+import { ArrowRight, BookOpen } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card';
 
 export default function JournalEntry() {
   const [date, setDate] = React.useState<Date>(new Date());
@@ -29,7 +22,6 @@ export default function JournalEntry() {
   } = useQuery<Journal[]>({
     queryKey: ['journals', dateKey],
     queryFn: async ({ signal }) => {
-      // Day boundaries in the user's local tz → tz-correct bucketing
       const start = new Date(date);
       start.setHours(0, 0, 0, 0);
       const end = new Date(start);
@@ -48,10 +40,9 @@ export default function JournalEntry() {
 
   return (
     <motion.div {...pageAnimations} className="space-y-6">
-      {/* Page header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
             Journal
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -61,46 +52,41 @@ export default function JournalEntry() {
         <NewEntryModal date={date} cacheKey={dateKey} />
       </div>
 
-      {/* Two-column layout */}
       <div className="grid gap-6 lg:grid-cols-[auto_1fr]">
-        {/* Calendar card */}
-        <Card className="h-fit">
-          <CardContent className="p-3">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={(d) => d && setDate(d)}
-              classNames={{
-                month_caption: 'ms-2.5 me-20 justify-start',
-                nav: 'justify-end',
-              }}
-            />
-          </CardContent>
-        </Card>
+        <section className="h-fit rounded-3xl border border-border/80 bg-secondary p-3">
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={(d) => d && setDate(d)}
+            classNames={{
+              month_caption: 'ms-2.5 me-20 justify-start',
+              nav: 'justify-end',
+            }}
+          />
+        </section>
 
-        {/* Entries panel */}
-        <Card className="flex flex-col">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base font-semibold">
+        <section className="flex flex-col rounded-3xl border border-border/80 bg-card p-6">
+          <div className="pb-3">
+            <h2 className="text-base font-semibold text-foreground">
               {safeFormat(date, 'EEEE, MMMM do, yyyy')}
-            </CardTitle>
-            <CardDescription className="text-xs">
+            </h2>
+            <p className="mt-1 text-xs text-muted-foreground">
               {isLoading
                 ? 'Loading…'
                 : count > 0
                   ? `${count} ${count === 1 ? 'entry' : 'entries'} recorded`
                   : 'No entries for this day'}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1 space-y-3">
+            </p>
+          </div>
+          <div className="flex-1 space-y-3">
             {isLoading ? (
               <div className="space-y-3">
                 {[...Array(3)].map((_, i) => (
-                  <Skeleton key={i} className="h-20 w-full rounded-xl" />
+                  <Skeleton key={i} className="h-20 w-full rounded-2xl" />
                 ))}
               </div>
             ) : isError ? (
-              <div className="border-destructive/30 bg-destructive/5 rounded-xl border px-4 py-8 text-center text-sm text-destructive">
+              <div className="border-destructive/30 bg-destructive/5 rounded-2xl border px-4 py-8 text-center text-sm text-destructive">
                 Failed to load journal entries.
               </div>
             ) : count > 0 ? (
@@ -112,15 +98,19 @@ export default function JournalEntry() {
                 />
               ))
             ) : (
-              <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-16 text-center text-muted-foreground">
-                <BookOpen className="h-7 w-7 opacity-40" />
-                <p className="text-sm">
+              <div className="flex flex-col items-center gap-3 rounded-2xl bg-secondary py-16 text-center">
+                <BookOpen className="h-7 w-7 text-primary opacity-70" />
+                <p className="text-sm text-muted-foreground">
                   No entries for this day. Start writing!
                 </p>
+                <span className="inline-flex items-center gap-1 text-xs font-bold text-primary">
+                  New Entry
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </span>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </section>
       </div>
     </motion.div>
   );

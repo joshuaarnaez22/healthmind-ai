@@ -12,9 +12,9 @@ import Link from 'next/link';
 
 export default function MobileNav({
   scrolled = false,
-}: {
+}: Readonly<{
   scrolled?: boolean;
-}) {
+}>) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -24,8 +24,8 @@ export default function MobileNav({
           aria-label="Open menu"
           className={
             scrolled
-              ? 'text-foreground hover:bg-muted'
-              : 'hover:bg-primary-foreground/10 text-primary-foreground'
+              ? 'text-[oklch(0.24_0.045_155)] hover:bg-[oklch(0.945_0.022_155)]'
+              : 'text-white hover:bg-white/10'
           }
         >
           <Menu className="h-5 w-5" />

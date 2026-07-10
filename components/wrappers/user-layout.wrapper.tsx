@@ -53,16 +53,19 @@ function useBreadcrumbs() {
 
 export default function UserLayoutWrapper({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   const crumbs = useBreadcrumbs();
 
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b-2 px-4 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+      <SidebarInset className="bg-background">
+        <header
+          data-tour="app-header"
+          className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border/80 bg-background/90 px-4 backdrop-blur-md transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12"
+        >
           <div className="flex items-center gap-2">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
@@ -77,7 +80,9 @@ export default function UserLayoutWrapper({
                       className={i < crumbs.length - 1 ? 'hidden md:block' : ''}
                     >
                       {crumb.isLast ? (
-                        <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                        <BreadcrumbPage className="font-semibold">
+                          {crumb.label}
+                        </BreadcrumbPage>
                       ) : (
                         <BreadcrumbLink href={crumb.href}>
                           {crumb.label}
@@ -89,14 +94,14 @@ export default function UserLayoutWrapper({
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <div className="flex items-center gap-4">
-            <ModeToggle />
+          <div className="flex items-center gap-3" data-tour="app-search">
+            <ModeToggle tone="onLight" />
             <div className="hidden md:flex">
               <SearchCommand />
             </div>
           </div>
         </header>
-        <div className="p-4">{children}</div>
+        <div className="px-4 py-6 md:px-6 md:py-8">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

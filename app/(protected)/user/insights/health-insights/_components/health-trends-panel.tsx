@@ -3,7 +3,6 @@
 import { useUser } from '@clerk/nextjs';
 import { useQuery } from '@tanstack/react-query';
 import { ONE_DAY_IN_MS } from '@/lib/constant';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -31,13 +30,12 @@ const trendBadge: Record<
   improving: {
     label: 'Improving',
     icon: <TrendingUp className="h-3 w-3" />,
-    className:
-      'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
+    className: 'bg-secondary text-primary',
   },
   worsening: {
     label: 'Worsening',
     icon: <TrendingDown className="h-3 w-3" />,
-    className: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+    className: 'bg-destructive/10 text-destructive',
   },
   stable: {
     label: 'Stable',
@@ -70,19 +68,17 @@ export default function HealthTrendsPanel() {
 
   if (isLoading) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Sparkles className="h-4 w-4 text-primary" />
-            AI Health Trends
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
+      <section className="rounded-3xl border border-border/80 bg-card p-6">
+        <div className="mb-4 flex items-center gap-2 text-base font-semibold">
+          <Sparkles className="h-4 w-4 text-primary" />
+          AI Health Trends
+        </div>
+        <div className="space-y-3">
           <Skeleton className="h-4 w-3/4" />
-          <Skeleton className="h-20 w-full rounded-xl" />
-          <Skeleton className="h-20 w-full rounded-xl" />
-        </CardContent>
-      </Card>
+          <Skeleton className="h-20 w-full rounded-2xl" />
+          <Skeleton className="h-20 w-full rounded-2xl" />
+        </div>
+      </section>
     );
   }
 
@@ -91,34 +87,34 @@ export default function HealthTrendsPanel() {
   const sections = [
     {
       label: 'Blood Pressure',
-      icon: <Activity className="h-4 w-4 text-red-500" />,
+      icon: <Activity className="h-4 w-4 text-primary" />,
       ...data.bloodPressure,
     },
     {
       label: 'Glucose',
-      icon: <Activity className="h-4 w-4 text-blue-500" />,
+      icon: <Activity className="h-4 w-4 text-primary" />,
       ...data.glucose,
     },
   ];
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-base">
-          <Sparkles className="h-4 w-4 text-primary" />
-          AI Health Trends
-        </CardTitle>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {data.overallAssessment}
-        </p>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Vitals sections */}
+    <section className="rounded-3xl border border-border/80 bg-card p-6">
+      <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
+        <Sparkles className="h-4 w-4 text-primary" />
+        AI Health Trends
+      </h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        {data.overallAssessment}
+      </p>
+      <div className="mt-4 space-y-4">
         <div className="grid gap-3 sm:grid-cols-2">
           {sections.map((s) => {
             const badge = trendBadge[s.trend];
             return (
-              <div key={s.label} className="space-y-2 rounded-xl border p-3">
+              <div
+                key={s.label}
+                className="space-y-2 rounded-2xl border border-border/80 bg-secondary/40 p-3"
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     {s.icon}
@@ -135,9 +131,9 @@ export default function HealthTrendsPanel() {
                     {s.alerts.map((a, i) => (
                       <li
                         key={i}
-                        className="flex items-start gap-1.5 text-xs text-amber-700 dark:text-amber-400"
+                        className="flex items-start gap-1.5 text-xs text-muted-foreground"
                       >
-                        <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" />
+                        <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0 text-primary" />
                         {a}
                       </li>
                     ))}
@@ -148,7 +144,6 @@ export default function HealthTrendsPanel() {
           })}
         </div>
 
-        {/* Recommendations */}
         {data.recommendations.length > 0 && (
           <div className="space-y-1.5">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -164,7 +159,7 @@ export default function HealthTrendsPanel() {
             </ul>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   );
 }

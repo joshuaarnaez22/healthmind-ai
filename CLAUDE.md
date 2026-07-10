@@ -101,6 +101,7 @@ CLERK_SECRET_KEY
 UPSTASH_REDIS_REST_URL
 UPSTASH_REDIS_REST_TOKEN
 DEEPSEEK_API_KEY
+NEXT_PUBLIC_FORCE_TOUR_FOR_TESTING  # optional — "true" forces tour every visit; unset/false = new users only
 ```
 
 Sentry is configured but disabled — do not uncomment `sentry.*.config.ts` without adding the DSN env vars.

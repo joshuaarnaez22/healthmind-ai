@@ -207,25 +207,51 @@ export const getIcon = (iconName: string) => {
 export const getDifficultyColor = (difficulty: string) => {
   switch (difficulty) {
     case 'beginner':
-      return 'bg-green-100 text-green-800';
+      return 'border-transparent bg-secondary text-primary';
     case 'intermediate':
-      return 'bg-yellow-100 text-yellow-800';
+      return 'border-transparent bg-accent/60 text-foreground';
     case 'advanced':
-      return 'bg-red-100 text-red-800';
+      return 'border-transparent bg-destructive/10 text-destructive';
     default:
-      return 'bg-gray-100 text-gray-800';
+      return 'border-transparent bg-muted text-muted-foreground';
   }
 };
 
 export const getTherapyTypeColor = (type: string) => {
   switch (type) {
     case 'CBT':
-      return 'bg-blue-100 text-blue-800';
+      return 'border-transparent bg-secondary text-primary';
     case 'DBT':
-      return 'bg-purple-100 text-purple-800';
+      return 'border-transparent bg-muted text-foreground';
     case 'ACT':
-      return 'bg-green-100 text-green-800';
+      return 'border-transparent bg-accent/50 text-foreground';
     default:
-      return 'bg-gray-100 text-gray-800';
+      return 'border-transparent bg-muted text-muted-foreground';
+  }
+};
+
+export const getTherapyAccentBar = (type: string) => {
+  switch (type) {
+    case 'CBT':
+      return 'bg-primary';
+    case 'DBT':
+      return 'bg-foreground/40';
+    case 'ACT':
+      return 'bg-accent';
+    default:
+      return 'bg-muted-foreground';
+  }
+};
+
+export const getTherapyIconColor = (type: string) => {
+  switch (type) {
+    case 'CBT':
+      return 'text-primary';
+    case 'DBT':
+      return 'text-foreground';
+    case 'ACT':
+      return 'text-foreground';
+    default:
+      return 'text-muted-foreground';
   }
 };

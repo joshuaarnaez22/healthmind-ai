@@ -7,7 +7,7 @@ export default function UserLayout({
 }>) {
   return (
     <UserLayoutWrapper>
-      <main className="container mx-auto py-10">{children}</main>
+      <main className="mx-auto w-full max-w-6xl">{children}</main>
     </UserLayoutWrapper>
   );
 }

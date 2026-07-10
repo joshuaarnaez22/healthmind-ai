@@ -5,7 +5,7 @@ import { getUserId } from '@/actions/server-actions/user';
 import BarChartComponent from './_components/bar-chart';
 import MoodInsightsPanel from './_components/mood-insights-panel';
 import Link from 'next/link';
-import { BarChart2 } from 'lucide-react';
+import { ArrowRight, BarChart2 } from 'lucide-react';
 
 const MOOD_KEYS = ['TERRIBLE', 'BAD', 'NEUTRAL', 'GOOD', 'GREAT'] as const;
 
@@ -20,7 +20,6 @@ export default async function AnalyticsPage() {
     orderBy: { addedAt: 'asc' },
   });
 
-  // Build a map of "Mon YYYY" -> mood counts
   const monthMap = new Map<
     string,
     {
@@ -68,27 +67,32 @@ export default async function AnalyticsPage() {
     }));
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Analytics</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+          Analytics
+        </h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Mood patterns from your journal entries over the last 6 months.
         </p>
       </div>
       {chartData.length === 0 ? (
-        <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-20 text-center text-muted-foreground">
-          <BarChart2 className="h-9 w-9 opacity-30" />
+        <div className="flex flex-col items-center gap-3 rounded-3xl border border-border/80 bg-secondary py-20 text-center">
+          <BarChart2 className="h-9 w-9 text-primary opacity-70" />
           <div>
-            <p className="text-sm font-medium">No mood data yet</p>
-            <p className="mt-1 text-xs">
+            <p className="text-sm font-medium text-foreground">
+              No mood data yet
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
               Start writing journal entries to see mood patterns here.
             </p>
           </div>
           <Link
             href="/user/journal"
-            className="mt-1 text-xs font-medium text-primary hover:underline"
+            className="mt-1 inline-flex items-center gap-1 text-xs font-bold text-primary"
           >
-            Go to Journal →
+            Go to Journal
+            <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
       ) : (

@@ -13,13 +13,25 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export function ModeToggle() {
+export function ModeToggle({
+  tone = 'default',
+}: Readonly<{
+  tone?: 'default' | 'onDark' | 'onLight';
+}>) {
   const { setTheme, theme } = useTheme();
+
+  const toneClasses: Record<typeof tone, string> = {
+    onDark:
+      'relative border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white',
+    onLight:
+      'relative border-border bg-transparent text-foreground hover:bg-secondary hover:text-foreground',
+    default: 'relative',
+  };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="relative">
+        <Button variant="outline" size="icon" className={toneClasses[tone]}>
           <motion.div
             animate={{ rotate: theme === 'light' ? 360 : 0 }}
             transition={{ duration: 0.7, ease: 'easeInOut' }}

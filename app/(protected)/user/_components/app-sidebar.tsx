@@ -27,6 +27,7 @@ const navItems = [
     url: '/user/dashboard',
     icon: LayoutDashboard,
     isActive: false,
+    tourId: 'nav-dashboard',
     items: [],
   },
   {
@@ -34,6 +35,7 @@ const navItems = [
     url: '/user/journal',
     icon: NotebookPen,
     isActive: false,
+    tourId: 'nav-journal',
     items: [{ title: 'Journal Entries', url: '/user/journal' }],
   },
   {
@@ -41,6 +43,7 @@ const navItems = [
     url: '/user/insights/health-tracker',
     icon: FileText,
     isActive: false,
+    tourId: 'nav-health',
     items: [
       { title: 'Health Tracker', url: '/user/insights/health-tracker' },
       { title: 'Health Insights', url: '/user/insights/health-insights' },
@@ -52,6 +55,7 @@ const navItems = [
     url: '/user/goals',
     icon: Goal,
     isActive: false,
+    tourId: 'nav-goals',
     items: [
       { title: 'Mindful Goals', url: '/user/goals' },
       { title: 'All Goals', url: '/user/goals/all-goals' },
@@ -62,6 +66,7 @@ const navItems = [
     url: '/user/therapy_modules',
     icon: BookOpen,
     isActive: false,
+    tourId: 'nav-therapy',
     items: [
       { title: 'Modules', url: '/user/therapy_modules' },
       { title: 'AI Therapy', url: '/user/ai-therapy' },
@@ -72,6 +77,7 @@ const navItems = [
     url: '/user/analytics',
     icon: BarChart2,
     isActive: false,
+    tourId: 'nav-analytics',
     items: [{ title: 'Mood Analytics', url: '/user/analytics' }],
   },
 ];

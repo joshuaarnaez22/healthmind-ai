@@ -21,17 +21,11 @@ import {
 import { getDifficultyColor, getIcon, getTherapyTypeColor } from '@/lib/utils';
 import { pageAnimations } from '@/lib/motion';
 
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import type {
   TherapyModule,
@@ -77,8 +71,32 @@ export default function Module({ id }: { id: string }) {
     }
   }, [module, currentStep]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError || !module) return <div>Error loading module.</div>;
+  if (isLoading) {
+    return (
+      <div className="space-y-6 py-6">
+        <Skeleton className="h-5 w-40" />
+        <Skeleton className="h-32 w-full rounded-3xl" />
+        <Skeleton className="h-10 w-full rounded-2xl" />
+        <Skeleton className="h-64 w-full rounded-3xl" />
+      </div>
+    );
+  }
+
+  if (isError || !module) {
+    return (
+      <div className="rounded-3xl border border-border/80 bg-secondary px-6 py-16 text-center">
+        <p className="text-sm font-medium text-foreground">
+          Couldn’t load this module
+        </p>
+        <Link
+          href="/user/therapy_modules"
+          className="mt-3 inline-block text-xs font-bold text-primary"
+        >
+          Back to modules
+        </Link>
+      </div>
+    );
+  }
 
   const IconComponent = getIcon(module.icon);
   const totalSteps = module.steps.length;
@@ -106,7 +124,7 @@ export default function Module({ id }: { id: string }) {
 
           const updatedSteps = prev.steps
             .map((s) => (s.id === step.id ? { ...s, ...step } : s))
-            .sort((a, b) => a.order - b.order); // ✅ sort by order
+            .sort((a, b) => a.order - b.order);
 
           return { ...prev, steps: updatedSteps };
         }
@@ -130,17 +148,24 @@ export default function Module({ id }: { id: string }) {
 
   if (isCompleted) {
     return (
-      <div className="py-12 text-center">
-        <CheckCircle className="mx-auto mb-4 h-12 w-12 text-green-500" />
-        <h1 className="text-2xl font-semibold">Module Completed!</h1>
-        <p className="mb-6 text-gray-600">
+      <div className="rounded-3xl border border-border/80 bg-secondary px-6 py-16 text-center">
+        <CheckCircle className="mx-auto mb-4 h-12 w-12 text-primary" />
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+          Module Completed!
+        </h1>
+        <p className="mb-6 mt-2 text-sm text-muted-foreground">
           You’ve completed all the steps in this module.
         </p>
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-3">
           <Link href="/user/therapy_modules">
             <Button variant="outline">Explore More Modules</Button>
           </Link>
-          <Button onClick={() => setCurrentStep(0)}>
+          <Button
+            onClick={() => {
+              setIsCompleted(false);
+              setCurrentStep(0);
+            }}
+          >
             <RotateCcw className="mr-2 h-4 w-4" />
             Restart Module
           </Button>
@@ -152,11 +177,11 @@ export default function Module({ id }: { id: string }) {
   const step = module.steps[currentStep];
 
   return (
-    <motion.div {...pageAnimations} className="py-6">
-      <div className="mb-6 flex items-center justify-between">
+    <motion.div {...pageAnimations} className="space-y-6 py-2">
+      <div className="flex items-center justify-between">
         <Link
           href="/user/therapy_modules"
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Modules
@@ -171,76 +196,84 @@ export default function Module({ id }: { id: string }) {
         </div>
       </div>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <div className="flex gap-4">
-            <IconComponent className="h-12 w-12" />
-            <div className="flex-1">
-              <CardTitle className="text-2xl">{module.title}</CardTitle>
-              <CardDescription>{module.description}</CardDescription>
-              <div className="mt-2 flex gap-4 text-sm text-gray-600">
-                <div className="flex items-center gap-1">
-                  <Clock className="h-4 w-4" />
-                  {module.estimatedTime}
-                </div>
-                <div className="flex items-center gap-1">
-                  <Users className="h-4 w-4" />
-                  {module.audience}
-                </div>
+      <section className="rounded-3xl border border-border/80 bg-card p-6">
+        <div className="flex gap-4">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-secondary">
+            <IconComponent className="h-7 w-7 text-primary" />
+          </div>
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              {module.title}
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {module.description}
+            </p>
+            <div className="mt-3 flex gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Clock className="h-4 w-4" />
+                {module.estimatedTime}
+              </div>
+              <div className="flex items-center gap-1">
+                <Users className="h-4 w-4" />
+                {module.audience}
               </div>
             </div>
           </div>
-        </CardHeader>
-      </Card>
+        </div>
+      </section>
 
-      <Card className="mb-6">
-        <CardContent className="p-4">
-          <div className="mb-2 flex justify-between">
-            <span className="text-sm font-medium">Progress</span>
-            <span className="text-sm text-muted-foreground">
-              Step {currentStep + 1} of {totalSteps}
-            </span>
-          </div>
-          <Progress value={progress} className="h-2" />
-        </CardContent>
-      </Card>
+      <section className="rounded-3xl border border-border/80 bg-card px-5 py-4">
+        <div className="mb-2 flex justify-between">
+          <span className="text-sm font-medium text-foreground">Progress</span>
+          <span className="text-sm text-muted-foreground">
+            Step {currentStep + 1} of {totalSteps}
+          </span>
+        </div>
+        <Progress value={progress} className="h-2" />
+      </section>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-800">
-              {currentStep + 1}
-            </span>
-            {step.title}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
+      <section className="rounded-3xl border border-border/80 bg-card p-6">
+        <h2 className="mb-6 flex items-center gap-3 text-lg font-semibold text-foreground">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-sm font-semibold text-primary">
+            {currentStep + 1}
+          </span>
+          {step.title}
+        </h2>
+        <div className="space-y-6">
           <div>
-            <h4 className="mb-2 font-semibold">Understanding</h4>
-            <p className="text-gray-700">{step.explanation}</p>
+            <h4 className="mb-2 text-sm font-semibold text-foreground">
+              Understanding
+            </h4>
+            <p className="text-sm text-muted-foreground">{step.explanation}</p>
           </div>
           <div>
-            <h4 className="mb-2 font-semibold">Exercise</h4>
-            <p className="mb-2 text-gray-700">{step.exercise}</p>
+            <h4 className="mb-2 text-sm font-semibold text-foreground">
+              Exercise
+            </h4>
+            <p className="mb-2 text-sm text-muted-foreground">{step.exercise}</p>
             <Textarea
               placeholder="Write your response here..."
               value={exerciseResponse}
               onChange={(e) => setExerciseResponse(e.target.value)}
-              className="min-h-[100px]"
+              className="min-h-[100px] rounded-2xl"
             />
           </div>
           <div>
-            <h4 className="mb-2 font-semibold">Reflection</h4>
-            <p className="mb-2 text-gray-700">{step.reflection}</p>
+            <h4 className="mb-2 text-sm font-semibold text-foreground">
+              Reflection
+            </h4>
+            <p className="mb-2 text-sm text-muted-foreground">
+              {step.reflection}
+            </p>
             <Textarea
               placeholder="Reflect on your experience..."
               value={reflectionResponse}
               onChange={(e) => setReflectionResponse(e.target.value)}
-              className="min-h-[100px]"
+              className="min-h-[100px] rounded-2xl"
             />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </section>
 
       <div className="flex justify-between">
         <Button

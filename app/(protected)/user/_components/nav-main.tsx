@@ -25,18 +25,19 @@ import { usePathname } from 'next/navigation';
 
 export default function NavMain({
   items,
-}: {
+}: Readonly<{
   items: {
     title: string;
     url: string;
     icon?: LucideIcon;
     isActive?: boolean;
+    tourId?: string;
     items?: {
       title: string;
       url: string;
     }[];
   }[];
-}) {
+}>) {
   const { toggleSidebar, open, isMobile } = useSidebar();
   const pathname = usePathname();
   return (
@@ -54,6 +55,7 @@ export default function NavMain({
                 animate="visible"
                 variants={menuItemVariants}
                 transition={{ delay: index * 0.1 }}
+                data-tour={item.tourId}
               >
                 <SidebarMenuItem>
                   <SidebarMenuButton
@@ -75,7 +77,7 @@ export default function NavMain({
             <Collapsible
               key={item.title}
               asChild
-              defaultOpen={item.isActive}
+              defaultOpen={item.isActive || pathname.startsWith(item.url)}
               className="group/collapsible"
             >
               <motion.div
@@ -83,6 +85,7 @@ export default function NavMain({
                 animate="visible"
                 variants={menuItemVariants}
                 transition={{ delay: index * 0.1 }}
+                data-tour={item.tourId}
               >
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { ClerkProvider } from '@clerk/nextjs';
-import { Manrope, Libre_Baskerville } from 'next/font/google';
+import localFont from 'next/font/local';
 import { MotionConfig } from 'motion/react';
 import NextTopLoader from 'nextjs-toploader';
 import QueryProvider from '@/components/wrappers/query-client';
@@ -9,18 +9,11 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 
-const manrope = Manrope({
-  subsets: ['latin'],
+const alanSans = localFont({
+  src: './fonts/AlanSans-Variable.woff2',
   variable: '--font-sans',
   display: 'swap',
-});
-
-const libreBaskerville = Libre_Baskerville({
-  weight: ['400', '700'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-  variable: '--font-heading',
-  display: 'swap',
+  weight: '300 900',
 });
 
 export const metadata: Metadata = {
@@ -35,8 +28,11 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={`${manrope.variable} ${libreBaskerville.variable}`}>
-          <NextTopLoader color="oklch(0.490 0.150 270)" showSpinner={false} />
+        <body
+          className={`${alanSans.variable} font-sans`}
+          style={{ fontFamily: 'var(--font-sans), Helvetica, Arial, sans-serif' }}
+        >
+          <NextTopLoader color="#0a70ff" showSpinner={false} />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

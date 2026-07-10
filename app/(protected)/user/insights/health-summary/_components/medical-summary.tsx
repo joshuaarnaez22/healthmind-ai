@@ -1,12 +1,5 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import React, { useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { memo } from 'react';
@@ -56,16 +49,14 @@ const MedicalSummary = memo(function MedicalSummary({
     URL.revokeObjectURL(url);
   };
   return (
-    <Card className="h-fit">
-      <CardHeader>
-        <CardTitle>Medical Summary</CardTitle>
-        <CardDescription>
-          {pending ? 'Generating...' : 'Your personalized health summary'}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+    <section className="h-fit rounded-3xl border border-border/80 bg-card p-6">
+      <h2 className="text-lg font-semibold text-foreground">Medical Summary</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        {pending ? 'Generating...' : 'Your personalized health summary'}
+      </p>
+      <div className="mt-4">
         <div
-          className="bg-muted/50 prose max-h-[500px] min-h-64 max-w-none space-y-4 overflow-y-auto scroll-smooth rounded-lg p-8"
+          className="prose max-h-[500px] min-h-64 max-w-none space-y-4 overflow-y-auto scroll-smooth rounded-2xl bg-secondary p-8"
           ref={summaryContentRef}
         >
           {summary ? (
@@ -120,8 +111,8 @@ const MedicalSummary = memo(function MedicalSummary({
             Download
           </Button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   );
 });
 

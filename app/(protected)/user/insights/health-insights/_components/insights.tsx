@@ -3,19 +3,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Affirmations from './affirmations';
 import ExercisesInsights from './exercises-insights';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
   BookmarkIcon,
   BookOpenIcon,
   CalendarIcon,
   ExternalLinkIcon,
   LightbulbIcon,
   SparklesIcon,
+  NotebookPen,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { pageAnimations } from '@/lib/motion';
@@ -35,7 +29,21 @@ import { Button } from '@/components/ui/button';
 import HealthTrendsPanel from './health-trends-panel';
 import MedicalDisclaimer from '@/components/medical-disclaimer';
 import Link from 'next/link';
-import { NotebookPen } from 'lucide-react';
+
+function AiWorkingBanner({ message }: { message: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="border-primary/20 bg-primary/5 my-4 flex items-center gap-2 rounded-2xl border px-4 py-3"
+    >
+      <SparklesIcon className="h-5 w-5 text-primary" />
+      <p className="text-sm text-primary">{message}</p>
+    </motion.div>
+  );
+}
 
 export default function Insights() {
   const [selectedObservation, setSelectedObservation] =
@@ -43,7 +51,7 @@ export default function Insights() {
   const { data, loadingStates, isError } = useSequentialInsights();
   if (isError)
     return (
-      <div className="border-destructive/30 bg-destructive/5 flex flex-col items-center gap-4 rounded-xl border border-dashed py-20 text-center">
+      <div className="border-destructive/30 bg-destructive/5 flex flex-col items-center gap-4 rounded-3xl border py-20 text-center">
         <SparklesIcon className="text-destructive/40 h-9 w-9" />
         <div>
           <p className="text-sm font-medium text-foreground">
@@ -56,7 +64,7 @@ export default function Insights() {
         </div>
         <button
           onClick={() => window.location.reload()}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-4 py-2 text-xs font-medium text-foreground hover:bg-muted"
+          className="inline-flex items-center gap-1.5 rounded-2xl border border-border bg-background px-4 py-2 text-xs font-medium text-foreground hover:bg-muted"
         >
           Refresh
         </button>
@@ -77,10 +85,8 @@ export default function Insights() {
   const articlesLoading = loadingStates.articles;
   const exercisesLoading = loadingStates.exercises;
 
-  // Show skeleton while group-1 queries are still in flight
   const isInitialLoading = observationsLoading;
 
-  // All queries settled but API returned null → no journal data yet
   const allSettled =
     !observationsLoading && !articlesLoading && !exercisesLoading;
   const hasNoData =
@@ -96,10 +102,10 @@ export default function Insights() {
       <motion.div {...pageAnimations}>
         <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
               Health Insights
             </h1>
-            <p className="mt-1 text-muted-foreground">
+            <p className="mt-1 text-sm text-muted-foreground">
               Personalized recommendations to support your mental wellbeing
             </p>
           </div>
@@ -112,20 +118,20 @@ export default function Insights() {
         {isInitialLoading ? (
           <InsightsLoader />
         ) : hasNoData ? (
-          <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed py-20 text-center text-muted-foreground">
-            <NotebookPen className="h-9 w-9 opacity-30" />
+          <div className="flex flex-col items-center gap-4 rounded-3xl border border-border/80 bg-secondary py-20 text-center">
+            <NotebookPen className="h-9 w-9 text-primary opacity-70" />
             <div>
               <p className="text-sm font-medium text-foreground">
                 No insights yet
               </p>
-              <p className="mt-1 text-xs">
+              <p className="mt-1 text-xs text-muted-foreground">
                 AI insights are generated from your journal entries. Write at
                 least one entry to unlock them.
               </p>
             </div>
             <Link
               href="/user/journal"
-              className="hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-xs font-medium text-primary-foreground"
+              className="inline-flex items-center gap-1.5 rounded-2xl bg-primary px-4 py-2 text-xs font-medium text-primary-foreground hover:opacity-90"
             >
               <NotebookPen className="h-3.5 w-3.5" />
               Write your first journal entry
@@ -141,44 +147,32 @@ export default function Insights() {
 
             <TabsContent value="observations" className="space-y-6">
               {observationsLoading && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="border-primary/10 bg-primary/5 mt-4 flex items-center gap-2 rounded-lg border p-4"
-                >
-                  <SparklesIcon className="text-primary/80 h-5 w-5" />
-                  <p className="text-primary/80 text-sm">
-                    AI is personalizing your Mental Health Insights based on
-                    your journal entries and progress
-                  </p>
-                </motion.div>
+                <AiWorkingBanner message="AI is personalizing your Mental Health Insights based on your journal entries and progress" />
               )}
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                <Card className="col-span-1">
-                  <CardHeader>
-                    <CardTitle>Daily Affirmations</CardTitle>
-                    <CardDescription>
-                      Positive statements to reinforce mental wellness
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
+                <section className="rounded-3xl border border-border/80 bg-card p-6">
+                  <h2 className="text-lg font-semibold text-foreground">
+                    Daily Affirmations
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Positive statements to reinforce mental wellness
+                  </p>
+                  <div className="mt-4">
                     {loadingStates.affirmations ? (
                       <AffirmationLoader />
                     ) : (
                       <Affirmations affirmations={affirmations || []} />
                     )}
-                  </CardContent>
-                </Card>
-                <Card className="col-span-1">
-                  <CardHeader>
-                    <CardTitle>Mental Health Summary</CardTitle>
-                    <CardDescription>
-                      Overview of your mental health journey
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
+                  </div>
+                </section>
+                <section className="rounded-3xl border border-border/80 bg-card p-6">
+                  <h2 className="text-lg font-semibold text-foreground">
+                    Mental Health Summary
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Overview of your mental health journey
+                  </p>
+                  <div className="mt-4">
                     {loadingStates.mental_summary ? (
                       <MentalSummaryLoader />
                     ) : (
@@ -187,17 +181,17 @@ export default function Insights() {
                         moodData={moodData}
                       />
                     )}
-                  </CardContent>
-                </Card>
+                  </div>
+                </section>
               </div>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Therapeutic Observations</CardTitle>
-                  <CardDescription>
-                    Key insights from your journal entries and therapy sessions
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
+              <section className="rounded-3xl border border-border/80 bg-card p-6">
+                <h2 className="text-lg font-semibold text-foreground">
+                  Therapeutic Observations
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Key insights from your journal entries and therapy sessions
+                </p>
+                <div className="mt-4">
                   {loadingStates.observations ? (
                     <ObservationLoader />
                   ) : (
@@ -216,100 +210,74 @@ export default function Insights() {
                         )}
                     </div>
                   )}
-                </CardContent>
-              </Card>
+                </div>
+              </section>
             </TabsContent>
             <TabsContent value="articles">
               {articlesLoading && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="border-primary/10 bg-primary/5 my-4 flex items-center gap-2 rounded-lg border p-4"
-                >
-                  <SparklesIcon className="text-primary/80 h-5 w-5" />
-                  <p className="text-primary/80 text-sm">
-                    AI is personalizing your Mental Health Insights based on
-                    your journal entries and progress
-                  </p>
-                </motion.div>
+                <AiWorkingBanner message="AI is personalizing your Mental Health Insights based on your journal entries and progress" />
               )}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Recommended Articles</CardTitle>
-                  <CardDescription>
-                    Curated readings based on your journal entries and progress
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
+              <section className="rounded-3xl border border-border/80 bg-card p-6">
+                <h2 className="text-lg font-semibold text-foreground">
+                  Recommended Articles
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Curated readings based on your journal entries and progress
+                </p>
+                <div className="mt-4">
                   {loadingStates.articles ? (
                     <ArticleLoader />
                   ) : (
-                    <div className="grid grid-cols-1 gap-6">
+                    <div className="grid grid-cols-1 gap-4">
                       {!!articles &&
                         articles.map((article: ArticleProps, index: number) => (
-                          <Card
+                          <div
                             key={index}
-                            className="hover:border-primary/50 overflow-hidden transition-all"
+                            className="overflow-hidden rounded-2xl border border-border/80 bg-background/70 p-6 transition-colors hover:border-primary/40"
                           >
-                            <CardContent className="p-6">
-                              <div className="flex flex-col items-start gap-6 md:flex-row">
-                                <div className="flex-1 space-y-4">
-                                  <div className="space-y-2">
-                                    <div className="flex items-center gap-2">
-                                      <BookOpenIcon className="h-5 w-5 text-primary" />
-                                      <span className="text-sm text-muted-foreground">
-                                        {article.publication}
-                                      </span>
-                                    </div>
-                                    <h3 className="text-lg font-semibold text-primary">
-                                      {article.title}
-                                    </h3>
+                            <div className="flex flex-col items-start gap-6 md:flex-row">
+                              <div className="flex-1 space-y-4">
+                                <div className="space-y-2">
+                                  <div className="flex items-center gap-2">
+                                    <BookOpenIcon className="h-5 w-5 text-primary" />
+                                    <span className="text-sm text-muted-foreground">
+                                      {article.publication}
+                                    </span>
                                   </div>
-                                  <p className="text-muted-foreground">
-                                    {article.benefit}
-                                  </p>
+                                  <h3 className="text-lg font-semibold text-primary">
+                                    {article.title}
+                                  </h3>
                                 </div>
-                                <Button
-                                  asChild
-                                  variant="outline"
-                                  className="shrink-0"
-                                >
-                                  <a
-                                    href={article.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-2"
-                                  >
-                                    Read Article
-                                    <ExternalLinkIcon className="h-4 w-4" />
-                                  </a>
-                                </Button>
+                                <p className="text-sm text-muted-foreground">
+                                  {article.benefit}
+                                </p>
                               </div>
-                            </CardContent>
-                          </Card>
+                              <Button
+                                asChild
+                                variant="outline"
+                                className="shrink-0"
+                              >
+                                <a
+                                  href={article.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-2"
+                                >
+                                  Read Article
+                                  <ExternalLinkIcon className="h-4 w-4" />
+                                </a>
+                              </Button>
+                            </div>
+                          </div>
                         ))}
                     </div>
                   )}
-                </CardContent>
-              </Card>
+                </div>
+              </section>
             </TabsContent>
             <TabsContent value="exercises">
               {exercisesLoading && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="border-primary/10 bg-primary/5 my-4 flex items-center gap-2 rounded-lg border p-4"
-                >
-                  <SparklesIcon className="text-primary/80 h-5 w-5" />
-                  <p className="text-primary/80 text-sm">
-                    AI is personalizing your Mental Health Insights based on
-                    your journal entries and progress
-                  </p>
-                </motion.div>
+                <AiWorkingBanner message="AI is personalizing your Mental Health Insights based on your journal entries and progress" />
               )}
               {!!exercisesData && (
                 <ExercisesInsights exercises={exercisesData} />

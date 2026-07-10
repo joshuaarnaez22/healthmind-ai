@@ -2,34 +2,34 @@ export const dynamic = 'force-dynamic';
 
 import { prisma } from '@/lib/client';
 import { getUserId } from '@/actions/server-actions/user';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import Link from 'next/link';
 import { safeFormat } from '@/lib/utils';
 import { Mood } from '@prisma/client';
 import { CheckCircle2, Circle, ArrowRight } from 'lucide-react';
+import OnboardingTour from '@/app/(protected)/user/_components/onboarding-tour';
 
 const moodConfig: Record<Mood, { label: string; className: string }> = {
   TERRIBLE: {
     label: 'Terrible',
-    className: 'bg-red-100 text-red-700 border-red-200',
+    className: 'border-red-200/80 bg-red-50 text-red-700',
   },
   BAD: {
     label: 'Bad',
-    className: 'bg-orange-100 text-orange-700 border-orange-200',
+    className: 'border-orange-200/80 bg-orange-50 text-orange-700',
   },
   NEUTRAL: {
     label: 'Neutral',
-    className: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+    className: 'border-amber-200/80 bg-amber-50 text-amber-800',
   },
   GOOD: {
     label: 'Good',
-    className: 'bg-green-100 text-green-700 border-green-200',
+    className: 'border-emerald-200/80 bg-emerald-50 text-emerald-700',
   },
   GREAT: {
     label: 'Great',
-    className: 'bg-blue-100 text-blue-700 border-blue-200',
+    className: 'border-primary/20 bg-secondary text-primary',
   },
 };
 
@@ -108,288 +108,279 @@ export default async function DashboardPage() {
     { label: 'Set a wellness goal', href: '/user/goals', done: totalGoals > 0 },
   ];
   const completedSteps = gettingStarted.filter((s) => s.done).length;
+  const showChecklist = completedSteps < gettingStarted.length;
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-8">
+      <OnboardingTour showTour />
+
       <div>
-        <h1 className="font-heading text-3xl font-bold tracking-tight">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
           {getGreeting()}, {user?.firstName ?? 'there'}
         </h1>
-        <p className="mt-1 text-muted-foreground">
+        <p className="mt-2 text-base text-muted-foreground">
           {isNewUser
-            ? "Welcome to HealthMind — let's get you set up."
-            : "Here's a snapshot of your wellness today."}
+            ? 'Welcome to HealthMind — let\'s get you set up.'
+            : 'Here\'s a snapshot of your wellness today.'}
         </p>
       </div>
 
-      {/* Getting started checklist — shown until all steps done */}
-      {completedSteps < gettingStarted.length && (
-        <Card className="border-primary/20 bg-primary/5">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base font-semibold">
+      {showChecklist && (
+        <section
+          id="getting-started"
+          data-tour="getting-started"
+          className="rounded-3xl bg-secondary p-6 sm:p-7"
+        >
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-primary">
+                Start here
+              </p>
+              <h2 className="mt-1 text-lg font-bold tracking-tight">
                 Getting started
-              </CardTitle>
-              <span className="text-xs text-muted-foreground">
-                {completedSteps} / {gettingStarted.length} done
-              </span>
+              </h2>
             </div>
-            <Progress
-              value={(completedSteps / gettingStarted.length) * 100}
-              className="h-1.5"
-            />
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2">
-              {gettingStarted.map((step) => (
-                <li key={step.href}>
-                  <Link
-                    href={step.done ? '#' : step.href}
-                    className={`flex items-center gap-3 rounded-lg px-2 py-1.5 text-sm transition-colors ${step.done ? 'cursor-default opacity-50' : 'hover:bg-primary/10'}`}
+            <span className="rounded-full bg-accent px-3 py-1 text-xs font-bold text-accent-foreground">
+              {completedSteps} / {gettingStarted.length}
+            </span>
+          </div>
+          <Progress
+            value={(completedSteps / gettingStarted.length) * 100}
+            className="mb-5 h-2 bg-background/60"
+          />
+          <ul className="space-y-2">
+            {gettingStarted.map((step) => (
+              <li key={step.href}>
+                <Link
+                  href={step.done ? '#' : step.href}
+                  className={`flex items-center gap-3 rounded-2xl bg-background/70 px-4 py-3 text-sm transition-colors ${
+                    step.done
+                      ? 'cursor-default opacity-55'
+                      : 'hover:bg-background'
+                  }`}
+                >
+                  {step.done ? (
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+                  ) : (
+                    <Circle className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  )}
+                  <span
+                    className={`font-medium ${step.done ? 'line-through' : ''}`}
                   >
-                    {step.done ? (
-                      <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                    ) : (
-                      <Circle className="h-4 w-4 shrink-0 text-muted-foreground" />
-                    )}
-                    <span className={step.done ? 'line-through' : ''}>
-                      {step.label}
-                    </span>
-                    {!step.done && (
-                      <ArrowRight className="ml-auto h-3.5 w-3.5 text-muted-foreground" />
-                    )}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+                    {step.label}
+                  </span>
+                  {!step.done && (
+                    <ArrowRight className="ml-auto h-3.5 w-3.5 text-muted-foreground" />
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-2">
-        {/* Mood Summary */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base font-semibold">
-                Mood This Week
-              </CardTitle>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {/* Mood */}
+        <section className="rounded-3xl border border-border/80 bg-card p-6">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-base font-bold tracking-tight">Mood this week</h2>
+            <Link
+              href="/user/journal"
+              className="text-xs font-medium text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+            >
+              New entry
+            </Link>
+          </div>
+          {Object.keys(moodCounts).length === 0 ? (
+            <div className="flex flex-col gap-2">
+              <p className="text-sm text-muted-foreground">
+                No mood entries this week.
+              </p>
               <Link
                 href="/user/journal"
-                className="text-xs text-muted-foreground underline-offset-4 hover:underline"
+                className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline"
               >
-                New entry
+                Write your first entry <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
-          </CardHeader>
-          <CardContent>
-            {Object.keys(moodCounts).length === 0 ? (
-              <div className="flex flex-col gap-2">
-                <p className="text-sm text-muted-foreground">
-                  No mood entries this week.
-                </p>
-                <Link
-                  href="/user/journal"
-                  className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                >
-                  Write your first entry <ArrowRight className="h-3 w-3" />
-                </Link>
-              </div>
-            ) : (
-              <div className="flex flex-wrap gap-2">
-                {(Object.entries(moodCounts) as [Mood, number][]).map(
-                  ([mood, count]) => (
-                    <Badge
-                      key={mood}
-                      variant="outline"
-                      className={moodConfig[mood].className}
-                    >
-                      {moodConfig[mood].label}: {count}
-                    </Badge>
-                  )
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {(Object.entries(moodCounts) as [Mood, number][]).map(
+                ([mood, count]) => (
+                  <Badge
+                    key={mood}
+                    variant="outline"
+                    className={moodConfig[mood].className}
+                  >
+                    {moodConfig[mood].label}: {count}
+                  </Badge>
+                )
+              )}
+            </div>
+          )}
+        </section>
+
+        {/* Journal */}
+        <section className="rounded-3xl border border-border/80 bg-card p-6">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-base font-bold tracking-tight">
+              Latest journal
+            </h2>
+            <Link
+              href="/user/journal"
+              className="text-xs font-medium text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+            >
+              View all
+            </Link>
+          </div>
+          {!recentJournal ? (
+            <div className="flex flex-col gap-2">
+              <p className="text-sm text-muted-foreground">
+                No journal entries yet.
+              </p>
+              <Link
+                href="/user/journal"
+                className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline"
+              >
+                Write your first entry <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="truncate font-semibold">
+                  {recentJournal.title}
+                </span>
+                {recentJournal.mood && (
+                  <Badge
+                    variant="outline"
+                    className={`shrink-0 ${moodConfig[recentJournal.mood].className}`}
+                  >
+                    {moodConfig[recentJournal.mood].label}
+                  </Badge>
                 )}
               </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Recent Journal */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base font-semibold">
-                Latest Journal Entry
-              </CardTitle>
-              <Link
-                href="/user/journal"
-                className="text-xs text-muted-foreground underline-offset-4 hover:underline"
-              >
-                View all
-              </Link>
+              <p className="text-xs text-muted-foreground">
+                {safeFormat(recentJournal.addedAt, 'EEE, MMM do yyyy')}
+              </p>
+              <p className="line-clamp-2 text-sm text-muted-foreground">
+                {recentJournal.content.slice(0, 100)}
+                {recentJournal.content.length > 100 ? '…' : ''}
+              </p>
             </div>
-          </CardHeader>
-          <CardContent>
-            {!recentJournal ? (
-              <div className="flex flex-col gap-2">
-                <p className="text-sm text-muted-foreground">
-                  No journal entries yet.
-                </p>
-                <Link
-                  href="/user/journal"
-                  className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                >
-                  Write your first entry <ArrowRight className="h-3 w-3" />
-                </Link>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <span className="truncate font-medium">
-                    {recentJournal.title}
-                  </span>
-                  {recentJournal.mood && (
-                    <Badge
-                      variant="outline"
-                      className={`shrink-0 ${moodConfig[recentJournal.mood].className}`}
-                    >
-                      {moodConfig[recentJournal.mood].label}
-                    </Badge>
-                  )}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  {safeFormat(recentJournal.addedAt, 'EEE, MMM do yyyy')}
-                </p>
-                <p className="line-clamp-2 text-sm text-muted-foreground">
-                  {recentJournal.content.slice(0, 100)}
-                  {recentJournal.content.length > 100 ? '…' : ''}
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+          )}
+        </section>
 
-        {/* Goals Summary */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base font-semibold">
-                Goals Overview
-              </CardTitle>
+        {/* Goals */}
+        <section className="rounded-3xl bg-secondary p-6">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-base font-bold tracking-tight">
+              Goals overview
+            </h2>
+            <Link
+              href="/user/goals"
+              className="text-xs font-medium text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+            >
+              View all
+            </Link>
+          </div>
+          {totalGoals === 0 ? (
+            <div className="flex flex-col gap-2">
+              <p className="text-sm text-muted-foreground">No goals set yet.</p>
               <Link
                 href="/user/goals"
-                className="text-xs text-muted-foreground underline-offset-4 hover:underline"
+                className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline"
               >
-                View all
+                Set your first goal <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {totalGoals === 0 ? (
-              <div className="flex flex-col gap-2">
-                <p className="text-sm text-muted-foreground">
-                  No goals set yet.
-                </p>
-                <Link
-                  href="/user/goals"
-                  className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                >
-                  Set your first goal <ArrowRight className="h-3 w-3" />
-                </Link>
+          ) : (
+            <div className="space-y-3">
+              <div className="flex flex-wrap gap-4 text-sm">
+                <span>
+                  <span className="font-bold">{totalGoals}</span>{' '}
+                  <span className="text-muted-foreground">total</span>
+                </span>
+                <span>
+                  <span className="font-bold text-emerald-700">
+                    {completedGoals}
+                  </span>{' '}
+                  <span className="text-muted-foreground">done</span>
+                </span>
+                <span>
+                  <span className="font-bold text-primary">
+                    {inProgressGoals}
+                  </span>{' '}
+                  <span className="text-muted-foreground">in progress</span>
+                </span>
               </div>
-            ) : (
-              <>
-                <div className="flex gap-4 text-sm">
-                  <span>
-                    <span className="font-medium">{totalGoals}</span>{' '}
-                    <span className="text-muted-foreground">total</span>
-                  </span>
-                  <span>
-                    <span className="font-medium text-green-600">
-                      {completedGoals}
-                    </span>{' '}
-                    <span className="text-muted-foreground">completed</span>
-                  </span>
-                  <span>
-                    <span className="font-medium text-primary">
-                      {inProgressGoals}
-                    </span>{' '}
-                    <span className="text-muted-foreground">in progress</span>
-                  </span>
-                </div>
-                <div className="space-y-1">
-                  <Progress value={completionPct} className="h-2" />
-                  <p className="text-xs text-muted-foreground">
-                    {completionPct}% complete
-                  </p>
-                </div>
-              </>
-            )}
-          </CardContent>
-        </Card>
+              <div className="space-y-1">
+                <Progress value={completionPct} className="h-2 bg-background/60" />
+                <p className="text-xs text-muted-foreground">
+                  {completionPct}% complete
+                </p>
+              </div>
+            </div>
+          )}
+        </section>
 
-        {/* Latest Vitals */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base font-semibold">
-                Latest Vitals
-              </CardTitle>
+        {/* Vitals */}
+        <section className="rounded-3xl border border-border/80 bg-[oklch(0.964_0.022_139)] p-6 dark:bg-card">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-base font-bold tracking-tight">
+              Latest vitals
+            </h2>
+            <Link
+              href="/user/insights/health-tracker"
+              className="text-xs font-medium text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+            >
+              View all
+            </Link>
+          </div>
+          {!latestBP && !latestGlucose ? (
+            <div className="flex flex-col gap-2">
+              <p className="text-sm text-muted-foreground">No readings yet.</p>
               <Link
                 href="/user/insights/health-tracker"
-                className="text-xs text-muted-foreground underline-offset-4 hover:underline"
+                className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline"
               >
-                View all
+                Log your first reading <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
-          </CardHeader>
-          <CardContent>
-            {!latestBP && !latestGlucose ? (
-              <div className="flex flex-col gap-2">
-                <p className="text-sm text-muted-foreground">
-                  No readings yet.
-                </p>
-                <Link
-                  href="/user/insights/health-tracker"
-                  className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                >
-                  Log your first reading <ArrowRight className="h-3 w-3" />
-                </Link>
-              </div>
-            ) : (
-              <div className="flex gap-6">
-                {latestBP && (
-                  <div className="space-y-0.5">
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                      Blood Pressure
-                    </p>
-                    <p className="text-xl font-semibold tabular-nums">
-                      {latestBP.systolic}/{latestBP.diastolic}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {safeFormat(latestBP.loggedAt, 'MMM do')}
-                    </p>
-                  </div>
-                )}
-                {latestGlucose && (
-                  <div className="space-y-0.5">
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                      Glucose
-                    </p>
-                    <p className="text-xl font-semibold tabular-nums">
-                      {Number(latestGlucose.glucose)}{' '}
-                      <span className="text-sm font-normal text-muted-foreground">
-                        mg/dL
-                      </span>
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {safeFormat(latestGlucose.loggedAt, 'MMM do')}
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+          ) : (
+            <div className="flex gap-6">
+              {latestBP && (
+                <div className="space-y-0.5">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    Blood pressure
+                  </p>
+                  <p className="text-2xl font-bold tabular-nums tracking-tight">
+                    {latestBP.systolic}/{latestBP.diastolic}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {safeFormat(latestBP.loggedAt, 'MMM do')}
+                  </p>
+                </div>
+              )}
+              {latestGlucose && (
+                <div className="space-y-0.5">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    Glucose
+                  </p>
+                  <p className="text-2xl font-bold tabular-nums tracking-tight">
+                    {Number(latestGlucose.glucose)}{' '}
+                    <span className="text-sm font-medium text-muted-foreground">
+                      mg/dL
+                    </span>
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {safeFormat(latestGlucose.loggedAt, 'MMM do')}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </section>
       </div>
     </div>
   );

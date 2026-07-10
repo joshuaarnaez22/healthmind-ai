@@ -1,6 +1,5 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   ChartContainer,
   ChartTooltip,
@@ -87,38 +86,26 @@ export default function InsightsChart({
   };
 
   const { open: sidebarOpen } = useSidebar();
+
+  const stats = [
+    { label: 'Total Check-ins', value: totalCheckIns },
+    { label: 'Reflections Tracked', value: totalReflection },
+    { label: 'Completed Goals', value: totalCompletedGoals },
+    { label: 'Active Goals', value: totalActiveGoals },
+  ];
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <Card className="p-3 text-center">
-          <div className="text-2xl font-bold text-blue-600">
-            {totalCheckIns}
+        {stats.map((stat) => (
+          <div
+            key={stat.label}
+            className="rounded-2xl border border-border/80 bg-secondary p-3 text-center"
+          >
+            <div className="text-2xl font-bold text-primary">{stat.value}</div>
+            <div className="text-xs text-muted-foreground">{stat.label}</div>
           </div>
-          <div className="text-xs text-muted-foreground">Total Check-ins</div>
-        </Card>
-
-        <Card className="p-3 text-center">
-          <div className="text-2xl font-bold text-green-600">
-            {totalReflection}
-          </div>
-          <div className="text-xs text-muted-foreground">
-            Reflections Tracked
-          </div>
-        </Card>
-
-        <Card className="p-3 text-center">
-          <div className="text-2xl font-bold text-purple-600">
-            {totalCompletedGoals}
-          </div>
-          <div className="text-xs text-muted-foreground">Completed Goals</div>
-        </Card>
-
-        <Card className="p-3 text-center">
-          <div className="text-2xl font-bold text-orange-600">
-            {totalActiveGoals}
-          </div>
-          <div className="text-xs text-muted-foreground">Active Goals</div>
-        </Card>
+        ))}
       </div>
 
       <div
@@ -128,122 +115,106 @@ export default function InsightsChart({
             : 'grid-cols-1 md:grid-cols-2'
         }`}
       >
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Activity Overview</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig}>
-              <ResponsiveContainer width="100%" height={240}>
-                <BarChart
-                  data={activityData}
-                  margin={{ top: 20, right: 0, left: 0, bottom: 5 }}
+        <div className="rounded-3xl border border-border/80 bg-card p-5">
+          <h3 className="mb-4 text-lg font-semibold text-foreground">
+            Activity Overview
+          </h3>
+          <ChartContainer config={chartConfig}>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart
+                data={activityData}
+                margin={{ top: 20, right: 0, left: 0, bottom: 5 }}
+              >
+                <XAxis
+                  dataKey="name"
+                  tickLine={false}
+                  axisLine={false}
+                  className="text-xs"
+                  angle={-30}
+                  textAnchor="end"
+                  height={80}
+                />
+                <YAxis tickLine={false} axisLine={false} className="text-xs" />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                  {activityData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+        </div>
+
+        <div className="rounded-3xl border border-border/80 bg-card p-5">
+          <h3 className="mb-4 text-lg font-semibold text-foreground">
+            Goals Distribution
+          </h3>
+          <ChartContainer config={chartConfig}>
+            <ResponsiveContainer width="100%" height={240}>
+              <PieChart>
+                <Pie
+                  data={goalsData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={40}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
                 >
-                  <XAxis
-                    dataKey="name"
-                    tickLine={false}
-                    axisLine={false}
-                    className="text-xs"
-                    angle={-30}
-                    textAnchor="end"
-                    height={80}
-                  />
-                  <YAxis
-                    tickLine={false}
-                    axisLine={false}
-                    className="text-xs"
-                  />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                    {activityData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Goals Distribution</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig}>
-              <ResponsiveContainer width="100%" height={240}>
-                <PieChart>
-                  <Pie
-                    data={goalsData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={40}
-                    outerRadius={80}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {goalsData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                </PieChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-            <div className="mt-4 flex justify-center gap-4 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-[hsl(var(--chart-3))]" />
-                <span>Completed ({totalCompletedGoals})</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-[hsl(var(--chart-4))]" />
-                <span>Active ({totalActiveGoals})</span>
-              </div>
+                  {goalsData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <ChartTooltip content={<ChartTooltipContent />} />
+              </PieChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+          <div className="mt-4 flex justify-center gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 rounded-full bg-[hsl(var(--chart-3))]" />
+              <span>Completed ({totalCompletedGoals})</span>
             </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Summary</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4 text-center">
-            <div>
-              <div className="text-2xl font-bold text-blue-600">
-                {totalCheckIns + totalReflection}
-              </div>
-              <div className="text-sm text-muted-foreground">
-                Total Activities
-              </div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-purple-600">
-                {totalCompletedGoals + totalActiveGoals}
-              </div>
-              <div className="text-sm text-muted-foreground">Total Goals</div>
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 rounded-full bg-[hsl(var(--chart-4))]" />
+              <span>Active ({totalActiveGoals})</span>
             </div>
           </div>
-          {totalCompletedGoals + totalActiveGoals > 0 && (
-            <div className="mt-4 border-t pt-4">
-              <div className="text-center">
-                <div className="text-lg font-semibold text-green-600">
-                  {Math.round(
-                    (totalCompletedGoals /
-                      (totalCompletedGoals + totalActiveGoals)) *
-                      100
-                  )}
-                  %
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  Goal Completion Rate
-                </div>
-              </div>
+        </div>
+      </div>
+
+      <div className="rounded-3xl border border-border/80 bg-secondary p-5">
+        <h3 className="mb-4 text-lg font-semibold text-foreground">Summary</h3>
+        <div className="grid grid-cols-2 gap-4 text-center">
+          <div>
+            <div className="text-2xl font-bold text-primary">
+              {totalCheckIns + totalReflection}
             </div>
-          )}
-        </CardContent>
-      </Card>
+            <div className="text-sm text-muted-foreground">Total Activities</div>
+          </div>
+          <div>
+            <div className="text-2xl font-bold text-foreground">
+              {totalCompletedGoals + totalActiveGoals}
+            </div>
+            <div className="text-sm text-muted-foreground">Total Goals</div>
+          </div>
+        </div>
+        {totalCompletedGoals + totalActiveGoals > 0 && (
+          <div className="mt-4 border-t border-border/80 pt-4 text-center">
+            <div className="inline-block rounded-full bg-accent px-3 py-1 text-lg font-semibold text-foreground">
+              {Math.round(
+                (totalCompletedGoals /
+                  (totalCompletedGoals + totalActiveGoals)) *
+                  100
+              )}
+              %
+            </div>
+            <div className="mt-1 text-sm text-muted-foreground">
+              Goal Completion Rate
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

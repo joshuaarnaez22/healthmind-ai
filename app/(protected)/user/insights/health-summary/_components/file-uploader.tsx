@@ -1,13 +1,5 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { cn, formatFileSize } from '@/lib/utils';
 import { Upload, UploadCloud, Loader2, Trash2 } from 'lucide-react';
 import { FileUploaderProps } from '@/lib/types';
@@ -31,21 +23,21 @@ const FileUploader = memo(function FileUploader({
   handleSummarize,
 }: FileUploaderProps) {
   return (
-    <Card className="h-fit">
-      <CardHeader>
-        <CardTitle>Upload Medical Files</CardTitle>
-        <CardDescription>
-          Upload medical records, test results, or other health documents for
-          summarization.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <section className="h-fit rounded-3xl border border-border/80 bg-card p-6">
+      <h2 className="text-lg font-semibold text-foreground">
+        Upload Medical Files
+      </h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Upload medical records, test results, or other health documents for
+        summarization.
+      </p>
+      <div className="mt-4 space-y-4">
         <div
           className={cn(
-            'rounded-lg border-2 border-dashed p-8 text-center',
+            'rounded-2xl border-2 border-dashed p-8 text-center',
             isDragging
-              ? 'bg-primary/5 border-primary'
-              : 'border-muted-foreground/20'
+              ? 'border-primary bg-primary/5'
+              : 'border-border/80'
           )}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
@@ -95,7 +87,7 @@ const FileUploader = memo(function FileUploader({
               {files.map((file, index) => (
                 <div
                   key={index}
-                  className="flex items-center space-x-3 rounded border p-3"
+                  className="flex items-center space-x-3 rounded-2xl border border-border/80 bg-background/70 p-3"
                 >
                   <div className="flex-shrink-0">{getFileIcon(file.type)}</div>
                   <div className="min-w-0 flex-1">
@@ -151,8 +143,8 @@ const FileUploader = memo(function FileUploader({
             </div>
           </div>
         )}
-      </CardContent>
-      <CardFooter>
+      </div>
+      <div className="mt-4">
         <Button
           className="w-full"
           disabled={
@@ -169,8 +161,8 @@ const FileUploader = memo(function FileUploader({
             'Summarize Files'
           )}
         </Button>
-      </CardFooter>
-    </Card>
+      </div>
+    </section>
   );
 });
 

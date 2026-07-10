@@ -12,42 +12,30 @@ export default function EmotionSelector({
   onSelectEmotion,
 }: EmotionSelectorProps) {
   const emotions = [
-    { name: 'CALM', color: 'bg-blue-100 text-blue-800 border-blue-200' },
-    {
-      name: 'ENERGIZED',
-      color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    },
-    {
-      name: 'FOCUSED',
-      color: 'bg-purple-100 text-purple-800 border-purple-200',
-    },
-    { name: 'CONNECTED', color: 'bg-pink-100 text-pink-800 border-pink-200' },
-    { name: 'GRATEFUL', color: 'bg-green-100 text-green-800 border-green-200' },
-    {
-      name: 'CONFIDENT',
-      color: 'bg-orange-100 text-orange-800 border-orange-200',
-    },
-    { name: 'PEACEFUL', color: 'bg-teal-100 text-teal-800 border-teal-200' },
-    {
-      name: 'INSPIRED',
-      color: 'bg-indigo-100 text-indigo-800 border-indigo-200',
-    },
+    'CALM',
+    'ENERGIZED',
+    'FOCUSED',
+    'CONNECTED',
+    'GRATEFUL',
+    'CONFIDENT',
+    'PEACEFUL',
+    'INSPIRED',
   ];
   return (
     <RadioGroup className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-      {emotions.map((emotion) => (
+      {emotions.map((name) => (
         <div
-          key={emotion.name}
+          key={name}
           className={cn(
-            'flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 p-3 transition-all',
-            selectedEmotion === emotion.name
-              ? `${emotion.color} border-current`
-              : 'border-transparent hover:border-gray-200'
+            'flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 p-3 transition-colors',
+            selectedEmotion === name
+              ? 'border-primary bg-secondary text-primary'
+              : 'border-transparent bg-card hover:border-border/80'
           )}
-          onClick={() => onSelectEmotion(emotion.name)}
+          onClick={() => onSelectEmotion(name)}
         >
-          <span className="mb-1 text-lg">{getEmotionEmoji(emotion.name)}</span>
-          <span className="text-sm font-medium">{emotion.name}</span>
+          <span className="mb-1 text-lg">{getEmotionEmoji(name)}</span>
+          <span className="text-sm font-medium">{name}</span>
         </div>
       ))}
     </RadioGroup>

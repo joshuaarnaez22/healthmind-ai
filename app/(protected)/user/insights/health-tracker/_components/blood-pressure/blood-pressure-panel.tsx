@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { BarChart, List, PlusCircle } from 'lucide-react';
 import { useState } from 'react';
 import BloodPressureForm from './blood-pressure-form';
@@ -11,7 +10,7 @@ export default function BloodPressurePanel() {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <h2 className="text-2xl font-bold text-red-800">
+        <h2 className="text-xl font-bold tracking-tight text-foreground">
           Blood Pressure Tracker
         </h2>
         <div className="flex flex-col justify-start gap-2 md:flex-row lg:justify-end">
@@ -41,11 +40,11 @@ export default function BloodPressurePanel() {
           </Button>
         </div>
       </div>
-      <Card className="p-4">
+      <div className="rounded-2xl border border-border/80 bg-background/70 p-4">
         {view === 'form' && <BloodPressureForm />}
         {view === 'history' && <BloodPressureHistory />}
         {view === 'chart' && <BloodPressureChart />}
-      </Card>
+      </div>
     </div>
   );
 }
