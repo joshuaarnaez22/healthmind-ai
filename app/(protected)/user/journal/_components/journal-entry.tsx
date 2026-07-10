@@ -53,7 +53,7 @@ export default function JournalEntry() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[auto_1fr]">
-        <section className="h-fit rounded-3xl border border-border/80 bg-secondary p-3">
+        <section className="border-border/80 h-fit rounded-3xl border bg-secondary p-3">
           <Calendar
             mode="single"
             selected={date}
@@ -65,7 +65,7 @@ export default function JournalEntry() {
           />
         </section>
 
-        <section className="flex flex-col rounded-3xl border border-border/80 bg-card p-6">
+        <section className="border-border/80 flex flex-col rounded-3xl border bg-card p-6">
           <div className="pb-3">
             <h2 className="text-base font-semibold text-foreground">
               {safeFormat(date, 'EEEE, MMMM do, yyyy')}

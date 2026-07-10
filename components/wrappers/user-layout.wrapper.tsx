@@ -64,7 +64,7 @@ export default function UserLayoutWrapper({
       <SidebarInset className="bg-background">
         <header
           data-tour="app-header"
-          className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border/80 bg-background/90 px-4 backdrop-blur-md transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12"
+          className="border-border/80 bg-background/90 flex h-14 shrink-0 items-center justify-between gap-2 border-b px-4 backdrop-blur-md transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12"
         >
           <div className="flex items-center gap-2">
             <SidebarTrigger className="-ml-1" />

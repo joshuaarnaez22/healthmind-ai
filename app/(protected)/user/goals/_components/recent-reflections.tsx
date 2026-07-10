@@ -28,7 +28,7 @@ export default function RecentReflections({
       {recentCheckIns.map((checkIn) => (
         <div
           key={checkIn.id}
-          className="flex gap-3 rounded-2xl border border-border/80 bg-background/70 p-3"
+          className="border-border/80 bg-background/70 flex gap-3 rounded-2xl border p-3"
         >
           <Avatar className="h-9 w-9">
             <AvatarImage src="/placeholder-user.jpg" alt="User" />

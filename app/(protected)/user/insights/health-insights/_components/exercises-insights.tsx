@@ -62,13 +62,16 @@ export default function ExercisesInsights({
   }
 
   return (
-    <section className="rounded-3xl border border-border/80 bg-card p-6">
+    <section className="border-border/80 rounded-3xl border bg-card p-6">
       <h2 className="text-lg font-semibold text-foreground">Mental Wellness</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         Guided exercises for your mental health journey
       </p>
       <div className="mt-4">
-        <Badge variant="secondary" className="bg-secondary px-3 py-1 text-sm text-primary">
+        <Badge
+          variant="secondary"
+          className="bg-secondary px-3 py-1 text-sm text-primary"
+        >
           {getCompletedExercises()} of {exercises.length} exercises completed
         </Badge>
       </div>
@@ -84,7 +87,7 @@ export default function ExercisesInsights({
           <div
             key={index}
             className={cn(
-              'cursor-pointer rounded-3xl border border-border/80 bg-card p-5 transition-colors hover:border-primary/30',
+              'border-border/80 hover:border-primary/30 cursor-pointer rounded-3xl border bg-card p-5 transition-colors',
               exercise.isDone && 'bg-secondary/60'
             )}
           >
@@ -96,7 +99,9 @@ export default function ExercisesInsights({
                 <CheckCircle className="ml-2 h-5 w-5 shrink-0 text-primary" />
               )}
             </div>
-            <p className="text-sm text-muted-foreground">{exercise.rationale}</p>
+            <p className="text-sm text-muted-foreground">
+              {exercise.rationale}
+            </p>
 
             <div className="mb-3 mt-4 flex items-center justify-between text-sm text-muted-foreground">
               <div className="flex items-center">

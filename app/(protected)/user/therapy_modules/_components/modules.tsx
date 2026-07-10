@@ -97,14 +97,18 @@ export default function Modules() {
 
   if (modulesError || generateError) {
     return (
-      <div className="rounded-3xl border border-border/80 bg-secondary px-6 py-16 text-center">
+      <div className="border-border/80 rounded-3xl border bg-secondary px-6 py-16 text-center">
         <p className="text-sm font-medium text-foreground">
           Couldn’t load therapy modules
         </p>
         <p className="mt-1 text-xs text-muted-foreground">
           Try generating again in a moment.
         </p>
-        <Button className="mt-4" onClick={() => mutate()} disabled={isGenerating}>
+        <Button
+          className="mt-4"
+          onClick={() => mutate()}
+          disabled={isGenerating}
+        >
           Retry
         </Button>
       </div>
@@ -137,7 +141,8 @@ export default function Modules() {
     {
       type: 'DBT',
       title: 'Dialectical Behavior Therapy (DBT)',
-      description: 'Build skills for emotional regulation and distress tolerance',
+      description:
+        'Build skills for emotional regulation and distress tolerance',
       items: dbtModules,
     },
     {
@@ -183,7 +188,7 @@ export default function Modules() {
         {STATS.map(({ key, icon: Icon, label }) => (
           <div
             key={key}
-            className="flex items-center gap-4 rounded-3xl border border-border/80 bg-card p-5"
+            className="border-border/80 flex items-center gap-4 rounded-3xl border bg-card p-5"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-secondary">
               <Icon className="h-5 w-5 text-primary" />
@@ -199,7 +204,7 @@ export default function Modules() {
       </div>
 
       {completedModules > 0 && (
-        <section className="rounded-3xl border border-border/80 bg-secondary p-6">
+        <section className="border-border/80 rounded-3xl border bg-secondary p-6">
           <div className="flex items-center justify-between gap-4">
             <div>
               <h3 className="text-lg font-semibold text-foreground">
@@ -246,7 +251,7 @@ export default function Modules() {
         </section>
       ))}
 
-      <section className="rounded-3xl border border-border/80 bg-card p-6">
+      <section className="border-border/80 rounded-3xl border bg-card p-6">
         <div className="flex items-start gap-4">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-secondary text-sm font-bold text-primary">
             !

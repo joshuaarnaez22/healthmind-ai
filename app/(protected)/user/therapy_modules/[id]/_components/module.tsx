@@ -84,7 +84,7 @@ export default function Module({ id }: { id: string }) {
 
   if (isError || !module) {
     return (
-      <div className="rounded-3xl border border-border/80 bg-secondary px-6 py-16 text-center">
+      <div className="border-border/80 rounded-3xl border bg-secondary px-6 py-16 text-center">
         <p className="text-sm font-medium text-foreground">
           Couldn’t load this module
         </p>
@@ -148,7 +148,7 @@ export default function Module({ id }: { id: string }) {
 
   if (isCompleted) {
     return (
-      <div className="rounded-3xl border border-border/80 bg-secondary px-6 py-16 text-center">
+      <div className="border-border/80 rounded-3xl border bg-secondary px-6 py-16 text-center">
         <CheckCircle className="mx-auto mb-4 h-12 w-12 text-primary" />
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           Module Completed!
@@ -196,7 +196,7 @@ export default function Module({ id }: { id: string }) {
         </div>
       </div>
 
-      <section className="rounded-3xl border border-border/80 bg-card p-6">
+      <section className="border-border/80 rounded-3xl border bg-card p-6">
         <div className="flex gap-4">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-secondary">
             <IconComponent className="h-7 w-7 text-primary" />
@@ -222,7 +222,7 @@ export default function Module({ id }: { id: string }) {
         </div>
       </section>
 
-      <section className="rounded-3xl border border-border/80 bg-card px-5 py-4">
+      <section className="border-border/80 rounded-3xl border bg-card px-5 py-4">
         <div className="mb-2 flex justify-between">
           <span className="text-sm font-medium text-foreground">Progress</span>
           <span className="text-sm text-muted-foreground">
@@ -232,7 +232,7 @@ export default function Module({ id }: { id: string }) {
         <Progress value={progress} className="h-2" />
       </section>
 
-      <section className="rounded-3xl border border-border/80 bg-card p-6">
+      <section className="border-border/80 rounded-3xl border bg-card p-6">
         <h2 className="mb-6 flex items-center gap-3 text-lg font-semibold text-foreground">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-sm font-semibold text-primary">
             {currentStep + 1}
@@ -250,7 +250,9 @@ export default function Module({ id }: { id: string }) {
             <h4 className="mb-2 text-sm font-semibold text-foreground">
               Exercise
             </h4>
-            <p className="mb-2 text-sm text-muted-foreground">{step.exercise}</p>
+            <p className="mb-2 text-sm text-muted-foreground">
+              {step.exercise}
+            </p>
             <Textarea
               placeholder="Write your response here..."
               value={exerciseResponse}

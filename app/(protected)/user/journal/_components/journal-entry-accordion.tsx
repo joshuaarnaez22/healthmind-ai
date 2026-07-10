@@ -64,7 +64,7 @@ export default function JournalEntryAccordionItem({
   };
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border/80 bg-card transition-colors hover:border-primary/30">
+    <div className="border-border/80 hover:border-primary/30 overflow-hidden rounded-2xl border bg-card transition-colors">
       {/* Header row — always visible */}
       <button
         onClick={() => setIsOpen(!isOpen)}

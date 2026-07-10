@@ -49,7 +49,7 @@ const MedicalSummary = memo(function MedicalSummary({
     URL.revokeObjectURL(url);
   };
   return (
-    <section className="h-fit rounded-3xl border border-border/80 bg-card p-6">
+    <section className="border-border/80 h-fit rounded-3xl border bg-card p-6">
       <h2 className="text-lg font-semibold text-foreground">Medical Summary</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         {pending ? 'Generating...' : 'Your personalized health summary'}

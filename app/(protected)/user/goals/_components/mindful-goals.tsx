@@ -47,7 +47,7 @@ export default function MindfulGoals() {
 
   if (isError) {
     return (
-      <div className="rounded-3xl border border-border/80 bg-secondary px-6 py-16 text-center">
+      <div className="border-border/80 rounded-3xl border bg-secondary px-6 py-16 text-center">
         <p className="text-sm font-medium text-foreground">
           Failed to load goals
         </p>
@@ -88,7 +88,7 @@ export default function MindfulGoals() {
         </header>
 
         {completedGoals.length > 0 && (
-          <section className="rounded-3xl border border-border/80 bg-secondary p-6">
+          <section className="border-border/80 rounded-3xl border bg-secondary p-6">
             <div className="mb-3 flex items-center gap-2">
               <Trophy className="h-5 w-5 text-primary" />
               <h2 className="text-lg font-semibold text-foreground">
@@ -102,7 +102,7 @@ export default function MindfulGoals() {
               {completedGoals.map((goal) => (
                 <div
                   key={goal.id}
-                  className="flex items-center gap-2 rounded-full border border-border/80 bg-card px-3 py-1"
+                  className="border-border/80 flex items-center gap-2 rounded-full border bg-card px-3 py-1"
                 >
                   <span className="text-sm font-medium">{goal.title}</span>
                   <EmotionBadge emotion={goal.emotion} />
@@ -112,7 +112,7 @@ export default function MindfulGoals() {
           </section>
         )}
 
-        <section className="rounded-3xl border border-border/80 bg-card p-6">
+        <section className="border-border/80 rounded-3xl border bg-card p-6">
           <h2 className="text-lg font-semibold text-foreground">
             This Week’s Focus
           </h2>
@@ -171,7 +171,7 @@ export default function MindfulGoals() {
             <TabsTrigger value="insights">Emotional Insights</TabsTrigger>
           </TabsList>
           <TabsContent value="reflections" className="mt-4">
-            <section className="rounded-3xl border border-border/80 bg-card p-6">
+            <section className="border-border/80 rounded-3xl border bg-card p-6">
               <h2 className="text-lg font-semibold text-foreground">
                 Your Reflections
               </h2>
@@ -184,7 +184,7 @@ export default function MindfulGoals() {
             </section>
           </TabsContent>
           <TabsContent value="insights" className="mt-4">
-            <section className="rounded-3xl border border-border/80 bg-card p-6">
+            <section className="border-border/80 rounded-3xl border bg-card p-6">
               <h2 className="text-lg font-semibold text-foreground">
                 Emotional Patterns
               </h2>

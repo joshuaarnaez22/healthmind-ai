@@ -40,7 +40,10 @@ function AppPreview() {
           <p className="text-xs font-medium" style={{ color: MUTED }}>
             Good evening
           </p>
-          <p className="text-lg font-bold tracking-tight" style={{ color: INK }}>
+          <p
+            className="text-lg font-bold tracking-tight"
+            style={{ color: INK }}
+          >
             How are you?
           </p>
         </div>
@@ -57,7 +60,10 @@ function AppPreview() {
           className="rounded-2xl p-4"
           style={{ background: PAPER, border: `1px solid ${RULE}` }}
         >
-          <p className="mb-2 text-[11px] font-bold uppercase tracking-wider" style={{ color: MUTED }}>
+          <p
+            className="mb-2 text-[11px] font-bold uppercase tracking-wider"
+            style={{ color: MUTED }}
+          >
             Today&apos;s mood
           </p>
           <div className="flex gap-2">
@@ -79,18 +85,30 @@ function AppPreview() {
 
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-2xl p-3.5" style={{ background: GREEN_SOFT }}>
-            <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: GREEN }}>
+            <p
+              className="text-[10px] font-bold uppercase tracking-wider"
+              style={{ color: GREEN }}
+            >
               BP
             </p>
-            <p className="mt-1 text-xl font-bold tracking-tight" style={{ color: INK }}>
+            <p
+              className="mt-1 text-xl font-bold tracking-tight"
+              style={{ color: INK }}
+            >
               118/76
             </p>
           </div>
           <div className="rounded-2xl p-3.5" style={{ background: BLUE_SOFT }}>
-            <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: BLUE_DEEP }}>
+            <p
+              className="text-[10px] font-bold uppercase tracking-wider"
+              style={{ color: BLUE_DEEP }}
+            >
               Glucose
             </p>
-            <p className="mt-1 text-xl font-bold tracking-tight" style={{ color: INK }}>
+            <p
+              className="mt-1 text-xl font-bold tracking-tight"
+              style={{ color: INK }}
+            >
               94
               <span className="text-xs font-medium" style={{ color: MUTED }}>
                 {' '}
@@ -100,10 +118,7 @@ function AppPreview() {
           </div>
         </div>
 
-        <div
-          className="rounded-2xl p-4"
-          style={{ background: INK }}
-        >
+        <div className="rounded-2xl p-4" style={{ background: INK }}>
           <p className="text-[11px] font-bold uppercase tracking-wider text-white/50">
             Talk it through
           </p>
@@ -168,13 +183,25 @@ export default function HomePage() {
           </Link>
 
           <nav className="hidden items-center gap-7 md:flex">
-            <a href="#why" className="text-sm font-medium hover:opacity-70" style={{ color: MUTED }}>
+            <a
+              href="#why"
+              className="text-sm font-medium hover:opacity-70"
+              style={{ color: MUTED }}
+            >
               Why HealthMind
             </a>
-            <a href="#app" className="text-sm font-medium hover:opacity-70" style={{ color: MUTED }}>
+            <a
+              href="#app"
+              className="text-sm font-medium hover:opacity-70"
+              style={{ color: MUTED }}
+            >
               The app
             </a>
-            <Link href="/sign-in" className="text-sm font-medium hover:opacity-70" style={{ color: MUTED }}>
+            <Link
+              href="/sign-in"
+              className="text-sm font-medium hover:opacity-70"
+              style={{ color: MUTED }}
+            >
               Log in
             </Link>
             <Link
@@ -192,7 +219,11 @@ export default function HomePage() {
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             onClick={() => setMenuOpen((o) => !o)}
           >
-            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {menuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </button>
         </div>
       </header>
@@ -202,13 +233,28 @@ export default function HomePage() {
           className="fixed inset-0 z-40 flex flex-col px-5 pt-24 md:hidden"
           style={{ background: PAPER }}
         >
-          <a href="#why" className="border-b py-5 text-2xl font-bold" style={{ borderColor: RULE }} onClick={() => setMenuOpen(false)}>
+          <a
+            href="#why"
+            className="border-b py-5 text-2xl font-bold"
+            style={{ borderColor: RULE }}
+            onClick={() => setMenuOpen(false)}
+          >
             Why HealthMind
           </a>
-          <a href="#app" className="border-b py-5 text-2xl font-bold" style={{ borderColor: RULE }} onClick={() => setMenuOpen(false)}>
+          <a
+            href="#app"
+            className="border-b py-5 text-2xl font-bold"
+            style={{ borderColor: RULE }}
+            onClick={() => setMenuOpen(false)}
+          >
             The app
           </a>
-          <Link href="/sign-in" className="border-b py-5 text-2xl font-bold" style={{ borderColor: RULE }} onClick={() => setMenuOpen(false)}>
+          <Link
+            href="/sign-in"
+            className="border-b py-5 text-2xl font-bold"
+            style={{ borderColor: RULE }}
+            onClick={() => setMenuOpen(false)}
+          >
             Log in
           </Link>
           <Link
@@ -237,10 +283,7 @@ export default function HomePage() {
             }}
           >
             Your health partner,{' '}
-            <span
-              className="rounded-lg px-2"
-              style={{ background: LIME }}
-            >
+            <span className="rounded-lg px-2" style={{ background: LIME }}>
               every day.
             </span>
           </motion.h1>
@@ -252,8 +295,8 @@ export default function HomePage() {
             className="mx-auto mt-6 max-w-xl text-lg leading-relaxed sm:text-xl"
             style={{ color: MUTED }}
           >
-            Mood, vitals, and someone to talk to — mental and physical health
-            in one quiet app you&apos;ll actually open.
+            Mood, vitals, and someone to talk to — mental and physical health in
+            one quiet app you&apos;ll actually open.
           </motion.p>
 
           <motion.div
@@ -455,8 +498,13 @@ export default function HomePage() {
                 className="rounded-3xl p-7 sm:p-8"
                 style={{ background: card.bg }}
               >
-                <h3 className="text-xl font-bold tracking-tight">{card.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed sm:text-base" style={{ color: MUTED }}>
+                <h3 className="text-xl font-bold tracking-tight">
+                  {card.title}
+                </h3>
+                <p
+                  className="mt-3 text-sm leading-relaxed sm:text-base"
+                  style={{ color: MUTED }}
+                >
                   {card.body}
                 </p>
               </motion.div>
@@ -492,7 +540,11 @@ export default function HomePage() {
                 'Therapy modules you can finish at your own pace',
                 'Private by design: export or delete anytime',
               ].map((line) => (
-                <li key={line} className="flex gap-3 text-base leading-relaxed" style={{ color: MUTED }}>
+                <li
+                  key={line}
+                  className="flex gap-3 text-base leading-relaxed"
+                  style={{ color: MUTED }}
+                >
                   <span
                     className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
                     style={{ background: BLUE }}
@@ -534,7 +586,10 @@ export default function HomePage() {
               <br />
               With you every day after that.
             </h2>
-            <p className="mx-auto mt-4 max-w-md text-base" style={{ color: MUTED }}>
+            <p
+              className="mx-auto mt-4 max-w-md text-base"
+              style={{ color: MUTED }}
+            >
               Create your account. Log one mood. See how it feels to keep mind
               and body in the same place.
             </p>
@@ -550,10 +605,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer className="border-t px-5 py-8 sm:px-8" style={{ borderColor: RULE }}>
+      <footer
+        className="border-t px-5 py-8 sm:px-8"
+        style={{ borderColor: RULE }}
+      >
         <div className="mx-auto flex max-w-6xl flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
           <span className="font-bold">© 2026 HealthMind</span>
-          <span style={{ color: MUTED }}>Your wellness partner. Private by default.</span>
+          <span style={{ color: MUTED }}>
+            Your wellness partner. Private by default.
+          </span>
         </div>
       </footer>
     </div>

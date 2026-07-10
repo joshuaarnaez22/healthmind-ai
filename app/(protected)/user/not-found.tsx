@@ -19,7 +19,7 @@ export default function NotFound() {
           </p>
         </div>
 
-        <section className="rounded-3xl border border-border/80 bg-card p-6 text-left">
+        <section className="border-border/80 rounded-3xl border bg-card p-6 text-left">
           <h3 className="mb-2 font-semibold text-foreground">
             You’re not lost — just exploring
           </h3>
@@ -45,7 +45,7 @@ export default function NotFound() {
           </Button>
         </div>
 
-        <div className="border-t border-border/80 pt-6">
+        <div className="border-border/80 border-t pt-6">
           <p className="mb-3 text-xs text-muted-foreground">Popular sections</p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             <Link

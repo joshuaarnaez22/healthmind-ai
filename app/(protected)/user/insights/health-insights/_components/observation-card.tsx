@@ -28,7 +28,7 @@ export default function ObservationCard({
     <motion.div whileHover={{ scale: 1.01 }} transition={{ duration: 0.2 }}>
       <button
         type="button"
-        className="w-full overflow-hidden rounded-3xl border border-border/80 bg-card text-left transition-colors hover:border-primary/40"
+        className="border-border/80 hover:border-primary/40 w-full overflow-hidden rounded-3xl border bg-card text-left transition-colors"
         onClick={onSelect}
       >
         <div className="p-6">
@@ -39,7 +39,7 @@ export default function ObservationCard({
             {observation.shortEvidence}
           </p>
         </div>
-        <div className="flex flex-col items-center justify-between gap-2 border-t border-border/80 bg-secondary/50 px-6 py-3 text-xs text-muted-foreground md:flex-row">
+        <div className="border-border/80 bg-secondary/50 flex flex-col items-center justify-between gap-2 border-t px-6 py-3 text-xs text-muted-foreground md:flex-row">
           <div className="flex items-center gap-1">
             <CalendarIcon className="h-3 w-3" />
             <span>{formattedDate}</span>

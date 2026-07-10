@@ -77,7 +77,7 @@ export default function MoodInsightsPanel() {
 
   if (isLoading) {
     return (
-      <section className="rounded-3xl border border-border/80 bg-card p-6">
+      <section className="border-border/80 rounded-3xl border bg-card p-6">
         <div className="mb-4 flex items-center gap-2 text-base font-semibold">
           <Sparkles className="h-4 w-4 text-primary" />
           AI Mood Insights
@@ -97,7 +97,7 @@ export default function MoodInsightsPanel() {
   const trend = trendConfig[data.weeklyTrend];
 
   return (
-    <section className="rounded-3xl border border-border/80 bg-card p-6">
+    <section className="border-border/80 rounded-3xl border bg-card p-6">
       <div className="mb-1 flex items-center justify-between gap-3">
         <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
           <Sparkles className="h-4 w-4 text-primary" />
@@ -113,7 +113,7 @@ export default function MoodInsightsPanel() {
         {data.insights.map((insight, i) => (
           <div
             key={i}
-            className="flex items-start gap-3 rounded-2xl border border-border/80 bg-secondary/50 p-3"
+            className="border-border/80 bg-secondary/50 flex items-start gap-3 rounded-2xl border p-3"
           >
             <span className="mt-0.5 shrink-0">
               {insightIcons[insight.type]}

@@ -41,7 +41,7 @@ export default function GlucosePanel() {
           </Button>
         </div>
       </div>
-      <div className="rounded-2xl border border-border/80 bg-background/70 p-4">
+      <div className="border-border/80 bg-background/70 rounded-2xl border p-4">
         {view === 'form' && <GlucoseForm />}
         {view === 'history' && <GlucoseHistory />}
         {view === 'chart' && <GlucoseChart />}

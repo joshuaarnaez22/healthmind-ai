@@ -6,15 +6,15 @@
 
 ## Colors
 
-| Role | Hex / OKLCH | CSS token |
-|------|-------------|-----------|
-| Paper | `#fffcf5` / `0.991 0.01 87.5` | `--background` |
-| Ink | `#282830` / `0.28 0.015 285.4` | `--foreground` |
-| Muted | `#656779` / `0.519 0.028 280.3` | `--muted-foreground` |
-| Blue | `#0a70ff` / `0.55 0.2 260` | `--primary` |
-| Blue soft | `#ebf5ff` / `0.966 0.017 248` | `--secondary`, `--muted` |
-| Lime | `#fcff7e` / `0.972 0.152 110.1` | `--accent` |
-| Green soft | `#ecf7e9` | Vitals panels (dashboard) |
+| Role       | Hex / OKLCH                     | CSS token                 |
+| ---------- | ------------------------------- | ------------------------- |
+| Paper      | `#fffcf5` / `0.991 0.01 87.5`   | `--background`            |
+| Ink        | `#282830` / `0.28 0.015 285.4`  | `--foreground`            |
+| Muted      | `#656779` / `0.519 0.028 280.3` | `--muted-foreground`      |
+| Blue       | `#0a70ff` / `0.55 0.2 260`      | `--primary`               |
+| Blue soft  | `#ebf5ff` / `0.966 0.017 248`   | `--secondary`, `--muted`  |
+| Lime       | `#fcff7e` / `0.972 0.152 110.1` | `--accent`                |
+| Green soft | `#ecf7e9`                       | Vitals panels (dashboard) |
 
 Defined in [`app/globals.css`](app/globals.css). Dark mode uses ink surfaces with blue primary (no purple).
 

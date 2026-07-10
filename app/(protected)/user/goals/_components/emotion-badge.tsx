@@ -12,7 +12,7 @@ export default function EmotionBadge({
   return (
     <span
       className={cn(
-        'rounded-full border border-border/80 bg-secondary px-2.5 py-0.5 text-xs font-medium text-primary',
+        'border-border/80 rounded-full border bg-secondary px-2.5 py-0.5 text-xs font-medium text-primary',
         className
       )}
     >

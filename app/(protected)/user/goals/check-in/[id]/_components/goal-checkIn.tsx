@@ -55,7 +55,7 @@ export default function GoalCheckIn({ id }: { id: string }) {
 
   if (isError) {
     return (
-      <div className="rounded-3xl border border-border/80 bg-secondary px-6 py-16 text-center">
+      <div className="border-border/80 rounded-3xl border bg-secondary px-6 py-16 text-center">
         <p className="text-sm font-medium text-foreground">
           Failed to load goal
         </p>
@@ -64,7 +64,7 @@ export default function GoalCheckIn({ id }: { id: string }) {
   }
   if (!goal) {
     return (
-      <div className="rounded-3xl border border-border/80 bg-secondary px-6 py-16 text-center">
+      <div className="border-border/80 rounded-3xl border bg-secondary px-6 py-16 text-center">
         <p className="text-sm font-medium text-foreground">No goal found</p>
         <Link
           href="/user/goals"
@@ -135,7 +135,7 @@ export default function GoalCheckIn({ id }: { id: string }) {
         Back to goals
       </Link>
 
-      <section className="rounded-3xl border border-border/80 bg-card p-6">
+      <section className="border-border/80 rounded-3xl border bg-card p-6">
         <p className="mb-2 text-xs font-bold uppercase tracking-wide text-primary">
           Goal Check-in
         </p>

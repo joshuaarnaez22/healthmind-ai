@@ -77,7 +77,7 @@ export default async function AnalyticsPage() {
         </p>
       </div>
       {chartData.length === 0 ? (
-        <div className="flex flex-col items-center gap-3 rounded-3xl border border-border/80 bg-secondary py-20 text-center">
+        <div className="border-border/80 flex flex-col items-center gap-3 rounded-3xl border bg-secondary py-20 text-center">
           <BarChart2 className="h-9 w-9 text-primary opacity-70" />
           <div>
             <p className="text-sm font-medium text-foreground">

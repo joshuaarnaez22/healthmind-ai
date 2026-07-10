@@ -45,9 +45,11 @@ const chartConfig = {
 
 export default function BarChartComponent({ data }: { data: MoodMonthData[] }) {
   return (
-    <section className="w-full rounded-3xl border border-border/80 bg-card p-6">
+    <section className="border-border/80 w-full rounded-3xl border bg-card p-6">
       <div className="mb-4">
-        <h2 className="text-lg font-semibold text-foreground">Mood Analytics</h2>
+        <h2 className="text-lg font-semibold text-foreground">
+          Mood Analytics
+        </h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Moods from your journal entries over the last 6 months
         </p>
@@ -80,12 +82,7 @@ export default function BarChartComponent({ data }: { data: MoodMonthData[] }) {
             radius={4}
             stackId="a"
           />
-          <Bar
-            dataKey="GOOD"
-            fill="var(--color-GOOD)"
-            radius={4}
-            stackId="a"
-          />
+          <Bar dataKey="GOOD" fill="var(--color-GOOD)" radius={4} stackId="a" />
           <Bar
             dataKey="GREAT"
             fill="var(--color-GREAT)"

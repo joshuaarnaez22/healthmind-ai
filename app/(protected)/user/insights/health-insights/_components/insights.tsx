@@ -118,7 +118,7 @@ export default function Insights() {
         {isInitialLoading ? (
           <InsightsLoader />
         ) : hasNoData ? (
-          <div className="flex flex-col items-center gap-4 rounded-3xl border border-border/80 bg-secondary py-20 text-center">
+          <div className="border-border/80 flex flex-col items-center gap-4 rounded-3xl border bg-secondary py-20 text-center">
             <NotebookPen className="h-9 w-9 text-primary opacity-70" />
             <div>
               <p className="text-sm font-medium text-foreground">
@@ -150,7 +150,7 @@ export default function Insights() {
                 <AiWorkingBanner message="AI is personalizing your Mental Health Insights based on your journal entries and progress" />
               )}
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                <section className="rounded-3xl border border-border/80 bg-card p-6">
+                <section className="border-border/80 rounded-3xl border bg-card p-6">
                   <h2 className="text-lg font-semibold text-foreground">
                     Daily Affirmations
                   </h2>
@@ -165,7 +165,7 @@ export default function Insights() {
                     )}
                   </div>
                 </section>
-                <section className="rounded-3xl border border-border/80 bg-card p-6">
+                <section className="border-border/80 rounded-3xl border bg-card p-6">
                   <h2 className="text-lg font-semibold text-foreground">
                     Mental Health Summary
                   </h2>
@@ -184,7 +184,7 @@ export default function Insights() {
                   </div>
                 </section>
               </div>
-              <section className="rounded-3xl border border-border/80 bg-card p-6">
+              <section className="border-border/80 rounded-3xl border bg-card p-6">
                 <h2 className="text-lg font-semibold text-foreground">
                   Therapeutic Observations
                 </h2>
@@ -217,7 +217,7 @@ export default function Insights() {
               {articlesLoading && (
                 <AiWorkingBanner message="AI is personalizing your Mental Health Insights based on your journal entries and progress" />
               )}
-              <section className="rounded-3xl border border-border/80 bg-card p-6">
+              <section className="border-border/80 rounded-3xl border bg-card p-6">
                 <h2 className="text-lg font-semibold text-foreground">
                   Recommended Articles
                 </h2>
@@ -233,7 +233,7 @@ export default function Insights() {
                         articles.map((article: ArticleProps, index: number) => (
                           <div
                             key={index}
-                            className="overflow-hidden rounded-2xl border border-border/80 bg-background/70 p-6 transition-colors hover:border-primary/40"
+                            className="border-border/80 bg-background/70 hover:border-primary/40 overflow-hidden rounded-2xl border p-6 transition-colors"
                           >
                             <div className="flex flex-col items-start gap-6 md:flex-row">
                               <div className="flex-1 space-y-4">

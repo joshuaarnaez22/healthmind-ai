@@ -30,7 +30,7 @@ export default function EmotionSelector({
             'flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 p-3 transition-colors',
             selectedEmotion === name
               ? 'border-primary bg-secondary text-primary'
-              : 'border-transparent bg-card hover:border-border/80'
+              : 'hover:border-border/80 border-transparent bg-card'
           )}
           onClick={() => onSelectEmotion(name)}
         >

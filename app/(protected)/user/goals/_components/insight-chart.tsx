@@ -100,7 +100,7 @@ export default function InsightsChart({
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-2xl border border-border/80 bg-secondary p-3 text-center"
+            className="border-border/80 rounded-2xl border bg-secondary p-3 text-center"
           >
             <div className="text-2xl font-bold text-primary">{stat.value}</div>
             <div className="text-xs text-muted-foreground">{stat.label}</div>
@@ -115,7 +115,7 @@ export default function InsightsChart({
             : 'grid-cols-1 md:grid-cols-2'
         }`}
       >
-        <div className="rounded-3xl border border-border/80 bg-card p-5">
+        <div className="border-border/80 rounded-3xl border bg-card p-5">
           <h3 className="mb-4 text-lg font-semibold text-foreground">
             Activity Overview
           </h3>
@@ -146,7 +146,7 @@ export default function InsightsChart({
           </ChartContainer>
         </div>
 
-        <div className="rounded-3xl border border-border/80 bg-card p-5">
+        <div className="border-border/80 rounded-3xl border bg-card p-5">
           <h3 className="mb-4 text-lg font-semibold text-foreground">
             Goals Distribution
           </h3>
@@ -183,14 +183,16 @@ export default function InsightsChart({
         </div>
       </div>
 
-      <div className="rounded-3xl border border-border/80 bg-secondary p-5">
+      <div className="border-border/80 rounded-3xl border bg-secondary p-5">
         <h3 className="mb-4 text-lg font-semibold text-foreground">Summary</h3>
         <div className="grid grid-cols-2 gap-4 text-center">
           <div>
             <div className="text-2xl font-bold text-primary">
               {totalCheckIns + totalReflection}
             </div>
-            <div className="text-sm text-muted-foreground">Total Activities</div>
+            <div className="text-sm text-muted-foreground">
+              Total Activities
+            </div>
           </div>
           <div>
             <div className="text-2xl font-bold text-foreground">
@@ -200,7 +202,7 @@ export default function InsightsChart({
           </div>
         </div>
         {totalCompletedGoals + totalActiveGoals > 0 && (
-          <div className="mt-4 border-t border-border/80 pt-4 text-center">
+          <div className="border-border/80 mt-4 border-t pt-4 text-center">
             <div className="inline-block rounded-full bg-accent px-3 py-1 text-lg font-semibold text-foreground">
               {Math.round(
                 (totalCompletedGoals /

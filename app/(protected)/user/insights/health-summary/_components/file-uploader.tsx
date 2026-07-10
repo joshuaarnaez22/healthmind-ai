@@ -23,7 +23,7 @@ const FileUploader = memo(function FileUploader({
   handleSummarize,
 }: FileUploaderProps) {
   return (
-    <section className="h-fit rounded-3xl border border-border/80 bg-card p-6">
+    <section className="border-border/80 h-fit rounded-3xl border bg-card p-6">
       <h2 className="text-lg font-semibold text-foreground">
         Upload Medical Files
       </h2>
@@ -35,9 +35,7 @@ const FileUploader = memo(function FileUploader({
         <div
           className={cn(
             'rounded-2xl border-2 border-dashed p-8 text-center',
-            isDragging
-              ? 'border-primary bg-primary/5'
-              : 'border-border/80'
+            isDragging ? 'bg-primary/5 border-primary' : 'border-border/80'
           )}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
@@ -87,7 +85,7 @@ const FileUploader = memo(function FileUploader({
               {files.map((file, index) => (
                 <div
                   key={index}
-                  className="flex items-center space-x-3 rounded-2xl border border-border/80 bg-background/70 p-3"
+                  className="border-border/80 bg-background/70 flex items-center space-x-3 rounded-2xl border p-3"
                 >
                   <div className="flex-shrink-0">{getFileIcon(file.type)}</div>
                   <div className="min-w-0 flex-1">

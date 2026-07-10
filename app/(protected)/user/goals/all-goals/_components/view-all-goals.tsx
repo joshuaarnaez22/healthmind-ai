@@ -29,7 +29,7 @@ export default function ViewAllGoals() {
 
   if (isError) {
     return (
-      <div className="rounded-3xl border border-border/80 bg-secondary px-6 py-16 text-center">
+      <div className="border-border/80 rounded-3xl border bg-secondary px-6 py-16 text-center">
         <p className="text-sm font-medium text-foreground">
           Failed to load goals
         </p>
@@ -68,7 +68,7 @@ export default function ViewAllGoals() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="active" className="mt-6">
-          <section className="rounded-3xl border border-border/80 bg-card p-6">
+          <section className="border-border/80 rounded-3xl border bg-card p-6">
             <h2 className="text-lg font-semibold text-foreground">
               Active Goals
             </h2>
@@ -116,7 +116,7 @@ export default function ViewAllGoals() {
           </section>
         </TabsContent>
         <TabsContent value="completed" className="mt-6">
-          <section className="rounded-3xl border border-border/80 bg-card p-6">
+          <section className="border-border/80 rounded-3xl border bg-card p-6">
             <h2 className="text-lg font-semibold text-foreground">
               Completed Goals
             </h2>

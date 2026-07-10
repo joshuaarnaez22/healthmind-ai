@@ -120,8 +120,8 @@ export default async function DashboardPage() {
         </h1>
         <p className="mt-2 text-base text-muted-foreground">
           {isNewUser
-            ? 'Welcome to HealthMind — let\'s get you set up.'
-            : 'Here\'s a snapshot of your wellness today.'}
+            ? "Welcome to HealthMind — let's get you set up."
+            : "Here's a snapshot of your wellness today."}
         </p>
       </div>
 
@@ -146,14 +146,14 @@ export default async function DashboardPage() {
           </div>
           <Progress
             value={(completedSteps / gettingStarted.length) * 100}
-            className="mb-5 h-2 bg-background/60"
+            className="bg-background/60 mb-5 h-2"
           />
           <ul className="space-y-2">
             {gettingStarted.map((step) => (
               <li key={step.href}>
                 <Link
                   href={step.done ? '#' : step.href}
-                  className={`flex items-center gap-3 rounded-2xl bg-background/70 px-4 py-3 text-sm transition-colors ${
+                  className={`bg-background/70 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm transition-colors ${
                     step.done
                       ? 'cursor-default opacity-55'
                       : 'hover:bg-background'
@@ -181,9 +181,11 @@ export default async function DashboardPage() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         {/* Mood */}
-        <section className="rounded-3xl border border-border/80 bg-card p-6">
+        <section className="border-border/80 rounded-3xl border bg-card p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-base font-bold tracking-tight">Mood this week</h2>
+            <h2 className="text-base font-bold tracking-tight">
+              Mood this week
+            </h2>
             <Link
               href="/user/journal"
               className="text-xs font-medium text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
@@ -221,7 +223,7 @@ export default async function DashboardPage() {
         </section>
 
         {/* Journal */}
-        <section className="rounded-3xl border border-border/80 bg-card p-6">
+        <section className="border-border/80 rounded-3xl border bg-card p-6">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-base font-bold tracking-tight">
               Latest journal
@@ -315,7 +317,10 @@ export default async function DashboardPage() {
                 </span>
               </div>
               <div className="space-y-1">
-                <Progress value={completionPct} className="h-2 bg-background/60" />
+                <Progress
+                  value={completionPct}
+                  className="bg-background/60 h-2"
+                />
                 <p className="text-xs text-muted-foreground">
                   {completionPct}% complete
                 </p>
@@ -325,7 +330,7 @@ export default async function DashboardPage() {
         </section>
 
         {/* Vitals */}
-        <section className="rounded-3xl border border-border/80 bg-[oklch(0.964_0.022_139)] p-6 dark:bg-card">
+        <section className="border-border/80 rounded-3xl border bg-[oklch(0.964_0.022_139)] p-6 dark:bg-card">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-base font-bold tracking-tight">
               Latest vitals

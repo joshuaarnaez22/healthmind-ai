@@ -22,16 +22,14 @@ export default function ModuleCard({ module, iconColor }: ModuleCardProps) {
   return (
     <div
       className={cn(
-        'flex h-full flex-col rounded-3xl border border-border/80 bg-card p-6 transition-colors hover:border-primary/30',
+        'border-border/80 hover:border-primary/30 flex h-full flex-col rounded-3xl border bg-card p-6 transition-colors',
         isCompleted && 'bg-secondary/60'
       )}
     >
       <div className="mb-4 flex items-start justify-between gap-2">
         <div className="flex items-center gap-2">
           <IconComponent className={cn('h-8 w-8', iconColor)} />
-          {isCompleted && (
-            <CheckCircle2 className="h-5 w-5 text-primary" />
-          )}
+          {isCompleted && <CheckCircle2 className="h-5 w-5 text-primary" />}
         </div>
         <div className="flex flex-wrap justify-end gap-1.5">
           <Badge className={getDifficultyColor(module.difficulty)}>
@@ -68,10 +66,7 @@ export default function ModuleCard({ module, iconColor }: ModuleCardProps) {
       </Link>
       {isCompleted && (
         <div className="mt-2 text-center">
-          <Badge
-            variant="secondary"
-            className="bg-secondary text-primary"
-          >
+          <Badge variant="secondary" className="bg-secondary text-primary">
             Completed
           </Badge>
         </div>

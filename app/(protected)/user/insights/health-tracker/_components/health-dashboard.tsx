@@ -20,7 +20,7 @@ export default function HealthDashboard() {
         </p>
       </div>
       <MedicalDisclaimer />
-      <section className="rounded-3xl border border-border/80 bg-card p-6">
+      <section className="border-border/80 rounded-3xl border bg-card p-6">
         <Tabs
           defaultValue="blood-pressure"
           className="w-full"

@@ -68,7 +68,7 @@ export default function HealthTrendsPanel() {
 
   if (isLoading) {
     return (
-      <section className="rounded-3xl border border-border/80 bg-card p-6">
+      <section className="border-border/80 rounded-3xl border bg-card p-6">
         <div className="mb-4 flex items-center gap-2 text-base font-semibold">
           <Sparkles className="h-4 w-4 text-primary" />
           AI Health Trends
@@ -98,7 +98,7 @@ export default function HealthTrendsPanel() {
   ];
 
   return (
-    <section className="rounded-3xl border border-border/80 bg-card p-6">
+    <section className="border-border/80 rounded-3xl border bg-card p-6">
       <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
         <Sparkles className="h-4 w-4 text-primary" />
         AI Health Trends
@@ -113,7 +113,7 @@ export default function HealthTrendsPanel() {
             return (
               <div
                 key={s.label}
-                className="space-y-2 rounded-2xl border border-border/80 bg-secondary/40 p-3"
+                className="border-border/80 bg-secondary/40 space-y-2 rounded-2xl border p-3"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-sm font-medium">

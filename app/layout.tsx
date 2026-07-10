@@ -30,7 +30,9 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body
           className={`${alanSans.variable} font-sans`}
-          style={{ fontFamily: 'var(--font-sans), Helvetica, Arial, sans-serif' }}
+          style={{
+            fontFamily: 'var(--font-sans), Helvetica, Arial, sans-serif',
+          }}
         >
           <NextTopLoader color="#0a70ff" showSpinner={false} />
           <ThemeProvider

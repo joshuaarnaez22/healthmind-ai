@@ -29,7 +29,7 @@ export default function GoalCard({
   goal,
 }: GoalCardProps) {
   return (
-    <div className="overflow-hidden rounded-3xl border border-border/80 bg-card">
+    <div className="border-border/80 overflow-hidden rounded-3xl border bg-card">
       <div className="h-1.5 bg-secondary">
         <div
           className="h-full bg-primary transition-all duration-300"

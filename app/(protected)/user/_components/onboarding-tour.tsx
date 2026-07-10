@@ -57,7 +57,8 @@ export default function OnboardingTour({
   useEffect(() => {
     if (!FORCE_TOUR_FOR_TESTING && !showTour) return;
     if (typeof window === 'undefined') return;
-    if (!FORCE_TOUR_FOR_TESTING && window.localStorage.getItem(TOUR_KEY)) return;
+    if (!FORCE_TOUR_FOR_TESTING && window.localStorage.getItem(TOUR_KEY))
+      return;
 
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
