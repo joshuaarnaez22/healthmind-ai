@@ -1,5 +1,7 @@
-import { redirect } from 'next/navigation';
+import AiSession from './_components/ai-session';
+
+export const dynamic = 'force-dynamic';
 
 export default function TherapySession() {
-  redirect('/user/ai-therapy');
+  return <AiSession />;
 }

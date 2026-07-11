@@ -103,6 +103,7 @@ CLERK_SECRET_KEY=
 UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
 DEEPSEEK_API_KEY=
+DEEPGRAM_API_KEY=                  # server-only — AI Therapy Voice Agent short-lived tokens
 # NEXT_PUBLIC_FORCE_TOUR_FOR_TESTING=true  # optional — force onboarding tour every visit
 # Optional — uncomment in sentry.*.config.ts when ready:
 # NEXT_PUBLIC_SENTRY_DSN=

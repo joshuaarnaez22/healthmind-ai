@@ -1,70 +1,127 @@
 'use client';
+
 import { motion } from 'motion/react';
 import { pageAnimations } from '@/lib/motion';
-import { Brain, Mic, ShieldCheck, Clock } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import {
+  Brain,
+  Mic,
+  ShieldCheck,
+  Clock,
+  AlertTriangle,
+  ArrowRight,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import HealthMindBot from '@/components/custom-icons/healthmind-bot';
 
-const COMING_FEATURES = [
+const FEATURES = [
   {
     icon: Mic,
-    heading: 'Voice therapy sessions',
-    body: "Talk through what's on your mind with an AI therapist trained on evidence-based approaches — no appointments, no waiting.",
+    heading: 'Voice sessions',
+    body: "Talk through what's on your mind with an evidence-informed coach — no appointments.",
   },
   {
     icon: Brain,
-    heading: 'Personalised to your journal',
-    body: 'Your mood history and journal entries will inform every session, so support feels grounded in your actual experience.',
+    heading: 'Journal-aware',
+    body: 'Mood and journal themes gently inform the conversation so it feels grounded in you.',
   },
   {
     icon: ShieldCheck,
-    heading: 'Private and end-to-end encrypted',
-    body: 'Sessions never touch external servers unencrypted. Your words stay yours.',
+    heading: 'Private by design',
+    body: "Encrypted in transit. We don't store session audio. Educational support, not clinical care.",
   },
   {
     icon: Clock,
-    heading: 'Available any time',
-    body: 'Support at 2am or during a lunch break — whenever you need it most.',
+    heading: 'Whenever you need',
+    body: 'Late night or lunch break — support on your schedule, not a waiting list.',
   },
-];
+] as const;
+
+const featureVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: 0.08 * i, duration: 0.4, ease: 'easeOut' as const },
+  }),
+};
 
 export default function Therapist() {
   return (
     <motion.div
       {...pageAnimations}
-      className="mx-auto max-w-2xl px-4 py-16 sm:py-24"
+      className="relative mx-auto max-w-3xl px-4 py-12 sm:py-16"
     >
-      <div className="mb-12 text-center">
-        <Badge
-          variant="secondary"
-          className="mb-6 px-3 py-1 text-xs font-medium tracking-wide"
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 -top-8 h-72 rounded-[3rem] bg-[radial-gradient(ellipse_at_top,oklch(var(--primary)_/_0.08),transparent_70%)]"
+      />
+
+      <div className="relative mb-14 text-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="mx-auto mb-8"
         >
-          Coming soon
-        </Badge>
-        <h1 className="mb-4 font-heading text-4xl font-bold tracking-tight text-foreground [text-wrap:balance]">
+          <HealthMindBot size={80} className="mx-auto rounded-[1.75rem]" />
+        </motion.div>
+
+        <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+          Voice coaching
+        </p>
+        <h1 className="mb-4 font-heading text-4xl font-bold tracking-tight text-foreground sm:text-5xl [text-wrap:balance]">
           AI Therapy
         </h1>
-        <p className="text-lg leading-relaxed text-muted-foreground [text-wrap:pretty]">
-          We&apos;re building a thoughtful voice therapy experience directly
-          inside HealthMind. This feature is not yet available — here&apos;s
-          what&apos;s coming.
+        <p className="mx-auto max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg [text-wrap:pretty]">
+          A calm voice session grounded in CBT, DBT, and ACT-informed coaching —
+          personalised lightly to your journal.
         </p>
+
+        <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Button asChild size="lg" className="min-w-[11rem] gap-2 px-8">
+            <Link href="/user/ai-therapy/session">
+              Start session
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
+          <p className="text-xs text-muted-foreground">
+            Mic required · ~20 min soft reminder
+          </p>
+        </div>
       </div>
 
-      <ul className="space-y-8">
-        {COMING_FEATURES.map(({ icon: Icon, heading, body }) => (
-          <li key={heading} className="flex gap-4">
-            <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
-              <Icon className="h-4 w-4" />
+      <ul className="relative mb-12 grid gap-4 sm:grid-cols-2">
+        {FEATURES.map(({ icon: Icon, heading, body }, i) => (
+          <motion.li
+            key={heading}
+            custom={i}
+            initial="hidden"
+            animate="visible"
+            variants={featureVariants}
+            className="border-border/80 flex gap-4 rounded-3xl border bg-card p-5"
+          >
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-secondary text-primary">
+              <Icon className="h-5 w-5" />
             </div>
-            <div>
+            <div className="min-w-0 pt-0.5">
               <p className="mb-1 font-semibold text-foreground">{heading}</p>
               <p className="text-sm leading-relaxed text-muted-foreground">
                 {body}
               </p>
             </div>
-          </li>
+          </motion.li>
         ))}
       </ul>
+
+      <div className="flex gap-3 rounded-2xl border border-border/80 bg-secondary/60 p-4">
+        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          <span className="font-medium text-foreground">Not clinical care.</span>{' '}
+          Supportive conversation only. In an emergency, contact local services
+          or the 988 Suicide &amp; Crisis Lifeline (US).
+        </p>
+      </div>
     </motion.div>
   );
 }

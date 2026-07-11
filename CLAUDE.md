@@ -101,6 +101,7 @@ CLERK_SECRET_KEY
 UPSTASH_REDIS_REST_URL
 UPSTASH_REDIS_REST_TOKEN
 DEEPSEEK_API_KEY
+DEEPGRAM_API_KEY                    # server-only — AI Therapy Voice Agent tokens
 NEXT_PUBLIC_FORCE_TOUR_FOR_TESTING  # optional — "true" forces tour every visit; unset/false = new users only
 # Optional chatbot limits:
 # CHAT_LANDING_RPM=10
