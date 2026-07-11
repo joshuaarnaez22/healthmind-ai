@@ -161,7 +161,7 @@ export default function BillingPageClient() {
 
   if (loadError) {
     return (
-      <div className="rounded-3xl border border-destructive/30 bg-destructive/10 p-8 text-center">
+      <div className="border-destructive/30 bg-destructive/10 rounded-3xl border p-8 text-center">
         <p className="mb-5 text-sm text-destructive">{loadError}</p>
         <Button variant="outline" onClick={reload} className="rounded-2xl">
           Try again
@@ -187,13 +187,13 @@ export default function BillingPageClient() {
   return (
     <motion.div {...pageAnimations} className="relative space-y-10">
       {checkout === 'success' && (
-        <div className="rounded-2xl bg-secondary/70 px-4 py-3 text-sm text-muted-foreground">
+        <div className="bg-secondary/70 rounded-2xl px-4 py-3 text-sm text-muted-foreground">
           Thanks — your billing update is processing. Refresh in a moment if
           your balance hasn&apos;t updated yet.
         </div>
       )}
       {checkout === 'cancel' && (
-        <div className="rounded-2xl bg-secondary/50 px-4 py-3 text-sm text-muted-foreground">
+        <div className="bg-secondary/50 rounded-2xl px-4 py-3 text-sm text-muted-foreground">
           Checkout canceled. No charge was made.
         </div>
       )}
@@ -230,7 +230,7 @@ export default function BillingPageClient() {
       </div>
 
       {actionError && (
-        <div className="rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+        <div className="border-destructive/30 bg-destructive/10 rounded-2xl border px-4 py-3 text-sm text-destructive">
           {actionError}
         </div>
       )}
@@ -240,7 +240,7 @@ export default function BillingPageClient() {
           Plans
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-3xl border border-border/80 bg-secondary/40 p-6">
+          <div className="border-border/80 bg-secondary/40 rounded-3xl border p-6">
             <p className="mb-1 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
               Free
             </p>
@@ -264,7 +264,7 @@ export default function BillingPageClient() {
             </p>
           </div>
 
-          <div className="rounded-3xl border border-primary/20 bg-secondary p-6">
+          <div className="border-primary/20 rounded-3xl border bg-secondary p-6">
             <p className="mb-1 text-xs font-medium uppercase tracking-[0.14em] text-primary">
               Pro
             </p>
@@ -287,11 +287,7 @@ export default function BillingPageClient() {
               ))}
             </ul>
             {isPro ? (
-              <Button
-                variant="outline"
-                className="w-full rounded-2xl"
-                disabled
-              >
+              <Button variant="outline" className="w-full rounded-2xl" disabled>
                 Current plan
               </Button>
             ) : (
@@ -319,7 +315,7 @@ export default function BillingPageClient() {
             {status.catalog.topups.map((pack) => (
               <div
                 key={pack.key}
-                className="flex flex-col rounded-3xl border border-border/80 bg-card/60 p-5"
+                className="border-border/80 bg-card/60 flex flex-col rounded-3xl border p-5"
               >
                 <p className="mb-1 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
                   {pack.label}

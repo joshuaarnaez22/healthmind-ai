@@ -19,12 +19,12 @@ Consumed by **AI Therapy**, **Chatbot**, and any future paid surfaces.
 
 ## Products (v1 placeholders)
 
-| SKU | Mode | Display | Tokens |
-| --- | ---- | ------- | ------ |
-| Pro monthly | subscription | $19/mo | **set** balance to **50_000** on subscribe / `invoice.paid` |
-| Top-up Small | payment | $5 | **+10_000** |
-| Top-up Medium | payment | $12 | **+30_000** |
-| Top-up Large | payment | $25 | **+80_000** |
+| SKU           | Mode         | Display | Tokens                                                      |
+| ------------- | ------------ | ------- | ----------------------------------------------------------- |
+| Pro monthly   | subscription | $19/mo  | **set** balance to **50_000** on subscribe / `invoice.paid` |
+| Top-up Small  | payment      | $5      | **+10_000**                                                 |
+| Top-up Medium | payment      | $12     | **+30_000**                                                 |
+| Top-up Large  | payment      | $25     | **+80_000**                                                 |
 
 Token grants live in [`lib/stripe-catalog.ts`](../../../lib/stripe-catalog.ts), keyed by env Price IDs.
 
@@ -84,7 +84,7 @@ Create Prices via Dashboard or `node --env-file=.env scripts/create-stripe-catal
 
 ## UI
 
-- [`/user/billing`](../../../app/(protected)/user/billing/page.tsx) — Alan DESIGN.md / PRODUCT.md (tinted panels, calm copy)
+- [`/user/billing`](<../../../app/(protected)/user/billing/page.tsx>) — Alan DESIGN.md / PRODUCT.md (tinted panels, calm copy)
 - Nav user menu → Billing
 - Chatbot Upgrade → `/user/billing`
 - AI Therapy free-cap / token CTAs → `/user/billing`

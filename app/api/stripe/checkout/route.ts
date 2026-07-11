@@ -29,10 +29,7 @@ export async function POST(req: Request) {
     const body = (await req.json()) as { priceKey?: string };
     const priceKey = body.priceKey;
     if (!priceKey || !isStripePriceKey(priceKey)) {
-      return NextResponse.json(
-        { error: 'Invalid priceKey' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid priceKey' }, { status: 400 });
     }
 
     const entry = STRIPE_CATALOG[priceKey as StripePriceKey];
@@ -74,7 +71,8 @@ export async function POST(req: Request) {
     if (entry.kind === 'pro' && user.subscriptionTier === 'SUBSCRIBED') {
       return NextResponse.json(
         {
-          error: 'You already have Pro. Use Manage billing to update your plan.',
+          error:
+            'You already have Pro. Use Manage billing to update your plan.',
           code: 'already_subscribed',
         },
         { status: 400 }

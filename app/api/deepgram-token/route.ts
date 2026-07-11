@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getApiUserId } from '@/actions/server-actions/user';
 import { prisma } from '@/lib/client';
-import {
-  checkTherapyGrantRate,
-} from '@/lib/ai-therapy-limits';
+import { checkTherapyGrantRate } from '@/lib/ai-therapy-limits';
 
 export async function GET() {
   try {
@@ -29,7 +27,8 @@ export async function GET() {
     if (isPaid && user.aiTokenBalance <= 0) {
       return NextResponse.json(
         {
-          error: 'Your token balance is empty. Top up to continue voice sessions.',
+          error:
+            'Your token balance is empty. Top up to continue voice sessions.',
           code: 'token_budget',
         },
         { status: 402 }

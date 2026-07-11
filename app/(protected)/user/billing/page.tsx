@@ -16,7 +16,7 @@ export default function BillingPage() {
         <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
           Billing
         </p>
-        <h1 className="mb-3 font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl [text-wrap:balance]">
+        <h1 className="mb-3 font-heading text-3xl font-bold tracking-tight text-foreground [text-wrap:balance] sm:text-4xl">
           Plans &amp; tokens
         </h1>
         <p className="max-w-xl text-base leading-relaxed text-muted-foreground [text-wrap:pretty]">

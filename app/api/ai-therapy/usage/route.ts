@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getApiUserId } from '@/actions/server-actions/user';
 import { prisma } from '@/lib/client';
-import {
-  endTherapyUsage,
-  startTherapyUsage,
-} from '@/lib/ai-therapy-usage';
+import { endTherapyUsage, startTherapyUsage } from '@/lib/ai-therapy-usage';
 import { estimateMinutesFromTokens } from '@/lib/stripe-catalog';
 
 export const dynamic = 'force-dynamic';
@@ -17,11 +14,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = (await req.json()) as { action?: string; usageId?: string; secondsAlive?: number; endReason?: string };
+    const body = (await req.json()) as {
+      action?: string;
+      usageId?: string;
+      secondsAlive?: number;
+      endReason?: string;
+    };
 
     if (body.action === 'end') {
       if (!body.usageId) {
-        return NextResponse.json({ error: 'usageId required' }, { status: 400 });
+        return NextResponse.json(
+          { error: 'usageId required' },
+          { status: 400 }
+        );
       }
       const ended = await endTherapyUsage({
         usageId: body.usageId,

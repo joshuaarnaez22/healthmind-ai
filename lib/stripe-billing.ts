@@ -91,12 +91,9 @@ export async function findUserIdFromStripeCustomer(
   return user?.id ?? null;
 }
 
-function periodEndFromSubscription(
-  sub: Stripe.Subscription
-): Date | null {
-  const end = (
-    sub as Stripe.Subscription & { current_period_end?: number }
-  ).current_period_end;
+function periodEndFromSubscription(sub: Stripe.Subscription): Date | null {
+  const end = (sub as Stripe.Subscription & { current_period_end?: number })
+    .current_period_end;
   if (!end) return null;
   return new Date(end * 1000);
 }
@@ -108,7 +105,9 @@ export async function handleCheckoutSessionCompleted(
     session.client_reference_id ||
     session.metadata?.userId ||
     (await findUserIdFromStripeCustomer(
-      typeof session.customer === 'string' ? session.customer : session.customer?.id
+      typeof session.customer === 'string'
+        ? session.customer
+        : session.customer?.id
     ));
 
   if (!userId) {
@@ -128,7 +127,7 @@ export async function handleCheckoutSessionCompleted(
     const subId =
       typeof session.subscription === 'string'
         ? session.subscription
-        : session.subscription?.id ?? null;
+        : (session.subscription?.id ?? null);
 
     let periodEnd: Date | null = null;
     if (subId) {
@@ -181,8 +180,7 @@ export async function handleInvoicePaid(invoice: Stripe.Invoice) {
       subscription?: string | Stripe.Subscription | null;
     }
   ).subscription;
-  const subId =
-    typeof subRef === 'string' ? subRef : subRef?.id ?? null;
+  const subId = typeof subRef === 'string' ? subRef : (subRef?.id ?? null);
 
   if (!subId) {
     // One-time invoice — ignore (top-ups handled via checkout.session.completed)

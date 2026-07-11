@@ -691,7 +691,9 @@ export default function HomePage() {
             >
               Free to start.
               <br />
-              <span style={{ color: MUTED }}>Upgrade only if you want more.</span>
+              <span style={{ color: MUTED }}>
+                Upgrade only if you want more.
+              </span>
             </h2>
             <p
               className="mx-auto mt-4 max-w-lg text-base leading-relaxed"

@@ -391,19 +391,16 @@ function SessionControls({
     }
   }, []);
 
-  const closeUsage = useCallback(
-    async (reason: string) => {
-      const id = usageIdRef.current;
-      if (!id) return;
-      usageIdRef.current = null;
-      await endUsageLedger({
-        usageId: id,
-        secondsAlive: sessionTimeRef.current,
-        endReason: reason,
-      });
-    },
-    []
-  );
+  const closeUsage = useCallback(async (reason: string) => {
+    const id = usageIdRef.current;
+    if (!id) return;
+    usageIdRef.current = null;
+    await endUsageLedger({
+      usageId: id,
+      secondsAlive: sessionTimeRef.current,
+      endReason: reason,
+    });
+  }, []);
 
   const finishSession = useCallback(
     (reason?: LimitReason) => {
@@ -776,7 +773,7 @@ function SessionControls({
       </AnimatePresence>
 
       {!inRoom && limitReason && (
-        <div className="mb-5 space-y-3 rounded-2xl bg-secondary/60 px-4 py-4 text-center">
+        <div className="bg-secondary/60 mb-5 space-y-3 rounded-2xl px-4 py-4 text-center">
           <p className="text-sm text-muted-foreground">
             {limitReason === 'free_cap'
               ? 'Free sessions wrap at 5 minutes. Upgrade for longer, token-based coaching.'
