@@ -191,7 +191,7 @@ function CaptionStrip({
 
   return (
     <div className="mx-auto w-full max-w-md">
-      <div className="rounded-3xl border border-border/70 bg-secondary/50 px-4 py-3.5 backdrop-blur-sm">
+      <div className="border-border/70 bg-secondary/50 rounded-3xl border px-4 py-3.5 backdrop-blur-sm">
         {conversation.length === 0 ? (
           <p className="text-center text-sm text-muted-foreground">
             Captions will appear as you talk…
@@ -201,7 +201,7 @@ function CaptionStrip({
             ref={scrollRef}
             className={cn(
               'space-y-3',
-              expanded && 'max-h-48 overflow-y-auto scrollbar'
+              expanded && 'scrollbar max-h-48 overflow-y-auto'
             )}
           >
             <AnimatePresence initial={false} mode="popLayout">
@@ -280,7 +280,7 @@ function ControlButton({
         'h-12 w-12 rounded-2xl text-foreground hover:bg-secondary',
         active && 'bg-secondary text-primary',
         danger &&
-          'bg-destructive text-destructive-foreground hover:bg-destructive/90 hover:text-destructive-foreground'
+          'hover:bg-destructive/90 bg-destructive text-destructive-foreground hover:text-destructive-foreground'
       )}
     >
       {children}
@@ -456,7 +456,7 @@ function SessionControls() {
               isActive
                 ? 'bg-primary'
                 : isConnecting
-                  ? 'bg-muted-foreground animate-pulse'
+                  ? 'animate-pulse bg-muted-foreground'
                   : 'bg-border'
             )}
           />
@@ -521,7 +521,7 @@ function SessionControls() {
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="mb-5 rounded-2xl bg-secondary/70 px-4 py-3 text-center text-sm text-muted-foreground"
+            className="bg-secondary/70 mb-5 rounded-2xl px-4 py-3 text-center text-sm text-muted-foreground"
           >
             About 20 minutes in — wrap up when it feels right.
           </motion.div>
@@ -529,7 +529,7 @@ function SessionControls() {
       </AnimatePresence>
 
       {(startError || agentError) && (
-        <div className="mb-5 rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+        <div className="border-destructive/30 bg-destructive/10 mb-5 rounded-2xl border px-4 py-3 text-sm text-destructive">
           {startError || agentError}
         </div>
       )}
@@ -561,7 +561,7 @@ function SessionControls() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-3 rounded-[1.75rem] border border-border/80 bg-card/90 p-2 shadow-sm backdrop-blur-sm"
+            className="border-border/80 bg-card/90 flex items-center gap-3 rounded-[1.75rem] border p-2 shadow-sm backdrop-blur-sm"
           >
             <ControlButton
               label={micMuted ? 'Unmute microphone' : 'Mute microphone'}
@@ -760,7 +760,7 @@ export default function AiSession() {
   if (loadError || !agent) {
     return (
       <SessionShell>
-        <div className="mx-auto max-w-md rounded-3xl border border-destructive/30 bg-destructive/10 p-8 text-center">
+        <div className="border-destructive/30 bg-destructive/10 mx-auto max-w-md rounded-3xl border p-8 text-center">
           <p className="mb-5 text-sm text-destructive">
             {loadError ?? 'Session unavailable.'}
           </p>

@@ -70,10 +70,10 @@ export default function Therapist() {
         <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
           Voice coaching
         </p>
-        <h1 className="mb-4 font-heading text-4xl font-bold tracking-tight text-foreground sm:text-5xl [text-wrap:balance]">
+        <h1 className="mb-4 font-heading text-4xl font-bold tracking-tight text-foreground [text-wrap:balance] sm:text-5xl">
           AI Therapy
         </h1>
-        <p className="mx-auto max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg [text-wrap:pretty]">
+        <p className="mx-auto max-w-xl text-base leading-relaxed text-muted-foreground [text-wrap:pretty] sm:text-lg">
           A calm voice session grounded in CBT, DBT, and ACT-informed coaching —
           personalised lightly to your journal.
         </p>
@@ -114,10 +114,12 @@ export default function Therapist() {
         ))}
       </ul>
 
-      <div className="flex gap-3 rounded-2xl border border-border/80 bg-secondary/60 p-4">
+      <div className="border-border/80 bg-secondary/60 flex gap-3 rounded-2xl border p-4">
         <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
         <p className="text-sm leading-relaxed text-muted-foreground">
-          <span className="font-medium text-foreground">Not clinical care.</span>{' '}
+          <span className="font-medium text-foreground">
+            Not clinical care.
+          </span>{' '}
           Supportive conversation only. In an emergency, contact local services
           or the 988 Suicide &amp; Crisis Lifeline (US).
         </p>

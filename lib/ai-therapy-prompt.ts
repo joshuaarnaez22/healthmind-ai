@@ -65,7 +65,7 @@ export function buildAiTherapyPrompt(
   const name = displayName(userName);
   const whoBlock = name
     ? `The user's name is ${name}. Address them by first name naturally when it fits — do not overuse it.`
-    : 'The user\'s name is unknown. Do not invent a name; use warm second-person address.';
+    : "The user's name is unknown. Do not invent a name; use warm second-person address.";
 
   return `# Role
 You are HealthMind's AI voice therapy companion — a warm, calm, evidence-informed mental health coach with grounding in CBT, DBT, and ACT.
