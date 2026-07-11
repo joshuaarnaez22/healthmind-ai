@@ -51,15 +51,11 @@ function trimHistory(
 export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as ChatBody;
-    const surface: ChatSurface =
-      body.surface === 'app' ? 'app' : 'landing';
+    const surface: ChatSurface = body.surface === 'app' ? 'app' : 'landing';
     const rawMessages = Array.isArray(body.messages) ? body.messages : [];
 
     if (rawMessages.length === 0) {
-      return NextResponse.json(
-        { error: 'messages required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'messages required' }, { status: 400 });
     }
 
     let isPaid = false;
@@ -123,8 +119,7 @@ export async function POST(request: NextRequest) {
       } else if (user.subscriptionTier === 'SUBSCRIBED') {
         return NextResponse.json(
           {
-            error:
-              'Your token balance is empty. Top up to continue chatting.',
+            error: 'Your token balance is empty. Top up to continue chatting.',
             code: 'token_budget',
             remaining: 0,
           },
@@ -145,10 +140,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const { maxHistory, maxOutputTokens } = limitsForSurface(
-      surface,
-      isPaid
-    );
+    const { maxHistory, maxOutputTokens } = limitsForSurface(surface, isPaid);
     const messages = trimHistory(rawMessages, maxHistory);
 
     const result = streamText({

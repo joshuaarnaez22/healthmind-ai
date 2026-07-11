@@ -3,16 +3,17 @@
 Separate product feature — conversational assistant on the **marketing landing page** and inside the **logged-in `/user` app**.
 
 **Related**
+
 - Existing stub UI: `app/_components/chat-panel.tsx` (fab only; no real LLM yet)
 - Limits / billing: [Paywall (Stripe)](../paywall/plan.md)
 - LLM: Deepseek (same as rest of app via `lib/ai.ts`)
 
 ## Surfaces
 
-| Surface | Who | Limit model |
-| --- | --- | --- |
-| Landing page (public) | Anonymous visitors | **Rate limited** only (IP / anonymous session) — no paid tokens |
-| Logged-in app | Authenticated users | **Free:** hard message/day (or token) cap → upgrade CTA; **Paid:** **token-driven** (shared Stripe balance) |
+| Surface               | Who                 | Limit model                                                                                                 |
+| --------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Landing page (public) | Anonymous visitors  | **Rate limited** only (IP / anonymous session) — no paid tokens                                             |
+| Logged-in app         | Authenticated users | **Free:** hard message/day (or token) cap → upgrade CTA; **Paid:** **token-driven** (shared Stripe balance) |
 
 ## Implementation status (v1 shipped)
 
@@ -37,6 +38,7 @@ Run `npx prisma db push` if the DB is reachable so new User columns exist.
 ### Shared wallet (default)
 
 Use one Stripe-backed balance (`aiTherapyTokenBalance` or rename to `aiTokenBalance`) for:
+
 - AI Therapy (voice)
 - Chatbot (text)
 
@@ -44,13 +46,13 @@ Simpler paywall, one top-up, one upgrade CTA.
 
 ## Proposed limits (tunable)
 
-| | Landing (anon) | Free (logged-in) | Paid (logged-in) |
-| --- | --- | --- | --- |
-| Messages / day | 10 / IP | 20 / user | Token budget |
-| Max tokens / request | 512 out | 1k out | 2k out |
-| History window | Last 6 turns (client) | Last 12 turns | Last 20 turns |
-| Rate (Redis) | 10 req / 10 min / IP | 30 req / 10 min / user | Higher |
-| On limit | “Sign up for more” | Upgrade CTA → Stripe | Top-up CTA → Stripe |
+|                      | Landing (anon)        | Free (logged-in)       | Paid (logged-in)    |
+| -------------------- | --------------------- | ---------------------- | ------------------- |
+| Messages / day       | 10 / IP               | 20 / user              | Token budget        |
+| Max tokens / request | 512 out               | 1k out                 | 2k out              |
+| History window       | Last 6 turns (client) | Last 12 turns          | Last 20 turns       |
+| Rate (Redis)         | 10 req / 10 min / IP  | 30 req / 10 min / user | Higher              |
+| On limit             | “Sign up for more”    | Upgrade CTA → Stripe   | Top-up CTA → Stripe |
 
 ## Architecture
 
@@ -132,12 +134,12 @@ CHAT_FREE_DAILY_MESSAGES=20
 
 ## Implementation order
 
-1. Shared chatbot UI component (Alan) + landing wiring  
-2. `POST /api/chat` + Deepseek + landing Redis rate limit  
-3. Logged-in free daily cap  
-4. Paid token debit (shared wallet with paywall)  
-5. Usage meter + upgrade/top-up CTAs  
-6. Optional journal-aware app prompt  
+1. Shared chatbot UI component (Alan) + landing wiring
+2. `POST /api/chat` + Deepseek + landing Redis rate limit
+3. Logged-in free daily cap
+4. Paid token debit (shared wallet with paywall)
+5. Usage meter + upgrade/top-up CTAs
+6. Optional journal-aware app prompt
 
 ## Docs layout
 

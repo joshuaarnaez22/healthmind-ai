@@ -15,12 +15,12 @@ Chatbot is a **separate feature:** [../chatbot/plan.md](../chatbot/plan.md).
 
 ## Can we customize the agent for the product claims?
 
-| Claim | Feasible? | How |
-| --- | --- | --- |
-| Evidence-based voice therapist | Yes | Fixed system prompt in `agent.think.prompt` (CBT/DBT/ACT-informed, crisis redirect, no diagnosis) |
-| Personalized to journal/mood | Yes | At session start, server loads recent journals and injects a compact summary into the prompt / `agent.context` |
-| Private E2E / no external servers | No (cloud) | Drop claim; honest privacy bullet instead |
-| Available anytime | Yes | On-demand browser WebSocket session, no scheduling |
+| Claim                             | Feasible?  | How                                                                                                            |
+| --------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------- |
+| Evidence-based voice therapist    | Yes        | Fixed system prompt in `agent.think.prompt` (CBT/DBT/ACT-informed, crisis redirect, no diagnosis)              |
+| Personalized to journal/mood      | Yes        | At session start, server loads recent journals and injects a compact summary into the prompt / `agent.context` |
+| Private E2E / no external servers | No (cloud) | Drop claim; honest privacy bullet instead                                                                      |
+| Available anytime                 | Yes        | On-demand browser WebSocket session, no scheduling                                                             |
 
 Deepgram supports inline agent config, mid-session `UpdatePrompt`, and BYO LLM with custom `endpoint` — so personalization is first-class.
 

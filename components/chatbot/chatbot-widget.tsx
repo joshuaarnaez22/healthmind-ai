@@ -4,12 +4,7 @@ import { useChat } from 'ai/react';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'motion/react';
-import {
-  ArrowUp,
-  Loader2,
-  Sparkles,
-  X,
-} from 'lucide-react';
+import { ArrowUp, Loader2, Sparkles, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import HealthMindBot from '@/components/custom-icons/healthmind-bot';
 import { cn } from '@/lib/utils';
@@ -61,30 +56,37 @@ export default function ChatbotWidget({
     }
   }
 
-  const { messages, input, setInput, handleSubmit, isLoading, setMessages, append } =
-    useChat({
-      api: '/api/chat',
-      body: { surface },
-      fetch: async (input, init) => {
-        const res = await fetch(input, init);
-        if (!res.ok) {
-          let message = 'Something went wrong';
-          let code: string | undefined;
-          try {
-            const data = await res.clone().json();
-            message = data.error || message;
-            code = data.code;
-          } catch {
-            /* ignore */
-          }
-          setLimitError({ message, code });
-          throw new Error(message);
+  const {
+    messages,
+    input,
+    setInput,
+    handleSubmit,
+    isLoading,
+    setMessages,
+    append,
+  } = useChat({
+    api: '/api/chat',
+    body: { surface },
+    fetch: async (input, init) => {
+      const res = await fetch(input, init);
+      if (!res.ok) {
+        let message = 'Something went wrong';
+        let code: string | undefined;
+        try {
+          const data = await res.clone().json();
+          message = data.error || message;
+          code = data.code;
+        } catch {
+          /* ignore */
         }
-        setLimitError(null);
-        if (surface === 'app') void refreshUsage();
-        return res;
-      },
-    });
+        setLimitError({ message, code });
+        throw new Error(message);
+      }
+      setLimitError(null);
+      if (surface === 'app') void refreshUsage();
+      return res;
+    },
+  });
 
   useEffect(() => {
     if (open && surface === 'app') void refreshUsage();
@@ -135,16 +137,16 @@ export default function ChatbotWidget({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
             transition={{ type: 'spring', stiffness: 380, damping: 28 }}
-            className="pointer-events-auto flex w-[min(100vw-1.5rem,24rem)] flex-col overflow-hidden rounded-[1.75rem] border border-border/70 bg-card shadow-[0_20px_50px_-24px_rgba(40,40,48,0.45)]"
+            className="border-border/70 pointer-events-auto flex w-[min(100vw-1.5rem,24rem)] flex-col overflow-hidden rounded-[1.75rem] border bg-card shadow-[0_20px_50px_-24px_rgba(40,40,48,0.45)]"
           >
             {/* Header */}
-            <div className="relative overflow-hidden border-b border-border/60 bg-secondary px-4 py-3.5">
+            <div className="border-border/60 relative overflow-hidden border-b bg-secondary px-4 py-3.5">
               <div
-                className="pointer-events-none absolute -right-6 -top-8 h-24 w-24 rounded-full bg-primary/10"
+                className="bg-primary/10 pointer-events-none absolute -right-6 -top-8 h-24 w-24 rounded-full"
                 aria-hidden
               />
               <div
-                className="pointer-events-none absolute -bottom-10 left-10 h-20 w-20 rounded-full bg-accent/40"
+                className="bg-accent/40 pointer-events-none absolute -bottom-10 left-10 h-20 w-20 rounded-full"
                 aria-hidden
               />
               <div className="relative flex items-center gap-3">
@@ -157,7 +159,7 @@ export default function ChatbotWidget({
                     <h3 className="truncate text-sm font-bold tracking-tight text-foreground">
                       HealthMind
                     </h3>
-                    <span className="inline-flex items-center gap-0.5 rounded-full bg-background/70 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
+                    <span className="bg-background/70 inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
                       <Sparkles className="h-2.5 w-2.5" />
                       AI
                     </span>
@@ -169,7 +171,7 @@ export default function ChatbotWidget({
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-background/80 text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
+                  className="bg-background/80 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
                   aria-label="Close chat"
                 >
                   <X className="h-4 w-4" />
@@ -178,7 +180,7 @@ export default function ChatbotWidget({
             </div>
 
             {/* Messages */}
-            <div className="flex h-[22rem] flex-col gap-3 overflow-y-auto bg-background/40 px-3.5 py-4">
+            <div className="bg-background/40 flex h-[22rem] flex-col gap-3 overflow-y-auto px-3.5 py-4">
               {messages.length === 0 && (
                 <div className="flex flex-1 flex-col items-center justify-center gap-4 px-2 text-center">
                   <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary">
@@ -199,7 +201,7 @@ export default function ChatbotWidget({
                         key={s}
                         type="button"
                         onClick={() => sendSuggestion(s)}
-                        className="rounded-2xl border border-border/80 bg-card px-3 py-2.5 text-left text-xs font-medium text-foreground transition-colors hover:border-primary/40 hover:bg-secondary"
+                        className="border-border/80 hover:border-primary/40 rounded-2xl border bg-card px-3 py-2.5 text-left text-xs font-medium text-foreground transition-colors hover:bg-secondary"
                       >
                         {s}
                       </button>
@@ -226,7 +228,7 @@ export default function ChatbotWidget({
                       'max-w-[78%] whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed',
                       m.role === 'user'
                         ? 'rounded-br-md bg-primary text-primary-foreground'
-                        : 'rounded-bl-md border border-border/60 bg-card text-foreground'
+                        : 'border-border/60 rounded-bl-md border bg-card text-foreground'
                     )}
                   >
                     {m.content}
@@ -237,7 +239,7 @@ export default function ChatbotWidget({
               {isLoading && (
                 <div className="flex items-center gap-2">
                   <HealthMindBot size={28} />
-                  <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-md border border-border/60 bg-card px-3.5 py-2.5 text-xs text-muted-foreground">
+                  <div className="border-border/60 flex items-center gap-1.5 rounded-2xl rounded-bl-md border bg-card px-3.5 py-2.5 text-xs text-muted-foreground">
                     <span className="flex gap-1">
                       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
                       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary [animation-delay:150ms]" />
@@ -251,17 +253,25 @@ export default function ChatbotWidget({
             </div>
 
             {limitError && (
-              <div className="border-t border-border/60 bg-secondary/80 px-4 py-3 text-xs text-foreground">
+              <div className="border-border/60 bg-secondary/80 border-t px-4 py-3 text-xs text-foreground">
                 <p className="mb-2 leading-relaxed">{limitError.message}</p>
                 <div className="flex flex-wrap gap-2">
                   {surface === 'landing' && (
-                    <Button asChild size="sm" className="h-7 rounded-full text-xs">
+                    <Button
+                      asChild
+                      size="sm"
+                      className="h-7 rounded-full text-xs"
+                    >
                       <Link href="/sign-up">Sign up free</Link>
                     </Button>
                   )}
                   {(limitError.code === 'free_quota' ||
                     limitError.code === 'token_budget') && (
-                    <Button asChild size="sm" className="h-7 rounded-full text-xs">
+                    <Button
+                      asChild
+                      size="sm"
+                      className="h-7 rounded-full text-xs"
+                    >
                       <Link href="/user/dashboard">Upgrade (soon)</Link>
                     </Button>
                   )}
@@ -283,9 +293,9 @@ export default function ChatbotWidget({
             {/* Composer */}
             <form
               onSubmit={onSubmit}
-              className="border-t border-border/60 bg-card p-3"
+              className="border-border/60 border-t bg-card p-3"
             >
-              <div className="flex items-center gap-2 rounded-full border border-border/80 bg-background px-1.5 py-1 pl-3.5 focus-within:border-primary/50">
+              <div className="border-border/80 focus-within:border-primary/50 flex items-center gap-2 rounded-full border bg-background px-1.5 py-1 pl-3.5">
                 <input
                   ref={inputRef}
                   value={input}

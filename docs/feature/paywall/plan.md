@@ -4,6 +4,7 @@ Separate product feature — subscriptions, token top-ups, and Customer Portal.
 Consumed by **AI Therapy**, **Chatbot**, and any future paid surfaces.
 
 **Related**
+
 - [AI Therapy future limits](../ai-therapy/future-plan.md) (free 5-min cap; paid token-driven)
 - [Chatbot](../chatbot/plan.md) (landing rate limit; logged-in free cap / paid tokens)
 
@@ -15,18 +16,18 @@ Consumed by **AI Therapy**, **Chatbot**, and any future paid surfaces.
 
 ## Why Stripe for HealthMind
 
-| Need | Stripe fit |
-| --- | --- |
+| Need                         | Stripe fit                                                                                               |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------- |
 | Token-driven paid AI therapy | Billing Meters / metered prices, or prepaid token packs as one-time PaymentIntents / checkout line items |
-| Subscriptions | Stripe Billing (monthly Pro with included token allotment) |
-| Upgrade CTAs in-app | Checkout Sessions (hosted) — fast, PCI-safe |
-| Cancel / invoices | Customer Portal |
-| Fees at scale | Typically lower than MoR platforms (you handle tax via Stripe Tax if needed) |
+| Subscriptions                | Stripe Billing (monthly Pro with included token allotment)                                               |
+| Upgrade CTAs in-app          | Checkout Sessions (hosted) — fast, PCI-safe                                                              |
+| Cancel / invoices            | Customer Portal                                                                                          |
+| Fees at scale                | Typically lower than MoR platforms (you handle tax via Stripe Tax if needed)                             |
 
 ## Products (sketch)
 
-1. **Pro subscription** — monthly; refills `aiTherapyTokenBalance` each period  
-2. **Token top-up packs** — one-time Checkout (e.g. Small / Medium / Large)  
+1. **Pro subscription** — monthly; refills `aiTherapyTokenBalance` each period
+2. **Token top-up packs** — one-time Checkout (e.g. Small / Medium / Large)
 3. Optional later: metered overage via Stripe Billing Meters when balance hits zero
 
 ## Data model (shared with consumers)
@@ -96,16 +97,16 @@ STRIPE_PRICE_TOPUP_LARGE=
 
 ## Out of scope (v1 paywall)
 
-- Merchant of Record / automatic global VAT without Stripe Tax  
-- Team / org billing  
-- Mobile IAP  
-- Migrating historical Millis/Vapi spend  
+- Merchant of Record / automatic global VAT without Stripe Tax
+- Team / org billing
+- Mobile IAP
+- Migrating historical Millis/Vapi spend
 
 ## Implementation order
 
-1. Stripe account + products/prices  
-2. Prisma Stripe fields on `User`  
-3. Checkout + Portal API routes  
-4. Webhook sync (subscribe, renew, cancel, top-up)  
-5. Pricing / upgrade UI  
+1. Stripe account + products/prices
+2. Prisma Stripe fields on `User`
+3. Checkout + Portal API routes
+4. Webhook sync (subscribe, renew, cancel, top-up)
+5. Pricing / upgrade UI
 6. Wire AI Therapy + Chatbot CTAs to this feature

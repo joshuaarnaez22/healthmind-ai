@@ -364,10 +364,7 @@ export default function HomePage() {
             transition={{ duration: 0.45, ease: EASE }}
             className="mb-10 max-w-2xl text-center sm:mx-auto sm:text-left"
           >
-            <p
-              className="mb-3 text-sm font-bold"
-              style={{ color: BLUE_DEEP }}
-            >
+            <p className="mb-3 text-sm font-bold" style={{ color: BLUE_DEEP }}>
               Built for real life, not another dashboard
             </p>
             <h2

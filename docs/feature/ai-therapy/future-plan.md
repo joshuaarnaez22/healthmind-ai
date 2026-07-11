@@ -8,15 +8,15 @@ Protect Deepgram + Deepseek spend and create a clear free → paid upgrade path 
 
 ## Tier model (locked)
 
-| | Free | Paid (subscribed) |
-| --- | --- | --- |
-| **Primary limit** | **Time-based: 5 minutes** per session (hard stop) | **Token-driven** — billed/capped by LLM + voice usage tokens, not a fixed minute wall |
-| Soft warning | at ~4 minutes | when ~80% of token budget is used |
-| Hard stop | at **5 minutes** | when token budget is exhausted |
-| Concurrent sessions | 1 | 1 |
-| Token grant rate (`/api/deepgram-token`) | 5 / hour | higher (e.g. 60 / hour) |
-| Journal context in prompt | smaller (~2k chars) | larger (~6k chars), still counted toward tokens |
-| After limit | Upgrade CTA | Top-up / next billing cycle / wait for refill |
+|                                          | Free                                              | Paid (subscribed)                                                                     |
+| ---------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| **Primary limit**                        | **Time-based: 5 minutes** per session (hard stop) | **Token-driven** — billed/capped by LLM + voice usage tokens, not a fixed minute wall |
+| Soft warning                             | at ~4 minutes                                     | when ~80% of token budget is used                                                     |
+| Hard stop                                | at **5 minutes**                                  | when token budget is exhausted                                                        |
+| Concurrent sessions                      | 1                                                 | 1                                                                                     |
+| Token grant rate (`/api/deepgram-token`) | 5 / hour                                          | higher (e.g. 60 / hour)                                                               |
+| Journal context in prompt                | smaller (~2k chars)                               | larger (~6k chars), still counted toward tokens                                       |
+| After limit                              | Upgrade CTA                                       | Top-up / next billing cycle / wait for refill                                         |
 
 ### Free — 5 minute limit
 
@@ -94,8 +94,8 @@ flowchart TD
 
 - Upstash Redis (`lib/upstash.ts`)
 - Key: `ai-therapy:token:{userId}:{window}`
-- Free: 5 grants / rolling hour  
-- Paid: higher cap  
+- Free: 5 grants / rolling hour
+- Paid: higher cap
 - Apply in `/api/deepgram-token` before Deepgram `auth/grant`
 
 ### 2. Free quota — 5 minute hard cap
@@ -118,9 +118,9 @@ flowchart TD
 
 ## UI (future)
 
-- **Free:** countdown “X:XX left in this free session” → at 0, upgrade modal  
-- **Paid:** “Tokens remaining” (and optional estimated minutes)  
-- Soft warning near 80% of free time or paid budget  
+- **Free:** countdown “X:XX left in this free session” → at 0, upgrade modal
+- **Paid:** “Tokens remaining” (and optional estimated minutes)
+- Soft warning near 80% of free time or paid budget
 - Settings / billing: plan status, balance, top-up
 
 ## Env / config (future)
@@ -135,17 +135,17 @@ AI_THERAPY_VOICE_MINUTE_TOKEN_EQUIV=1000
 
 ## Implementation order (when ready)
 
-1. Prisma `subscriptionTier`, `aiTherapyTokenBalance`, `AiTherapyUsage`  
-2. Redis rate limit on `/api/deepgram-token`  
-3. Free 5-minute hard cap (client + server)  
-4. Paid token metering + balance debit  
-5. Stripe paywall webhooks → tier + token refill — see [../paywall/plan.md](../paywall/plan.md)  
-6. Upgrade / top-up CTAs → paywall Checkout  
+1. Prisma `subscriptionTier`, `aiTherapyTokenBalance`, `AiTherapyUsage`
+2. Redis rate limit on `/api/deepgram-token`
+3. Free 5-minute hard cap (client + server)
+4. Paid token metering + balance debit
+5. Stripe paywall webhooks → tier + token refill — see [../paywall/plan.md](../paywall/plan.md)
+6. Upgrade / top-up CTAs → paywall Checkout
 
 ## Out of scope for this future doc
 
-- Enterprise / team plans  
-- Per-org shared pools  
-- True E2E / self-hosted Deepgram  
-- Refunds for partial sessions  
+- Enterprise / team plans
+- Per-org shared pools
+- True E2E / self-hosted Deepgram
+- Refunds for partial sessions
 - Paywall implementation details (owned by `docs/feature/paywall/`)

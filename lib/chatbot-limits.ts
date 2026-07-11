@@ -29,9 +29,7 @@ async function slidingWindowAllow(
   return { allowed, remaining: Math.max(0, max - count) };
 }
 
-export async function checkLandingRateLimit(
-  ip: string
-): Promise<LimitResult> {
+export async function checkLandingRateLimit(ip: string): Promise<LimitResult> {
   const { maxRequests, windowSeconds } = CHATBOT_LIMITS.landing;
   const key = `chat:landing:rate:${ip}`;
   const { allowed, remaining } = await slidingWindowAllow(
@@ -107,9 +105,7 @@ export async function checkAndIncrementFreeDaily(
   return { ok: true, remaining: Math.max(0, max - count) };
 }
 
-export async function peekFreeDailyRemaining(
-  userId: string
-): Promise<number> {
+export async function peekFreeDailyRemaining(userId: string): Promise<number> {
   const used = await getFreeDailyUsage(userId);
   return Math.max(0, CHATBOT_LIMITS.free.dailyMessages - used);
 }
