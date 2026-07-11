@@ -10,6 +10,8 @@ const publicRoutes = createRouteMatcher([
   '/sign-up(.*)',
   '/',
   '/api/webhooks/clerk',
+  '/api/chat',
+  '/api/chat/(.*)',
 ]);
 
 const adminRoutes = createRouteMatcher(['/admin(.*)']);
@@ -32,8 +34,8 @@ export default clerkMiddleware(async (auth, req) => {
     const { publicMetadata } = await client.users.getUser(userId);
     const userRole = (publicMetadata?.role as string) || 'user'; // Default to 'user' if missing
 
-    // ✅ Redirect logged-in users away from public pages to appropriate dashboards
-    if (publicRoutes(req)) {
+    // ✅ Redirect logged-in users away from marketing/auth pages (not public APIs)
+    if (publicRoutes(req) && !req.nextUrl.pathname.startsWith('/api/')) {
       if (userRole === 'admin') {
         return NextResponse.redirect(new URL('/admin/dashboard', req.url));
       }

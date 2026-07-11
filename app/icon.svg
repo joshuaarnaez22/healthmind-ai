@@ -1,17 +1,15 @@
 <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="8" fill="#0a70ff"/>
-  <path
-    d="M8 16 C8 11 12 8 16 8 C20 8 24 11 24 16"
-    stroke="#fffcf5"
-    stroke-width="2.25"
-    stroke-linecap="round"
-  />
-  <path
-    d="M8 16 C8 21 12 24 16 24 C20 24 24 21 24 16"
-    stroke="#fffcf5"
-    stroke-width="2.25"
-    stroke-linecap="round"
-    stroke-opacity="0.45"
-  />
-  <circle cx="16" cy="16" r="2.5" fill="#fcff7e"/>
+  <rect width="32" height="32" rx="10" fill="#0a70ff"/>
+  <line x1="16" y1="5.5" x2="16" y2="9" stroke="#fffcf5" stroke-width="1.75" stroke-linecap="round"/>
+  <circle cx="16" cy="4.25" r="2.1" fill="#fcff7e"/>
+  <rect x="5.25" y="14" width="2.25" height="5" rx="1.1" fill="#fffcf5"/>
+  <rect x="24.5" y="14" width="2.25" height="5" rx="1.1" fill="#fffcf5"/>
+  <rect x="7" y="9" width="18" height="16.5" rx="6.5" fill="#fffcf5"/>
+  <circle cx="10.4" cy="19.2" r="1.7" fill="#ffb4a8" fill-opacity="0.5"/>
+  <circle cx="21.6" cy="19.2" r="1.7" fill="#ffb4a8" fill-opacity="0.5"/>
+  <circle cx="12.2" cy="15.8" r="2.25" fill="#282830"/>
+  <circle cx="19.8" cy="15.8" r="2.25" fill="#282830"/>
+  <circle cx="12.85" cy="15.15" r="0.75" fill="#fffcf5"/>
+  <circle cx="20.45" cy="15.15" r="0.75" fill="#fffcf5"/>
+  <path d="M12.4 20.4 C13.8 22.15 18.2 22.15 19.6 20.4" stroke="#0a70ff" stroke-width="1.8" stroke-linecap="round" fill="none"/>
 </svg>

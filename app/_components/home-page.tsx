@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { Menu, X, ArrowRight } from 'lucide-react';
+import ChatPanel from './chat-panel';
 
 /**
  * Alan-inspired — cream paper, bold blue action, soft single sans.
@@ -356,16 +357,32 @@ export default function HomePage() {
       {/* Stats — Alan-style proof strip */}
       <section id="why" className="px-5 py-16 sm:px-8 sm:py-20">
         <div className="mx-auto max-w-6xl">
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 8 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45, ease: EASE }}
-            className="mb-10 text-center text-sm font-bold"
-            style={{ color: BLUE_DEEP }}
+            className="mb-10 max-w-2xl text-center sm:mx-auto sm:text-left"
           >
-            Built for real life, not another dashboard
-          </motion.p>
+            <p
+              className="mb-3 text-sm font-bold"
+              style={{ color: BLUE_DEEP }}
+            >
+              Built for real life, not another dashboard
+            </p>
+            <h2
+              className="font-bold tracking-tight [text-wrap:balance]"
+              style={{
+                fontSize: 'clamp(1.65rem, 3.5vw, 2.25rem)',
+                letterSpacing: '-0.03em',
+                lineHeight: 1.2,
+                color: INK,
+              }}
+            >
+              One home for how you feel, what your body says, and support when
+              you need it.
+            </h2>
+          </motion.div>
 
           <div
             className="overflow-hidden rounded-[2rem]"
@@ -376,19 +393,28 @@ export default function HomePage() {
                 {
                   n: '1',
                   unit: 'place',
-                  label: 'Mood, vitals, and support — finally together',
+                  title: 'Mind and body, same home',
+                  label:
+                    'Mood, journal, blood pressure, glucose, goals, and therapy modules live together — so patterns are easier to notice.',
+                  detail: 'No more hopping between wellness apps',
                   accent: LIME,
                 },
                 {
                   n: '<1',
                   unit: 'min',
-                  label: 'To log how you feel and move on with your day',
+                  title: 'Fast enough for busy days',
+                  label:
+                    'Tap how you feel, jot a line if you want, and get back to your day. Check-ins are designed to be light, not another chore.',
+                  detail: 'Optional deeper journal when you have time',
                   accent: null,
                 },
                 {
                   n: '24',
                   unit: '/7',
-                  label: 'AI therapy when a waiting room is not an option',
+                  title: 'Support between appointments',
+                  label:
+                    'AI chat, guided CBT-style modules, and voice therapy sessions for the hours when a waiting room is not an option.',
+                  detail: 'Companion support — not a clinical replacement',
                   accent: null,
                 },
               ].map((s, i) => (
@@ -398,7 +424,7 @@ export default function HomePage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, ease: EASE, delay: i * 0.08 }}
-                  className={`relative px-7 py-10 text-center sm:px-8 sm:py-12 sm:text-left ${
+                  className={`relative flex flex-col px-7 py-10 text-center sm:px-8 sm:py-12 sm:text-left ${
                     i > 0 ? 'border-t sm:border-t-0' : ''
                   }`}
                   style={
@@ -407,7 +433,6 @@ export default function HomePage() {
                       : undefined
                   }
                 >
-                  {/* Desktop vertical dividers */}
                   {i > 0 && (
                     <div
                       className="absolute bottom-8 left-0 top-8 hidden w-px sm:block"
@@ -438,15 +463,78 @@ export default function HomePage() {
                       {s.unit}
                     </span>
                   </div>
+                  <h3
+                    className="mt-5 text-base font-bold tracking-tight"
+                    style={{ color: INK }}
+                  >
+                    {s.title}
+                  </h3>
                   <p
-                    className="mx-auto mt-4 max-w-[16rem] text-sm leading-relaxed sm:mx-0"
+                    className="mx-auto mt-2 max-w-[18rem] flex-1 text-sm leading-relaxed sm:mx-0 sm:max-w-none"
                     style={{ color: MUTED }}
                   >
                     {s.label}
                   </p>
+                  <p
+                    className="mx-auto mt-4 max-w-[18rem] text-xs font-medium leading-snug sm:mx-0 sm:max-w-none"
+                    style={{ color: BLUE_DEEP }}
+                  >
+                    {s.detail}
+                  </p>
                 </motion.div>
               ))}
             </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, ease: EASE, delay: 0.2 }}
+              className="grid gap-6 border-t px-7 py-8 sm:grid-cols-3 sm:gap-0 sm:px-8"
+              style={{ borderColor: 'rgba(10, 112, 255, 0.12)' }}
+            >
+              {[
+                {
+                  title: 'Insights that connect the dots',
+                  body: 'Weekly patterns across mood and vitals — not just another chart dump.',
+                },
+                {
+                  title: 'Private by design',
+                  body: 'Your data stays yours. Export or delete anytime from your account.',
+                },
+                {
+                  title: 'Free to start',
+                  body: 'Core tracking and limited AI support included. Upgrade only if you want more.',
+                },
+              ].map((item, i) => (
+                <div
+                  key={item.title}
+                  className={`relative text-center sm:px-6 sm:text-left ${
+                    i > 0 ? 'sm:pl-8' : ''
+                  }`}
+                >
+                  {i > 0 && (
+                    <div
+                      className="absolute bottom-0 left-0 top-0 hidden w-px sm:block"
+                      style={{ background: 'rgba(10, 112, 255, 0.12)' }}
+                      aria-hidden="true"
+                    />
+                  )}
+                  <p
+                    className="text-sm font-bold tracking-tight"
+                    style={{ color: INK }}
+                  >
+                    {item.title}
+                  </p>
+                  <p
+                    className="mt-1.5 text-xs leading-relaxed sm:text-sm"
+                    style={{ color: MUTED }}
+                  >
+                    {item.body}
+                  </p>
+                </div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
@@ -616,6 +704,8 @@ export default function HomePage() {
           </span>
         </div>
       </footer>
+
+      <ChatPanel />
     </div>
   );
 }

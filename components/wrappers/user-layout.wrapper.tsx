@@ -18,6 +18,7 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { usePathname } from 'next/navigation';
+import ChatbotWidget from '@/components/chatbot/chatbot-widget';
 
 const ROUTE_LABELS: Record<string, string> = {
   dashboard: 'Dashboard',
@@ -102,6 +103,7 @@ export default function UserLayoutWrapper({
           </div>
         </header>
         <div className="px-4 py-6 md:px-6 md:py-8">{children}</div>
+        <ChatbotWidget surface="app" />
       </SidebarInset>
     </SidebarProvider>
   );
