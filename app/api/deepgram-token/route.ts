@@ -1,11 +1,52 @@
 import { NextResponse } from 'next/server';
 import { getApiUserId } from '@/actions/server-actions/user';
+import { prisma } from '@/lib/client';
+import {
+  checkTherapyGrantRate,
+} from '@/lib/ai-therapy-limits';
 
 export async function GET() {
   try {
     const userId = await getApiUserId();
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        subscriptionTier: true,
+        aiTokenBalance: true,
+      },
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const isPaid = user.subscriptionTier === 'SUBSCRIBED';
+
+    if (isPaid && user.aiTokenBalance <= 0) {
+      return NextResponse.json(
+        {
+          error: 'Your token balance is empty. Top up to continue voice sessions.',
+          code: 'token_budget',
+        },
+        { status: 402 }
+      );
+    }
+
+    const rate = await checkTherapyGrantRate(userId, isPaid);
+    if (!rate.ok) {
+      return NextResponse.json(
+        {
+          error: isPaid
+            ? 'Too many session starts. Please wait a bit and try again.'
+            : 'You’ve reached the free session start limit for now. Upgrade for higher limits.',
+          code: 'rate_limited',
+        },
+        { status: 429 }
+      );
     }
 
     const apiKey = process.env.DEEPGRAM_API_KEY;
@@ -64,6 +105,8 @@ export async function GET() {
       {
         access_token: data.access_token,
         expires_in: data.expires_in,
+        tier: user.subscriptionTier,
+        tokenBalance: isPaid ? user.aiTokenBalance : null,
       },
       { status: 200 }
     );

@@ -10,6 +10,7 @@ const publicRoutes = createRouteMatcher([
   '/sign-up(.*)',
   '/',
   '/api/webhooks/clerk',
+  '/api/webhooks/stripe',
   '/api/chat',
   '/api/chat/(.*)',
 ]);

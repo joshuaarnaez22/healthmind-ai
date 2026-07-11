@@ -272,7 +272,7 @@ export default function ChatbotWidget({
                       size="sm"
                       className="h-7 rounded-full text-xs"
                     >
-                      <Link href="/user/dashboard">Upgrade (soon)</Link>
+                      <Link href="/user/billing">Upgrade</Link>
                     </Button>
                   )}
                   <Button

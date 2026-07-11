@@ -3,8 +3,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
-import { Menu, X, ArrowRight } from 'lucide-react';
+import { Menu, X, ArrowRight, Check } from 'lucide-react';
 import ChatPanel from './chat-panel';
+import { PRO_MONTHLY_TOKENS, STRIPE_CATALOG } from '@/lib/stripe-catalog';
 
 /**
  * Alan-inspired — cream paper, bold blue action, soft single sans.
@@ -198,6 +199,13 @@ export default function HomePage() {
             >
               The app
             </a>
+            <a
+              href="#pricing"
+              className="text-sm font-medium hover:opacity-70"
+              style={{ color: MUTED }}
+            >
+              Pricing
+            </a>
             <Link
               href="/sign-in"
               className="text-sm font-medium hover:opacity-70"
@@ -249,6 +257,14 @@ export default function HomePage() {
             onClick={() => setMenuOpen(false)}
           >
             The app
+          </a>
+          <a
+            href="#pricing"
+            className="border-b py-5 text-2xl font-bold"
+            style={{ borderColor: RULE }}
+            onClick={() => setMenuOpen(false)}
+          >
+            Pricing
           </a>
           <Link
             href="/sign-in"
@@ -649,6 +665,158 @@ export default function HomePage() {
             </Link>
           </div>
           <AppPreview />
+        </div>
+      </section>
+
+      {/* Pricing — oriented, not sold-to */}
+      <section id="pricing" className="px-5 py-20 sm:px-8 sm:py-28">
+        <div className="mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.55, ease: EASE }}
+            className="mx-auto max-w-2xl text-center"
+          >
+            <p className="mb-3 text-sm font-bold" style={{ color: BLUE_DEEP }}>
+              Pricing
+            </p>
+            <h2
+              className="font-bold tracking-tight [text-wrap:balance]"
+              style={{
+                fontSize: 'clamp(1.85rem, 4vw, 3rem)',
+                letterSpacing: '-0.03em',
+                lineHeight: 1.15,
+              }}
+            >
+              Free to start.
+              <br />
+              <span style={{ color: MUTED }}>Upgrade only if you want more.</span>
+            </h2>
+            <p
+              className="mx-auto mt-4 max-w-lg text-base leading-relaxed"
+              style={{ color: MUTED }}
+            >
+              Core tracking is included. Pro adds a shared token wallet for chat
+              and longer AI Therapy sessions.
+            </p>
+          </motion.div>
+
+          <div className="mx-auto mt-12 grid max-w-4xl gap-5 sm:grid-cols-2">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5, ease: EASE }}
+              className="rounded-[1.75rem] p-7 sm:p-8"
+              style={{ background: BLUE_SOFT }}
+            >
+              <p
+                className="mb-1 text-xs font-bold uppercase tracking-[0.14em]"
+                style={{ color: MUTED }}
+              >
+                Free
+              </p>
+              <p
+                className="font-bold tracking-tight"
+                style={{ fontSize: '2rem', letterSpacing: '-0.03em' }}
+              >
+                Included
+              </p>
+              <ul className="mt-6 space-y-3">
+                {[
+                  'Mood, journal, and vitals tracking',
+                  'Daily free chat messages',
+                  'AI Therapy sessions up to 5 minutes',
+                ].map((item) => (
+                  <li
+                    key={item}
+                    className="flex gap-2.5 text-sm leading-relaxed"
+                    style={{ color: MUTED }}
+                  >
+                    <Check
+                      className="mt-0.5 h-4 w-4 shrink-0"
+                      style={{ color: BLUE }}
+                    />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/sign-up"
+                className="mt-8 inline-flex w-full items-center justify-center rounded-full px-6 py-3.5 text-sm font-bold transition-colors hover:bg-black/5"
+                style={{ color: INK, border: `1px solid ${RULE}` }}
+              >
+                Start free
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5, ease: EASE, delay: 0.08 }}
+              className="rounded-[1.75rem] p-7 sm:p-8"
+              style={{
+                background: '#fff',
+                border: `1.5px solid ${BLUE}`,
+              }}
+            >
+              <div className="mb-1 flex items-center gap-2">
+                <p
+                  className="text-xs font-bold uppercase tracking-[0.14em]"
+                  style={{ color: BLUE_DEEP }}
+                >
+                  Pro
+                </p>
+                <span
+                  className="rounded-full px-2.5 py-0.5 text-[10px] font-bold"
+                  style={{ background: LIME, color: INK }}
+                >
+                  Optional
+                </span>
+              </div>
+              <p
+                className="font-bold tracking-tight"
+                style={{ fontSize: '2rem', letterSpacing: '-0.03em' }}
+              >
+                {STRIPE_CATALOG.pro.displayPrice}
+              </p>
+              <p className="mt-1 text-sm" style={{ color: MUTED }}>
+                {PRO_MONTHLY_TOKENS.toLocaleString()} tokens each month
+              </p>
+              <ul className="mt-6 space-y-3">
+                {[
+                  'Shared wallet for chat + AI Therapy',
+                  'Longer voice sessions (token-based)',
+                  'Cancel anytime after you upgrade',
+                ].map((item) => (
+                  <li
+                    key={item}
+                    className="flex gap-2.5 text-sm leading-relaxed"
+                    style={{ color: MUTED }}
+                  >
+                    <Check
+                      className="mt-0.5 h-4 w-4 shrink-0"
+                      style={{ color: BLUE }}
+                    />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/sign-up"
+                className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
+                style={{ background: BLUE }}
+              >
+                Create account
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <p className="mt-3 text-center text-xs" style={{ color: MUTED }}>
+                Upgrade from Billing after you sign in.
+              </p>
+            </motion.div>
+          </div>
         </div>
       </section>
 

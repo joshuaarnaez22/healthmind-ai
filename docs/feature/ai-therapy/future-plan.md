@@ -1,6 +1,9 @@
 # AI Therapy — Future Plan: Rate Limits & Subscription Tiers
 
-Follow-up to [plan.md](./plan.md). **Not in v1.** Add after voice sessions ship.
+Follow-up to [plan.md](./plan.md). **Paywall + free 5-min / paid token gate shipped.**  
+**Also shipped:** session token UX (remaining + ~min left + 80% warn) and `AiTherapyUsage` ledger.
+
+Still TBD later: real Deepgram/LLM burn metering, Billing Meters, tiered journal context size, concurrent session lock.
 
 ## Goal
 

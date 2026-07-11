@@ -12,7 +12,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky",
-    "check:deepgram": "node scripts/check-deepgram-grant.mjs"
+    "check:deepgram": "node scripts/check-deepgram-grant.mjs",
+    "stripe:catalog": "node --env-file=.env scripts/create-stripe-catalog.mjs",
+    "stripe:listen": "stripe listen --forward-to localhost:3000/api/webhooks/stripe"
   },
   "dependencies": {
     "@ai-sdk/deepseek": "^0.2.11",
@@ -76,6 +78,7 @@
     "react-hook-form": "^7.55.0",
     "react-markdown": "^10.1.0",
     "recharts": "^2.15.1",
+    "stripe": "^22.3.1",
     "svix": "^1.62.0",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",

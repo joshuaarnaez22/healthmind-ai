@@ -32,6 +32,12 @@ import {
   ensureDeepgramAgentAudioDefaults,
 } from '@/lib/deepgram-agent-audio';
 import {
+  THERAPY_FREE_CAP_SECONDS,
+  THERAPY_FREE_WARNING_SECONDS,
+  THERAPY_TOKENS_PER_MINUTE,
+  estimateMinutesFromTokens,
+} from '@/lib/stripe-catalog';
+import {
   AgentProvider,
   useAgentClientTool,
   useAgentConversation,
@@ -48,6 +54,10 @@ ensureDeepgramAgentAudioDefaults();
 
 const SOFT_LIMIT_SECONDS = 20 * 60;
 const CAPTION_PREVIEW = 2;
+const HEARTBEAT_MS = 30_000;
+
+type TherapyTier = 'FREE' | 'SUBSCRIBED';
+type LimitReason = 'free_cap' | 'token_budget' | null;
 
 function formatTime(seconds: number) {
   const mins = Math.floor(seconds / 60);
@@ -66,12 +76,18 @@ function connectionLabel(
   return 'Ready';
 }
 
-async function fetchDeepgramToken(): Promise<string> {
+async function fetchDeepgramToken(): Promise<{
+  access_token: string;
+  tier: TherapyTier;
+  tokenBalance: number | null;
+}> {
   const res = await fetch('/api/deepgram-token');
   let payload: {
     access_token?: string;
     error?: string;
     code?: string;
+    tier?: TherapyTier;
+    tokenBalance?: number | null;
   } = {};
   try {
     payload = await res.json();
@@ -87,7 +103,58 @@ async function fetchDeepgramToken(): Promise<string> {
   if (!payload.access_token) {
     throw new Error('Invalid voice session token');
   }
-  return payload.access_token;
+  return {
+    access_token: payload.access_token,
+    tier: payload.tier === 'SUBSCRIBED' ? 'SUBSCRIBED' : 'FREE',
+    tokenBalance:
+      typeof payload.tokenBalance === 'number' ? payload.tokenBalance : null,
+  };
+}
+
+async function startUsageLedger(): Promise<{
+  usageId: string;
+  tokenBalance: number | null;
+  openingBalance: number;
+  estimatedMinutesLeft: number | null;
+}> {
+  const res = await fetch('/api/ai-therapy/usage', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'start' }),
+  });
+  if (!res.ok) throw new Error('Could not start usage tracking');
+  const data = (await res.json()) as {
+    usageId: string;
+    tokenBalance: number | null;
+    openingBalance: number;
+    estimatedMinutesLeft: number | null;
+  };
+  return data;
+}
+
+async function endUsageLedger({
+  usageId,
+  secondsAlive,
+  endReason,
+}: {
+  usageId: string;
+  secondsAlive: number;
+  endReason: string;
+}) {
+  try {
+    await fetch('/api/ai-therapy/usage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'end',
+        usageId,
+        secondsAlive,
+        endReason,
+      }),
+    });
+  } catch (err) {
+    console.error('Failed to end therapy usage:', err);
+  }
 }
 
 /** Brand presence — HealthMindBot + soft concentric pulse. */
@@ -288,7 +355,9 @@ function ControlButton({
   );
 }
 
-function SessionControls() {
+function SessionControls({
+  initialTier,
+}: Readonly<{ initialTier: TherapyTier }>) {
   const { state, isActive, isConnecting, start, stop } = useAgentState();
   const { isSpeaking } = useAgentMode();
   const { micMuted, setMicMuted } = useAgentMicrophone();
@@ -300,7 +369,17 @@ function SessionControls() {
   const [agentError, setAgentError] = useState<string | null>(null);
   const [userSpeaking, setUserSpeaking] = useState(false);
   const [endedByIntent, setEndedByIntent] = useState(false);
+  const [tier, setTier] = useState<TherapyTier>(initialTier);
+  const [limitReason, setLimitReason] = useState<LimitReason>(null);
+  const [tokenBalance, setTokenBalance] = useState<number | null>(null);
+  const [estimatedMinutesLeft, setEstimatedMinutesLeft] = useState<
+    number | null
+  >(null);
+  const [warnBudget, setWarnBudget] = useState(false);
   const pendingEndRef = useRef(false);
+  const lastBilledSecondsRef = useRef(0);
+  const sessionTimeRef = useRef(0);
+  const usageIdRef = useRef<string | null>(null);
   const endFallbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
@@ -312,13 +391,32 @@ function SessionControls() {
     }
   }, []);
 
-  const finishSession = useCallback(() => {
-    clearEndFallback();
-    pendingEndRef.current = false;
-    setEndedByIntent(true);
-    setUserSpeaking(false);
-    stop();
-  }, [clearEndFallback, stop]);
+  const closeUsage = useCallback(
+    async (reason: string) => {
+      const id = usageIdRef.current;
+      if (!id) return;
+      usageIdRef.current = null;
+      await endUsageLedger({
+        usageId: id,
+        secondsAlive: sessionTimeRef.current,
+        endReason: reason,
+      });
+    },
+    []
+  );
+
+  const finishSession = useCallback(
+    (reason?: LimitReason) => {
+      clearEndFallback();
+      pendingEndRef.current = false;
+      setEndedByIntent(true);
+      setUserSpeaking(false);
+      if (reason) setLimitReason(reason);
+      void closeUsage(reason ?? 'user');
+      stop();
+    },
+    [clearEndFallback, closeUsage, stop]
+  );
 
   useAgentClientTool('end_session', (fn) => {
     pendingEndRef.current = true;
@@ -340,14 +438,82 @@ function SessionControls() {
   useEffect(() => {
     if (!isActive) {
       setSessionTime(0);
+      sessionTimeRef.current = 0;
       setUserSpeaking(false);
+      lastBilledSecondsRef.current = 0;
       return;
     }
     const interval = setInterval(() => {
-      setSessionTime((prev) => prev + 1);
+      setSessionTime((prev) => {
+        const next = prev + 1;
+        sessionTimeRef.current = next;
+        return next;
+      });
     }, 1000);
     return () => clearInterval(interval);
   }, [isActive]);
+
+  // Free hard stop + paid soft 20-min warning
+  useEffect(() => {
+    if (!isActive) return;
+    if (tier === 'FREE' && sessionTime >= THERAPY_FREE_CAP_SECONDS) {
+      finishSession('free_cap');
+    }
+  }, [isActive, sessionTime, tier, finishSession]);
+
+  // Paid heartbeat debit
+  useEffect(() => {
+    if (!isActive || tier !== 'SUBSCRIBED') return;
+
+    let cancelled = false;
+
+    const beat = async () => {
+      try {
+        const res = await fetch('/api/ai-therapy/heartbeat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            secondsAlive: sessionTimeRef.current,
+            lastBilledSeconds: lastBilledSecondsRef.current,
+            usageId: usageIdRef.current,
+          }),
+        });
+        const data = (await res.json()) as {
+          shouldEnd?: boolean;
+          reason?: LimitReason;
+          billedSeconds?: number;
+          tokenBalance?: number | null;
+          warnBudget?: boolean;
+          estimatedMinutesLeft?: number | null;
+        };
+        if (cancelled) return;
+        if (typeof data.billedSeconds === 'number') {
+          lastBilledSecondsRef.current = data.billedSeconds;
+        }
+        if (typeof data.tokenBalance === 'number') {
+          setTokenBalance(data.tokenBalance);
+        }
+        if (typeof data.estimatedMinutesLeft === 'number') {
+          setEstimatedMinutesLeft(data.estimatedMinutesLeft);
+        }
+        if (typeof data.warnBudget === 'boolean') {
+          setWarnBudget(data.warnBudget);
+        }
+        if (data.shouldEnd) {
+          finishSession(data.reason ?? 'token_budget');
+        }
+      } catch (err) {
+        console.error('Therapy heartbeat failed:', err);
+      }
+    };
+
+    beat();
+    const id = setInterval(beat, HEARTBEAT_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, [isActive, tier, finishSession]);
 
   useEffect(() => {
     const onError = (msg: {
@@ -399,10 +565,22 @@ function SessionControls() {
 
   const coachSpeaking = isSpeaking;
   const inRoom = isActive || isConnecting;
-  const showSoftLimitWarning = isActive && sessionTime >= SOFT_LIMIT_SECONDS;
+  const showFreeWarning =
+    isActive &&
+    tier === 'FREE' &&
+    sessionTime >= THERAPY_FREE_WARNING_SECONDS &&
+    sessionTime < THERAPY_FREE_CAP_SECONDS;
+  const showSoftLimitWarning =
+    isActive && tier === 'SUBSCRIBED' && sessionTime >= SOFT_LIMIT_SECONDS;
+  const showBudgetWarning =
+    isActive && tier === 'SUBSCRIBED' && warnBudget && !showSoftLimitWarning;
 
   const statusCopy = (() => {
     if (isConnecting) return 'Connecting…';
+    if (!isActive && limitReason === 'free_cap')
+      return 'Free session limit reached';
+    if (!isActive && limitReason === 'token_budget')
+      return 'Token balance used up';
     if (!isActive && endedByIntent) return 'Session ended — take care';
     if (!isActive) return 'Ready when you are';
     if (coachSpeaking) return 'Coach speaking';
@@ -415,10 +593,32 @@ function SessionControls() {
     setStartError(null);
     setAgentError(null);
     setEndedByIntent(false);
+    setLimitReason(null);
+    setWarnBudget(false);
     pendingEndRef.current = false;
+    lastBilledSecondsRef.current = 0;
+    usageIdRef.current = null;
     clearEndFallback();
     try {
-      await fetchDeepgramToken();
+      const grant = await fetchDeepgramToken();
+      setTier(grant.tier);
+      if (typeof grant.tokenBalance === 'number') {
+        setTokenBalance(grant.tokenBalance);
+        setEstimatedMinutesLeft(estimateMinutesFromTokens(grant.tokenBalance));
+      } else {
+        setTokenBalance(null);
+        setEstimatedMinutesLeft(null);
+      }
+
+      const usage = await startUsageLedger();
+      usageIdRef.current = usage.usageId;
+      if (typeof usage.tokenBalance === 'number') {
+        setTokenBalance(usage.tokenBalance);
+      }
+      if (typeof usage.estimatedMinutesLeft === 'number') {
+        setEstimatedMinutesLeft(usage.estimatedMinutesLeft);
+      }
+
       await start();
     } catch (err) {
       console.error('Failed to start therapy session:', err);
@@ -427,6 +627,7 @@ function SessionControls() {
           ? err.message
           : 'Could not start the session. Check microphone permissions and try again.'
       );
+      usageIdRef.current = null;
       try {
         stop();
       } catch {
@@ -439,10 +640,13 @@ function SessionControls() {
     pendingEndRef.current = false;
     clearEndFallback();
     setEndedByIntent(false);
+    setLimitReason(null);
+    void closeUsage('user');
     stop();
     setStartError(null);
     setAgentError(null);
     setUserSpeaking(false);
+    setWarnBudget(false);
   };
 
   return (
@@ -475,6 +679,19 @@ function SessionControls() {
           {formatTime(sessionTime)}
         </p>
       </div>
+
+      {tier === 'SUBSCRIBED' && typeof tokenBalance === 'number' && (
+        <p className="mb-6 text-center text-xs text-muted-foreground">
+          {tokenBalance.toLocaleString()} tokens left
+          {typeof estimatedMinutesLeft === 'number'
+            ? ` · ~${estimatedMinutesLeft} min`
+            : ''}
+          <span className="text-muted-foreground/70">
+            {' '}
+            ({THERAPY_TOKENS_PER_MINUTE}/min)
+          </span>
+        </p>
+      )}
 
       {/* Presence */}
       <div className="mb-3 text-center">
@@ -510,7 +727,37 @@ function SessionControls() {
             <p className="mx-auto max-w-sm text-sm leading-relaxed text-muted-foreground [text-wrap:pretty]">
               Talk freely. Your coach listens and responds — grounded lightly in
               your journal.
+              {tier === 'FREE'
+                ? ' Free sessions wrap gently at 5 minutes.'
+                : ''}
             </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showFreeWarning && (
+          <motion.div
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="bg-secondary/70 mb-5 rounded-2xl px-4 py-3 text-center text-sm text-muted-foreground"
+          >
+            About a minute left on the free session.
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showBudgetWarning && (
+          <motion.div
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="bg-secondary/70 mb-5 rounded-2xl px-4 py-3 text-center text-sm text-muted-foreground"
+          >
+            You&apos;ve used most of this session&apos;s token budget — wrap up
+            or top up when you can.
           </motion.div>
         )}
       </AnimatePresence>
@@ -528,9 +775,31 @@ function SessionControls() {
         )}
       </AnimatePresence>
 
+      {!inRoom && limitReason && (
+        <div className="mb-5 space-y-3 rounded-2xl bg-secondary/60 px-4 py-4 text-center">
+          <p className="text-sm text-muted-foreground">
+            {limitReason === 'free_cap'
+              ? 'Free sessions wrap at 5 minutes. Upgrade for longer, token-based coaching.'
+              : 'Your token balance is empty. Top up to continue talking.'}
+          </p>
+          <Button asChild size="sm" className="rounded-2xl">
+            <Link href="/user/billing">
+              {limitReason === 'free_cap' ? 'Upgrade' : 'Top up'}
+            </Link>
+          </Button>
+        </div>
+      )}
+
       {(startError || agentError) && (
-        <div className="border-destructive/30 bg-destructive/10 mb-5 rounded-2xl border px-4 py-3 text-sm text-destructive">
-          {startError || agentError}
+        <div className="border-destructive/30 bg-destructive/10 mb-5 space-y-3 rounded-2xl border px-4 py-3 text-sm text-destructive">
+          <p>{startError || agentError}</p>
+          {(startError?.toLowerCase().includes('token') ||
+            startError?.toLowerCase().includes('upgrade') ||
+            startError?.toLowerCase().includes('top up')) && (
+            <Button asChild size="sm" variant="outline" className="rounded-2xl">
+              <Link href="/user/billing">Go to billing</Link>
+            </Button>
+          )}
         </div>
       )}
 
@@ -648,8 +917,14 @@ function SessionShell({ children }: Readonly<{ children: ReactNode }>) {
   );
 }
 
-function ActiveSession({ agent }: Readonly<{ agent: AgentSettingsObject }>) {
-  const tokenFactory = useCallback(() => fetchDeepgramToken(), []);
+function ActiveSession({
+  agent,
+  initialTier,
+}: Readonly<{ agent: AgentSettingsObject; initialTier: TherapyTier }>) {
+  const tokenFactory = useCallback(async () => {
+    const grant = await fetchDeepgramToken();
+    return grant.access_token;
+  }, []);
 
   const config = useMemo(
     () => ({
@@ -678,25 +953,35 @@ function ActiveSession({ agent }: Readonly<{ agent: AgentSettingsObject }>) {
       tts
       playerSampleRate={DEEPGRAM_PLAYER_SAMPLE_RATE}
     >
-      <SessionControls />
+      <SessionControls initialTier={initialTier} />
     </AgentProvider>
   );
 }
 
-async function loadAgentSettings(): Promise<AgentSettingsObject> {
+async function loadAgentSettings(): Promise<{
+  agent: AgentSettingsObject;
+  tier: TherapyTier;
+}> {
   const res = await fetch('/api/ai-therapy/session');
   if (!res.ok) {
     throw new Error('Failed to load therapy session settings');
   }
-  const data = (await res.json()) as { agent?: AgentSettingsObject };
+  const data = (await res.json()) as {
+    agent?: AgentSettingsObject;
+    tier?: TherapyTier;
+  };
   if (!data.agent) {
     throw new Error('Invalid therapy session settings');
   }
-  return data.agent;
+  return {
+    agent: data.agent,
+    tier: data.tier === 'SUBSCRIBED' ? 'SUBSCRIBED' : 'FREE',
+  };
 }
 
 export default function AiSession() {
   const [agent, setAgent] = useState<AgentSettingsObject | null>(null);
+  const [tier, setTier] = useState<TherapyTier>('FREE');
   const [loadError, setLoadError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -705,7 +990,10 @@ export default function AiSession() {
     setLoadError(null);
     setAgent(null);
     loadAgentSettings()
-      .then(setAgent)
+      .then((data) => {
+        setAgent(data.agent);
+        setTier(data.tier);
+      })
       .catch((err) => {
         console.error(err);
         setLoadError(
@@ -720,8 +1008,11 @@ export default function AiSession() {
   useEffect(() => {
     let cancelled = false;
     loadAgentSettings()
-      .then((a) => {
-        if (!cancelled) setAgent(a);
+      .then((data) => {
+        if (!cancelled) {
+          setAgent(data.agent);
+          setTier(data.tier);
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -774,7 +1065,7 @@ export default function AiSession() {
 
   return (
     <SessionShell>
-      <ActiveSession agent={agent} />
+      <ActiveSession agent={agent} initialTier={tier} />
     </SessionShell>
   );
 }

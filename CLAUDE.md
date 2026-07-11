@@ -102,6 +102,13 @@ UPSTASH_REDIS_REST_URL
 UPSTASH_REDIS_REST_TOKEN
 DEEPSEEK_API_KEY
 DEEPGRAM_API_KEY                    # server-only — AI Therapy Voice Agent tokens
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+STRIPE_SECRET_KEY
+STRIPE_WEBHOOK_SECRET               # from Stripe CLI / Dashboard webhook
+STRIPE_PRICE_PRO_MONTHLY
+STRIPE_PRICE_TOPUP_SMALL
+STRIPE_PRICE_TOPUP_MEDIUM
+STRIPE_PRICE_TOPUP_LARGE
 NEXT_PUBLIC_FORCE_TOUR_FOR_TESTING  # optional — "true" forces tour every visit; unset/false = new users only
 # Optional chatbot limits:
 # CHAT_LANDING_RPM=10

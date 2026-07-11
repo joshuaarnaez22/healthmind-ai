@@ -40,10 +40,27 @@ model User {
   file             File[]
   goal             Goal[]
   therapyModule    TherapyModule[]
+  aiTherapyUsage   AiTherapyUsage[]
 
   @@index([clerkUserId])
   @@index([email])
   @@index([username])
+}
+
+model AiTherapyUsage {
+  id              String           @id @default(cuid())
+  userId          String
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startedAt       DateTime         @default(now())
+  endedAt         DateTime?
+  durationSeconds Int              @default(0)
+  tokensConsumed  Int              @default(0)
+  /// Wallet balance when the session started (paid); 0 for free
+  openingBalance  Int              @default(0)
+  tier            SubscriptionTier
+  endReason       String?
+
+  @@index([userId, startedAt])
 }
 
 model Journal {

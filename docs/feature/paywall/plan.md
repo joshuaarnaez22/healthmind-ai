@@ -7,39 +7,36 @@ Consumed by **AI Therapy**, **Chatbot**, and any future paid surfaces.
 
 - [AI Therapy future limits](../ai-therapy/future-plan.md) (free 5-min cap; paid token-driven)
 - [Chatbot](../chatbot/plan.md) (landing rate limit; logged-in free cap / paid tokens)
+- [Manual test](./manual-test.md)
 
 ## Decision locked in
 
-- **Provider:** [Stripe](https://stripe.com) — Checkout + Billing + Customer Portal (+ optional Billing Meters for token usage)
+- **Provider:** [Stripe](https://stripe.com) — Checkout + Billing + Customer Portal
 - **Auth:** Keep Clerk for identity; map `clerkUserId` ↔ Stripe `customer.id` in Prisma
+- **Wallet field:** `User.aiTokenBalance` (shared chat + therapy) — not `aiTherapyTokenBalance`
 - **Not using:** Polar, Lemon Squeezy, Paddle, Clerk Billing (for this feature)
+- **Top-ups:** only for `SUBSCRIBED` users; FREE users upgrade to Pro first
 
-## Why Stripe for HealthMind
+## Products (v1 placeholders)
 
-| Need                         | Stripe fit                                                                                               |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Token-driven paid AI therapy | Billing Meters / metered prices, or prepaid token packs as one-time PaymentIntents / checkout line items |
-| Subscriptions                | Stripe Billing (monthly Pro with included token allotment)                                               |
-| Upgrade CTAs in-app          | Checkout Sessions (hosted) — fast, PCI-safe                                                              |
-| Cancel / invoices            | Customer Portal                                                                                          |
-| Fees at scale                | Typically lower than MoR platforms (you handle tax via Stripe Tax if needed)                             |
+| SKU | Mode | Display | Tokens |
+| --- | ---- | ------- | ------ |
+| Pro monthly | subscription | $19/mo | **set** balance to **50_000** on subscribe / `invoice.paid` |
+| Top-up Small | payment | $5 | **+10_000** |
+| Top-up Medium | payment | $12 | **+30_000** |
+| Top-up Large | payment | $25 | **+80_000** |
 
-## Products (sketch)
+Token grants live in [`lib/stripe-catalog.ts`](../../../lib/stripe-catalog.ts), keyed by env Price IDs.
 
-1. **Pro subscription** — monthly; refills `aiTherapyTokenBalance` each period
-2. **Token top-up packs** — one-time Checkout (e.g. Small / Medium / Large)
-3. Optional later: metered overage via Stripe Billing Meters when balance hits zero
-
-## Data model (shared with consumers)
+## Data model
 
 ```prisma
 model User {
-  // existing...
   subscriptionTier     SubscriptionTier @default(FREE)
   subscriptionEndsAt   DateTime?
   stripeCustomerId     String?   @unique
   stripeSubscriptionId String?   @unique
-  aiTherapyTokenBalance Int      @default(0)
+  aiTokenBalance       Int       @default(0)
 }
 ```
 
@@ -64,9 +61,7 @@ sequenceDiagram
   App->>Stripe: Customer Portal session
 ```
 
-## Implementation (when ready)
-
-### Env
+## Env
 
 ```env
 STRIPE_SECRET_KEY=
@@ -78,35 +73,30 @@ STRIPE_PRICE_TOPUP_MEDIUM=
 STRIPE_PRICE_TOPUP_LARGE=
 ```
 
-### Routes
+Create Prices via Dashboard or `node --env-file=.env scripts/create-stripe-catalog.mjs`.
 
-- `POST /api/stripe/checkout` — auth’d; create Checkout Session (mode `subscription` or `payment`)
-- `POST /api/stripe/portal` — auth’d; Customer Portal session
-- `POST /api/webhooks/stripe` — verify signature; sync `subscriptionTier`, `stripeSubscriptionId`, token refills/top-ups
+## Routes
 
-### UI
+- `GET /api/billing/status` — tier, balance, catalog display
+- `POST /api/stripe/checkout` — auth’d Checkout Session
+- `POST /api/stripe/portal` — Customer Portal session
+- `POST /api/webhooks/stripe` — signature-verified sync
 
-- Pricing / upgrade page under `/user` (Alan-styled)
-- CTAs from AI Therapy when free 5-min cap or paid token budget hits zero
-- “Manage billing” in user menu → Portal
+## UI
 
-### Libs
+- [`/user/billing`](../../../app/(protected)/user/billing/page.tsx) — Alan DESIGN.md / PRODUCT.md (tinted panels, calm copy)
+- Nav user menu → Billing
+- Chatbot Upgrade → `/user/billing`
+- AI Therapy free-cap / token CTAs → `/user/billing`
 
-- `stripe` Node SDK
-- Optional `@stripe/stripe-js` only if embedding Elements later (v1 can be Checkout-only)
+## Therapy consumers (shipped with paywall v1)
 
-## Out of scope (v1 paywall)
+- Free: hard stop at **5 minutes** (warning at 4)
+- Paid: `/api/deepgram-token` requires `aiTokenBalance > 0`; heartbeat debits ~500 tokens/min
+- Grant rate limits via Redis (free 5/hr, paid 60/hr)
+- Session UI: remaining tokens + ~minutes left; warn at 80% of session opening balance
+- `AiTherapyUsage` ledger: start / heartbeat touch / end with duration + tokensConsumed
 
-- Merchant of Record / automatic global VAT without Stripe Tax
-- Team / org billing
-- Mobile IAP
-- Migrating historical Millis/Vapi spend
+## Out of scope
 
-## Implementation order
-
-1. Stripe account + products/prices
-2. Prisma Stripe fields on `User`
-3. Checkout + Portal API routes
-4. Webhook sync (subscribe, renew, cancel, top-up)
-5. Pricing / upgrade UI
-6. Wire AI Therapy + Chatbot CTAs to this feature
+- Stripe Tax / MoR, team billing, mobile IAP, Billing Meters, real Deepgram burn metering

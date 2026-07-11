@@ -104,6 +104,13 @@ UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
 DEEPSEEK_API_KEY=
 DEEPGRAM_API_KEY=                  # server-only — AI Therapy Voice Agent short-lived tokens
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=             # stripe listen / Dashboard webhook signing secret
+STRIPE_PRICE_PRO_MONTHLY=
+STRIPE_PRICE_TOPUP_SMALL=
+STRIPE_PRICE_TOPUP_MEDIUM=
+STRIPE_PRICE_TOPUP_LARGE=
 # NEXT_PUBLIC_FORCE_TOUR_FOR_TESTING=true  # optional — force onboarding tour every visit
 # Optional — uncomment in sentry.*.config.ts when ready:
 # NEXT_PUBLIC_SENTRY_DSN=
@@ -118,6 +125,10 @@ npm install
 npx prisma generate
 npx prisma db push
 npm run dev
+
+# Optional Stripe catalog (paste Price IDs into .env):
+# node --env-file=.env scripts/create-stripe-catalog.mjs
+# stripe listen --forward-to localhost:3000/api/webhooks/stripe
 ```
 
 ## Checklist

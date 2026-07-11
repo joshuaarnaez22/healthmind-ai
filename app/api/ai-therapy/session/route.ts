@@ -24,7 +24,12 @@ export async function GET() {
     const [user, journals] = await Promise.all([
       prisma.user.findUnique({
         where: { id: userId },
-        select: { firstName: true, username: true },
+        select: {
+          firstName: true,
+          username: true,
+          subscriptionTier: true,
+          aiTokenBalance: true,
+        },
       }),
       prisma.journal.findMany({
         where: {
@@ -44,8 +49,16 @@ export async function GET() {
 
     const userName = user?.firstName?.trim() || user?.username?.trim() || null;
     const agent = buildAiTherapySettings({ journals, userName });
+    const isPaid = user?.subscriptionTier === 'SUBSCRIBED';
 
-    return NextResponse.json({ agent }, { status: 200 });
+    return NextResponse.json(
+      {
+        agent,
+        tier: user?.subscriptionTier ?? 'FREE',
+        tokenBalance: isPaid ? (user?.aiTokenBalance ?? 0) : null,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Error ai-therapy/session:', error);
     return NextResponse.json(

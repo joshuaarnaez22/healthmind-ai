@@ -1,7 +1,8 @@
 'use client';
 
 import { useClerk, useUser } from '@clerk/nextjs';
-import { ChevronsUpDown, LogOut, UserCircle } from 'lucide-react';
+import { ChevronsUpDown, CreditCard, LogOut, UserCircle } from 'lucide-react';
+import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -84,6 +85,12 @@ export default function NavUser() {
             <DropdownMenuItem onClick={() => openUserProfile()}>
               <UserCircle className="mr-2 h-4 w-4" />
               Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/user/billing">
+                <CreditCard className="mr-2 h-4 w-4" />
+                Billing
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => signOut({ redirectUrl: '/' })}>
